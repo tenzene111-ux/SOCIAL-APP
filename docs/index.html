@@ -480,11 +480,15 @@ function toast(msg, icon='fa-check-circle') {
 // ===== RENDER =====
 function render() {
   const app = document.getElementById('app');
+  const ptEl = document.getElementById('postText');
+  if (ptEl) S._postDraft = ptEl.value;
   if (!S.user) {
     app.innerHTML = S.page === 'register' ? renderRegister() : renderLogin();
   } else {
     app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + renderPage();
   }
+  const ptEl2 = document.getElementById('postText');
+  if (ptEl2 && S._postDraft) ptEl2.value = S._postDraft;
   attachEvents();
   if (S.page === 'messages' && S.activeConv) {
     const body = document.querySelector('.msg-chat-body');
@@ -608,9 +612,9 @@ function renderCreatePost() {
     attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-video"></i> Add Video</span><button class="close-attach" onclick="S.postAttachMode=null;render()">✕</button></div>
     <div class="photo-input-row"><input type="text" id="videoUrl" placeholder="Paste video URL..." class="attach-input"><button class="btn-add-photo" onclick="addVideo()">Add</button></div></div>`;
   } else if (S.postAttachMode === 'feeling') {
-    const feelings = ['😊 Happy','😢 Sad','🥳 Celebrating','😍 In Love','😤 Angry','🤔 Thoughtful','😴 Tired','🔥 Motivated','🎉 Excited','😎 Cool','🙏 Grateful','💪 Strong'];
+    const feelings = [['happy','😊 Happy'],['sad','😢 Sad'],['celebrating','🥳 Celebrating'],['inlove','😍 In Love'],['angry','😤 Angry'],['thoughtful','🤔 Thoughtful'],['tired','😴 Tired'],['motivated','🔥 Motivated'],['excited','🎉 Excited'],['cool','😎 Cool'],['grateful','🙏 Grateful'],['strong','💪 Strong']];
     attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-smile"></i> How are you feeling?</span><button class="close-attach" onclick="S.postAttachMode=null;S.postFeeling='';render()">✕</button></div>
-    <div class="feelings-grid">${feelings.map(f=>`<button class="feeling-btn ${S.postFeeling===f?'active':''}" onclick="S.postFeeling='${f}';render()">${f}</button>`).join('')}</div></div>`;
+    <div class="feelings-grid">${feelings.map(([k,label])=>`<button class="feeling-btn ${S.postFeeling===k?'active':''}" onclick="setFeeling('${k}')">${label}</button>`).join('')}</div></div>`;
   } else if (S.postAttachMode === 'poll') {
     if (!S.postPoll) S.postPoll = {question:'',options:['','']};
     attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-poll"></i> Create Poll</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPoll=null;render()">✕</button></div>
@@ -618,7 +622,7 @@ function renderCreatePost() {
     ${S.postPoll.options.map((o,i)=>`<div class="poll-option-row"><input type="text" class="attach-input poll-opt" placeholder="Option ${i+1}" value="${o}" onchange="S.postPoll.options[${i}]=this.value"><button class="remove-photo" onclick="if(S.postPoll.options.length>2){S.postPoll.options.splice(${i},1);render()}">✕</button></div>`).join('')}
     ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
   }
-  const feelingTag = S.postFeeling ? `<span class="feeling-tag">${S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
+  const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
   return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button></div><button class="post-btn" onclick="newPost()">Post</button></div></div>`;
 }
 
@@ -829,6 +833,8 @@ function addComment(id) {
   render();
 }
 
+const FEELINGS = {happy:'😊 Happy',sad:'😢 Sad',celebrating:'🥳 Celebrating',inlove:'😍 In Love',angry:'😤 Angry',thoughtful:'🤔 Thoughtful',tired:'😴 Tired',motivated:'🔥 Motivated',excited:'🎉 Excited',cool:'😎 Cool',grateful:'🙏 Grateful',strong:'💪 Strong'};
+function setFeeling(k) { S.postFeeling = k; render(); }
 function addPhoto() {
   const el = document.getElementById('photoUrl');
   if (el && el.value.trim()) { S.postPhotos.push(el.value.trim()); render(); }
@@ -840,7 +846,7 @@ function addVideo() {
 function newPost() {
   const el = document.getElementById('postText');
   let text = el ? el.value.trim() : '';
-  if (S.postFeeling) text += (text ? ' ' : '') + `— feeling ${S.postFeeling}`;
+  if (S.postFeeling) text += (text ? ' ' : '') + `— feeling ${FEELINGS[S.postFeeling]||S.postFeeling}`;
   let pollHtml = '';
   if (S.postPoll && S.postPoll.question && S.postPoll.options.filter(o=>o).length>=2) {
     const opts = S.postPoll.options.filter(o=>o);
