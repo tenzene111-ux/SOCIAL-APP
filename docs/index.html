@@ -101,6 +101,36 @@
     .post-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; }
     .post-btn:hover { box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
     .post-btn:disabled { opacity: 0.5; }
+    .tool-btn.active { background: #e8f0fe; color: #1a73e8; }
+    .attach-area { margin-top: 12px; padding: 14px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #dadce0; }
+    .attach-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: #333; }
+    .close-attach { background: none; border: none; font-size: 18px; cursor: pointer; color: #999; }
+    .attach-input { width: 100%; padding: 10px 14px; border: 1px solid #dadce0; border-radius: 8px; font-size: 14px; margin-bottom: 8px; box-sizing: border-box; }
+    .photo-input-row { display: flex; gap: 8px; }
+    .photo-input-row .attach-input { margin-bottom: 0; }
+    .btn-add-photo { background: #667eea; color: white; padding: 8px 16px; border-radius: 8px; font-size: 13px; white-space: nowrap; }
+    .photo-previews { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .photo-preview { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; }
+    .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .remove-photo { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .feelings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .feeling-btn { padding: 8px 10px; border-radius: 8px; background: white; border: 1px solid #dadce0; font-size: 13px; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .feeling-btn:hover { background: #e8f0fe; }
+    .feeling-btn.active { background: #667eea; color: white; border-color: #667eea; }
+    .feeling-tag { display: inline-block; background: #e8f0fe; color: #667eea; padding: 4px 10px; border-radius: 12px; font-size: 13px; margin-top: 6px; }
+    .feeling-tag button { background: none; border: none; color: #667eea; cursor: pointer; margin-left: 4px; }
+    .poll-option-row { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; }
+    .poll-option-row .attach-input { margin-bottom: 0; }
+    .poll-option-row .remove-photo { position: static; background: #e74c3c; width: 28px; height: 28px; border-radius: 6px; }
+    .btn-add-option { background: none; color: #667eea; font-weight: 600; font-size: 13px; padding: 8px 0; }
+    .poll-widget { margin: 12px 0; }
+    .poll-option { width: 100%; padding: 12px 16px; background: #f8f9fa; border: 1px solid #dadce0; border-radius: 10px; margin-bottom: 6px; cursor: pointer; position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; text-align: left; font-size: 14px; transition: all 0.2s; }
+    .poll-option:hover { border-color: #667eea; }
+    .poll-option.voted { border-color: #667eea; background: #e8f0fe; }
+    .poll-bar { position: absolute; left: 0; top: 0; height: 100%; background: rgba(102,126,234,0.12); transition: width 0.5s ease; border-radius: 10px; }
+    .poll-option-text { position: relative; z-index: 1; }
+    .poll-pct { position: relative; z-index: 1; font-weight: 600; color: #667eea; }
+    .poll-total { font-size: 13px; color: #999; margin-top: 4px; }
 
     .post-card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px; overflow: hidden; }
     .post-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
@@ -365,7 +395,8 @@
 const S = {
   user: null, page: 'login', viewProfile: null, viewStory: null, storyIdx: 0,
   activeConv: null, profileTab: 'posts', exploreTab: 'trending', notifTab: 'all',
-  openComments: {}, openMenus: {}, storyTimer: null
+  openComments: {}, openMenus: {}, storyTimer: null,
+  postPhotos: [], postFeeling: '', postPoll: null, postAttachMode: null
 };
 
 const users = [
@@ -568,7 +599,27 @@ function renderRight() {
 }
 
 function renderCreatePost() {
-  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea></div><div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll"><i class="fas fa-poll"></i> Poll</button></div><button class="post-btn" onclick="newPost()">Post</button></div></div>`;
+  let attachArea = '';
+  if (S.postAttachMode === 'photo') {
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-image"></i> Add Photos</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPhotos=[];render()">✕</button></div>
+    <div class="photo-input-row"><input type="text" id="photoUrl" placeholder="Paste image URL..." class="attach-input"><button class="btn-add-photo" onclick="addPhoto()">Add</button></div>
+    ${S.postPhotos.length?`<div class="photo-previews">${S.postPhotos.map((u,i)=>`<div class="photo-preview"><img src="${u}"><button class="remove-photo" onclick="S.postPhotos.splice(${i},1);render()">✕</button></div>`).join('')}</div>`:''}</div>`;
+  } else if (S.postAttachMode === 'video') {
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-video"></i> Add Video</span><button class="close-attach" onclick="S.postAttachMode=null;render()">✕</button></div>
+    <div class="photo-input-row"><input type="text" id="videoUrl" placeholder="Paste video URL..." class="attach-input"><button class="btn-add-photo" onclick="addVideo()">Add</button></div></div>`;
+  } else if (S.postAttachMode === 'feeling') {
+    const feelings = ['😊 Happy','😢 Sad','🥳 Celebrating','😍 In Love','😤 Angry','🤔 Thoughtful','😴 Tired','🔥 Motivated','🎉 Excited','😎 Cool','🙏 Grateful','💪 Strong'];
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-smile"></i> How are you feeling?</span><button class="close-attach" onclick="S.postAttachMode=null;S.postFeeling='';render()">✕</button></div>
+    <div class="feelings-grid">${feelings.map(f=>`<button class="feeling-btn ${S.postFeeling===f?'active':''}" onclick="S.postFeeling='${f}';render()">${f}</button>`).join('')}</div></div>`;
+  } else if (S.postAttachMode === 'poll') {
+    if (!S.postPoll) S.postPoll = {question:'',options:['','']};
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-poll"></i> Create Poll</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPoll=null;render()">✕</button></div>
+    <input type="text" id="pollQ" placeholder="Ask a question..." class="attach-input" value="${S.postPoll.question}" onchange="S.postPoll.question=this.value">
+    ${S.postPoll.options.map((o,i)=>`<div class="poll-option-row"><input type="text" class="attach-input poll-opt" placeholder="Option ${i+1}" value="${o}" onchange="S.postPoll.options[${i}]=this.value"><button class="remove-photo" onclick="if(S.postPoll.options.length>2){S.postPoll.options.splice(${i},1);render()}">✕</button></div>`).join('')}
+    ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
+  }
+  const feelingTag = S.postFeeling ? `<span class="feeling-tag">${S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button></div><button class="post-btn" onclick="newPost()">Post</button></div></div>`;
 }
 
 function renderPost(p) {
@@ -579,6 +630,7 @@ function renderPost(p) {
     <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><img src="${a.avatar}" class="avatar-sm"><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''}</div><div class="post-meta">${p.time} · <i class="fas fa-globe-americas"></i></div></div></div>
     <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:''}<a onclick="togglePostMenu('${p.id}')"><i class="fas fa-flag"></i> Report</a></div></div></div>
     <div class="post-content">${txt}</div>
+    ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
     ${p.media.length?`<div class="post-media"><div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div></div>`:''}
     <div class="post-stats"><div class="post-stats-left"><div class="reaction-icons"><span style="background:#e74c3c;color:white">❤️</span><span style="background:#3498db;color:white">👍</span></div> ${p.likes.length}</div><div class="post-stats-right" onclick="toggleComments('${p.id}')">${p.comments.length} comments · ${p.shares.length} shares</div></div>
     <div class="post-actions-bar">
@@ -777,14 +829,38 @@ function addComment(id) {
   render();
 }
 
+function addPhoto() {
+  const el = document.getElementById('photoUrl');
+  if (el && el.value.trim()) { S.postPhotos.push(el.value.trim()); render(); }
+}
+function addVideo() {
+  const el = document.getElementById('videoUrl');
+  if (el && el.value.trim()) { S.postPhotos.push(el.value.trim()); render(); toast('Video added!','fa-video'); S.postAttachMode=null; }
+}
 function newPost() {
   const el = document.getElementById('postText');
-  if (!el || !el.value.trim()) return;
-  posts.unshift({ id:'p'+(++postIdCounter), aid:S.user.id, text:el.value, media:[], likes:[], comments:[], shares:[], saves:[], time:'just now' });
+  let text = el ? el.value.trim() : '';
+  if (S.postFeeling) text += (text ? ' ' : '') + `— feeling ${S.postFeeling}`;
+  let pollHtml = '';
+  if (S.postPoll && S.postPoll.question && S.postPoll.options.filter(o=>o).length>=2) {
+    const opts = S.postPoll.options.filter(o=>o);
+    text += (text ? '\n\n' : '') + '📊 ' + S.postPoll.question;
+    pollHtml = opts;
+  }
+  if (!text && !S.postPhotos.length) return;
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:text, media:[...S.postPhotos], likes:[], comments:[], shares:[], saves:[], time:'just now' };
+  if (pollHtml && Array.isArray(pollHtml)) p.poll = { question: S.postPoll.question, options: pollHtml.map(o=>({text:o,votes:[]})) };
+  posts.unshift(p);
+  S.postPhotos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null;
   toast('Post published! 🎉','fa-check-circle');
   render();
 }
 
+function votePoll(pid, oi) {
+  const p = posts.find(x=>x.id===pid); if(!p||!p.poll) return;
+  p.poll.options.forEach(o => { const idx=o.votes.indexOf(S.user.id); if(idx!==-1) o.votes.splice(idx,1); });
+  p.poll.options[oi].votes.push(S.user.id); render();
+}
 function deletePost(id) {
   const i = posts.findIndex(p => p.id === id);
   if (i !== -1) { posts.splice(i,1); toast('Post deleted','fa-trash'); S.openMenus={}; render(); }
