@@ -131,6 +131,15 @@
     .poll-option-text { position: relative; z-index: 1; }
     .poll-pct { position: relative; z-index: 1; font-weight: 600; color: #667eea; }
     .poll-total { font-size: 13px; color: #999; margin-top: 4px; }
+    .file-upload-zone { border: 2px dashed #dadce0; border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.2s; background: white; }
+    .file-upload-zone:hover { border-color: #667eea; background: #f8f9ff; }
+    .file-upload-zone i { font-size: 36px; color: #667eea; margin-bottom: 8px; }
+    .file-upload-zone p { margin: 6px 0 4px; font-size: 15px; font-weight: 500; color: #333; }
+    .file-upload-zone span { font-size: 12px; color: #999; }
+    .video-previews { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .video-preview { position: relative; width: 160px; border-radius: 8px; overflow: hidden; }
+    .video-preview video { width: 100%; border-radius: 8px; }
+    .post-video { width: 100%; max-height: 400px; border-radius: 8px; }
 
     .post-card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px; overflow: hidden; }
     .post-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
@@ -396,7 +405,7 @@ const S = {
   user: null, page: 'login', viewProfile: null, viewStory: null, storyIdx: 0,
   activeConv: null, profileTab: 'posts', exploreTab: 'trending', notifTab: 'all',
   openComments: {}, openMenus: {}, storyTimer: null,
-  postPhotos: [], postFeeling: '', postPoll: null, postAttachMode: null
+  postPhotos: [], postVideos: [], postFeeling: '', postPoll: null, postAttachMode: null
 };
 
 const users = [
@@ -606,11 +615,18 @@ function renderCreatePost() {
   let attachArea = '';
   if (S.postAttachMode === 'photo') {
     attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-image"></i> Add Photos</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPhotos=[];render()">✕</button></div>
-    <div class="photo-input-row"><input type="text" id="photoUrl" placeholder="Paste image URL..." class="attach-input"><button class="btn-add-photo" onclick="addPhoto()">Add</button></div>
+    <div class="file-upload-zone" onclick="document.getElementById('photoFile').click()" id="photoDropZone">
+      <i class="fas fa-cloud-upload-alt"></i><p>Click to upload or drag & drop</p><span>JPG, PNG, GIF up to 10MB</span>
+      <input type="file" id="photoFile" accept="image/*" multiple capture="environment" onchange="handlePhotoFiles(this.files)" style="display:none">
+    </div>
     ${S.postPhotos.length?`<div class="photo-previews">${S.postPhotos.map((u,i)=>`<div class="photo-preview"><img src="${u}"><button class="remove-photo" onclick="S.postPhotos.splice(${i},1);render()">✕</button></div>`).join('')}</div>`:''}</div>`;
   } else if (S.postAttachMode === 'video') {
-    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-video"></i> Add Video</span><button class="close-attach" onclick="S.postAttachMode=null;render()">✕</button></div>
-    <div class="photo-input-row"><input type="text" id="videoUrl" placeholder="Paste video URL..." class="attach-input"><button class="btn-add-photo" onclick="addVideo()">Add</button></div></div>`;
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-video"></i> Add Video</span><button class="close-attach" onclick="S.postAttachMode=null;S.postVideos=[];render()">✕</button></div>
+    <div class="file-upload-zone" onclick="document.getElementById('videoFile').click()" id="videoDropZone">
+      <i class="fas fa-film"></i><p>Click to upload or drag & drop</p><span>MP4, MOV, AVI up to 50MB</span>
+      <input type="file" id="videoFile" accept="video/*" capture="environment" onchange="handleVideoFiles(this.files)" style="display:none">
+    </div>
+    ${(S.postVideos||[]).length?`<div class="video-previews">${S.postVideos.map((v,i)=>`<div class="video-preview"><video src="${v}" controls></video><button class="remove-photo" onclick="S.postVideos.splice(${i},1);render()">✕</button></div>`).join('')}</div>`:''}</div>`;
   } else if (S.postAttachMode === 'feeling') {
     const feelings = [['happy','😊 Happy'],['sad','😢 Sad'],['celebrating','🥳 Celebrating'],['inlove','😍 In Love'],['angry','😤 Angry'],['thoughtful','🤔 Thoughtful'],['tired','😴 Tired'],['motivated','🔥 Motivated'],['excited','🎉 Excited'],['cool','😎 Cool'],['grateful','🙏 Grateful'],['strong','💪 Strong']];
     attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-smile"></i> How are you feeling?</span><button class="close-attach" onclick="S.postAttachMode=null;S.postFeeling='';render()">✕</button></div>
@@ -636,6 +652,7 @@ function renderPost(p) {
     <div class="post-content">${txt}</div>
     ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
     ${p.media.length?`<div class="post-media"><div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div></div>`:''}
+    ${(p.videos||[]).length?`<div class="post-media">${p.videos.map(v=>`<video src="${v}" controls class="post-video"></video>`).join('')}</div>`:''}
     <div class="post-stats"><div class="post-stats-left"><div class="reaction-icons"><span style="background:#e74c3c;color:white">❤️</span><span style="background:#3498db;color:white">👍</span></div> ${p.likes.length}</div><div class="post-stats-right" onclick="toggleComments('${p.id}')">${p.comments.length} comments · ${p.shares.length} shares</div></div>
     <div class="post-actions-bar">
       <button class="action-btn ${liked?'liked':''}" onclick="toggleLike('${p.id}')"><i class="fas ${liked?'fa-heart':'fa-heart'}"></i> ${liked?'Liked':'Like'}</button>
@@ -835,13 +852,22 @@ function addComment(id) {
 
 const FEELINGS = {happy:'😊 Happy',sad:'😢 Sad',celebrating:'🥳 Celebrating',inlove:'😍 In Love',angry:'😤 Angry',thoughtful:'🤔 Thoughtful',tired:'😴 Tired',motivated:'🔥 Motivated',excited:'🎉 Excited',cool:'😎 Cool',grateful:'🙏 Grateful',strong:'💪 Strong'};
 function setFeeling(k) { S.postFeeling = k; render(); }
-function addPhoto() {
-  const el = document.getElementById('photoUrl');
-  if (el && el.value.trim()) { S.postPhotos.push(el.value.trim()); render(); }
+function handlePhotoFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { S.postPhotos.push(e.target.result); render(); toast('Photo added!','fa-image'); };
+    reader.readAsDataURL(file);
+  });
 }
-function addVideo() {
-  const el = document.getElementById('videoUrl');
-  if (el && el.value.trim()) { S.postPhotos.push(el.value.trim()); render(); toast('Video added!','fa-video'); S.postAttachMode=null; }
+function handleVideoFiles(files) {
+  if (!S.postVideos) S.postVideos = [];
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('video/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { S.postVideos.push(e.target.result); render(); toast('Video added!','fa-video'); };
+    reader.readAsDataURL(file);
+  });
 }
 function newPost() {
   const el = document.getElementById('postText');
@@ -853,11 +879,12 @@ function newPost() {
     text += (text ? '\n\n' : '') + '📊 ' + S.postPoll.question;
     pollHtml = opts;
   }
-  if (!text && !S.postPhotos.length) return;
-  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:text, media:[...S.postPhotos], likes:[], comments:[], shares:[], saves:[], time:'just now' };
+  if (!text && !S.postPhotos.length && !(S.postVideos||[]).length) return;
+  const allMedia = [...S.postPhotos, ...(S.postVideos||[])];
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:text, media:allMedia.filter(m=>!m.startsWith('data:video')), videos:(S.postVideos||[]), likes:[], comments:[], shares:[], saves:[], time:'just now' };
   if (pollHtml && Array.isArray(pollHtml)) p.poll = { question: S.postPoll.question, options: pollHtml.map(o=>({text:o,votes:[]})) };
   posts.unshift(p);
-  S.postPhotos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null;
+  S.postPhotos=[]; S.postVideos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null; S._postDraft='';
   toast('Post published! 🎉','fa-check-circle');
   render();
 }
@@ -1019,6 +1046,16 @@ function attachEvents() {
     e.preventDefault();
     const nu = { id:String(users.length+1), fullName:document.getElementById('regName').value, username:document.getElementById('regUser').value, email:document.getElementById('regEmail').value, pw:document.getElementById('regPass').value, avatar:`https://i.pravatar.cc/150?img=${users.length+10}`, bio:'',location:'',website:'',followers:[],following:[],verified:false,online:true,private:false };
     users.push(nu); S.user=nu; S.page='feed'; render();
+  });
+  ['photoDropZone','videoDropZone'].forEach(id => {
+    const zone = document.getElementById(id);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='#667eea'; zone.style.background='#f0f0ff'; });
+    zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white'; });
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white';
+      if (id==='photoDropZone') handlePhotoFiles(e.dataTransfer.files);
+      else handleVideoFiles(e.dataTransfer.files);
+    });
   });
   document.addEventListener('click', e => {
     if (!e.target.closest('.nav-profile') && !e.target.closest('.nav-avatar')) document.getElementById('navDrop')?.classList.remove('show');
