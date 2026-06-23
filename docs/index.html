@@ -1039,6 +1039,89 @@
     .secret-theme .post-card { background: rgba(212,160,23,0.05) !important; border: 1px solid rgba(212,160,23,0.2) !important; }
     .secret-theme .navbar { background: rgba(28,28,30,0.95) !important; }
     .secret-theme .nav-logo { background: linear-gradient(135deg, #D4A017, #FFD700) !important; -webkit-background-clip: text !important; }
+
+    /* Whiteboard */
+    .whiteboard-container { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; }
+    .whiteboard-card { background: white; border-radius: 20px; width: 90vw; max-width: 700px; height: 80vh; display: flex; flex-direction: column; overflow: hidden; }
+    .whiteboard-toolbar { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #f0f2f5; align-items: center; flex-wrap: wrap; }
+    .wb-color { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+    .wb-color.active { border-color: #1C1C1E; transform: scale(1.15); }
+    .whiteboard-canvas { flex: 1; cursor: crosshair; }
+
+    /* Secret Chat */
+    .secret-chat-banner { background: linear-gradient(135deg, #1C1C1E, #2d2d2d); color: #D4A017; padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; border-radius: 12px; margin-bottom: 12px; }
+    .secret-chat-banner i { font-size: 18px; }
+
+    /* Challenges */
+    .challenge-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 12px; transition: all 0.2s; border: 1px solid rgba(0,0,0,0.04); }
+    .challenge-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .challenge-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+    .challenge-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .challenge-entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
+    .challenge-entry { border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 1; cursor: pointer; }
+    .challenge-entry img { width: 100%; height: 100%; object-fit: cover; }
+    .challenge-entry .vote-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 12px; color: white; display: flex; justify-content: space-between; align-items: center; }
+
+    /* Music Share */
+    .music-share-card { background: linear-gradient(135deg, #1C1C1E, #2A1A2E); border-radius: 16px; padding: 16px; color: white; display: flex; align-items: center; gap: 14px; margin: 8px 16px; cursor: pointer; }
+    .music-share-card .album-art { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
+    .music-equalizer { display: flex; gap: 2px; align-items: flex-end; height: 20px; }
+    .music-equalizer span { width: 3px; background: #C41E3A; border-radius: 2px; animation: eqBounce 0.6s ease infinite alternate; }
+    .music-equalizer span:nth-child(2) { animation-delay: 0.1s; }
+    .music-equalizer span:nth-child(3) { animation-delay: 0.2s; }
+    .music-equalizer span:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes eqBounce { 0%{height:4px} 100%{height:18px} }
+
+    /* Achievement Badges */
+    .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .achievement-card { background: white; border-radius: 16px; padding: 20px; text-align: center; border: 2px solid #f0f2f5; transition: all 0.3s; }
+    .achievement-card.unlocked { border-color: #D4A017; background: linear-gradient(135deg, rgba(212,160,23,0.05), rgba(196,30,58,0.05)); }
+    .achievement-card.locked { opacity: 0.5; filter: grayscale(0.8); }
+    .achievement-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px; }
+    .achievement-card.unlocked .achievement-icon { background: linear-gradient(135deg, #D4A017, #FFD700); color: white; }
+    .achievement-card.locked .achievement-icon { background: #e4e6eb; color: #999; }
+
+    /* Karma Betting */
+    .bet-card { background: linear-gradient(135deg, #1C1C1E, #2d1a2e); border-radius: 16px; padding: 20px; color: white; margin-top: 12px; }
+    .bet-options { display: flex; gap: 8px; margin-top: 12px; }
+    .bet-btn { padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+
+    /* Mood Feed Filter */
+    .mood-filter-bar { display: flex; gap: 8px; padding: 8px 0; overflow-x: auto; margin-bottom: 12px; }
+    .mood-filter-btn { padding: 6px 14px; border-radius: 20px; font-size: 13px; border: 2px solid #e4e6eb; background: white; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .mood-filter-btn.active { border-color: #C41E3A; background: #FDE8EC; color: #C41E3A; }
+
+    /* Translation */
+    .translate-bar { padding: 6px 16px; display: flex; align-items: center; gap: 8px; }
+    .translate-btn { background: none; color: #C41E3A; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .translated-text { padding: 4px 16px 8px; font-style: italic; color: #65676b; font-size: 13px; border-left: 3px solid #D4A017; margin: 4px 16px 8px; }
+
+    /* Sticker Pack */
+    .sticker-picker { position: absolute; bottom: 50px; left: 0; right: 0; background: white; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 24px rgba(0,0,0,0.12); padding: 16px; max-height: 300px; overflow-y: auto; z-index: 100; }
+    .sticker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .sticker-item { font-size: 40px; text-align: center; padding: 12px; cursor: pointer; border-radius: 12px; transition: all 0.2s; }
+    .sticker-item:hover { background: #f0f2f5; transform: scale(1.15); }
+    .sticker-tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid #f0f2f5; padding-bottom: 8px; }
+    .sticker-tab { padding: 6px 12px; border-radius: 8px; font-size: 20px; cursor: pointer; }
+    .sticker-tab.active { background: #FDE8EC; }
+
+    /* Story AR Reactions */
+    .ar-reaction-bar { display: flex; gap: 8px; justify-content: center; padding: 12px; }
+    .ar-reaction { font-size: 28px; cursor: pointer; transition: all 0.2s; animation: arFloat 2s ease infinite; }
+    .ar-reaction:hover { transform: scale(1.3); }
+    @keyframes arFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .ar-overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .ar-particle { position: absolute; animation: arParticle 2s ease-out forwards; font-size: 30px; }
+    @keyframes arParticle { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-200px) scale(0.3)} }
+
+    .dark .challenge-card { background: #161B22; border-color: #30363D; }
+    .dark .achievement-card { background: #161B22; border-color: #30363D; }
+    .dark .achievement-card.unlocked { border-color: #D4A017; }
+    .dark .whiteboard-card { background: #161B22; }
+    .dark .sticker-picker { background: #161B22; }
+    .dark .sticker-item:hover { background: #21262D; }
+    .dark .mood-filter-btn { background: #161B22; border-color: #30363D; color: #c9d1d9; }
+    .dark .music-share-card { background: linear-gradient(135deg, #0D1117, #1A0D1F); }
     }
   </style>
 </head>
@@ -1119,7 +1202,27 @@ const S = {
   profileTheme: 'default',
   spotlightPost: null,
   easterEggFound: [], konamiIdx: 0,
-  showEasterEgg: false
+  showEasterEgg: false,
+  // New features batch 5
+  showWhiteboard: false, whiteboardLines: [], whiteboardColor: '#C41E3A',
+  showSecretChat: null, secretChatMsgs: {}, secretTimer: 30,
+  showChallengeFeed: false, challengeTab: 'active',
+  weeklyChallenges: [
+    {id:'ch1',title:'Golden Hour Shot',desc:'Capture the most stunning golden hour photo',icon:'fa-sun',entries:234,endDate:'3 days left',prize:'500 Karma + Badge',category:'photo'},
+    {id:'ch2',title:'Funniest Meme',desc:'Create the funniest original meme',icon:'fa-laugh-squint',entries:567,endDate:'5 days left',prize:'300 Karma',category:'meme'},
+    {id:'ch3',title:'Best Travel Story',desc:'Share your most memorable travel experience',icon:'fa-plane',entries:189,endDate:'1 day left',prize:'1000 Karma + Featured',category:'story'},
+    {id:'ch4',title:'Code Art Challenge',desc:'Create art using only code',icon:'fa-code',entries:78,endDate:'6 days left',prize:'Diamond Badge',category:'creative'}
+  ],
+  challengeVotes: {},
+  showMusicShare: false, sharedSongs: [],
+  achievements: ['first_post','liked_10','streak_7','explorer'],
+  showAchievements: false,
+  karmaBets: {},
+  showBetting: null,
+  moodFilter: null,
+  showTranslate: {},
+  showStickerPicker: false,
+  storyReactionOverlay: null
 };
 
 const users = [
@@ -1246,6 +1349,12 @@ function render() {
     if (S.showTimeCapsule) modals += renderTimeCapsuleModal();
     if (S.showMiniGame) modals += renderMiniGameModal();
     if (S.showEasterEgg) modals += renderEasterEggOverlay();
+    if (S.showWhiteboard) modals += renderWhiteboard();
+    if (S.showChallengeFeed) modals += renderChallengeFeed();
+    if (S.showMusicShare) modals += renderMusicShareModal();
+    if (S.showAchievements) modals += renderAchievementsModal();
+    if (S.showBetting) modals += renderBettingModal();
+    if (S.showStickerPicker) modals += renderStickerPicker();
     if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
     const moodBar = S.showMoodPicker ? renderMoodPicker() : '';
     const karmaLvl = getKarmaLevel(S.karma);
@@ -1312,6 +1421,8 @@ function renderNav() {
           <a onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</a>
           <a onclick="S.showMoodPicker=!S.showMoodPicker;render()"><i class="fas fa-${S.mood?'heart':'smile-beam'}"${S.mood?' style="color:#C41E3A"':''}></i> ${S.mood?'Change Mood':'Set Mood'}</a>
           <a onclick="S.showMiniGame=true;S.miniGameType=null;render()"><i class="fas fa-gamepad"></i> Mini Games</a>
+          <a onclick="S.showChallengeFeed=true;render()"><i class="fas fa-trophy" style="color:#D4A017"></i> Challenges</a>
+          <a onclick="S.showAchievements=true;render()"><i class="fas fa-medal" style="color:#D4A017"></i> Achievements</a>
           <a onclick="go('settings')"><i class="fas fa-cog"></i> Settings</a>
           <a onclick="toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
           <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
@@ -1347,6 +1458,14 @@ function renderFeed() {
       ${storyUsers.map(uid => { const u=U(uid); return `<div class="story-card" onclick="openStory('${uid}')"><img class="story-bg" src="https://picsum.photos/200/350?random=${uid}"><div class="story-overlay"></div><img src="${u.avatar}" class="story-user"><span class="story-name">${u.fullName.split(' ')[0]}</span></div>`; }).join('')}
     </div>
     ${renderCreatePost()}
+    <div class="mood-filter-bar">
+      <button class="mood-filter-btn ${!S.moodFilter?'active':''}" onclick="S.moodFilter=null;render()">All</button>
+      <button class="mood-filter-btn ${S.moodFilter==='happy'?'active':''}" onclick="S.moodFilter='happy';render()">😊 Happy</button>
+      <button class="mood-filter-btn ${S.moodFilter==='inspired'?'active':''}" onclick="S.moodFilter='inspired';render()">🔥 Inspired</button>
+      <button class="mood-filter-btn ${S.moodFilter==='creative'?'active':''}" onclick="S.moodFilter='creative';render()">🎨 Creative</button>
+      <button class="mood-filter-btn ${S.moodFilter==='chill'?'active':''}" onclick="S.moodFilter='chill';render()">😌 Chill</button>
+      <button class="mood-filter-btn ${S.moodFilter==='excited'?'active':''}" onclick="S.moodFilter='excited';render()">🎉 Excited</button>
+    </div>
     <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
     ${posts.map(p => renderPost(p)).join('')}
   </div><div class="sidebar-right">${renderRight()}</div></div>${S.viewStory ? renderStoryViewer() : ''}${S.showStoryCreate ? renderStoryCreate() : ''}${S.showShareModal ? renderShareModal() : ''}`;
@@ -1419,7 +1538,7 @@ function renderCreatePost() {
     ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
   }
   const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
-  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><div class="post-tools-primary"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="post-tools-toggle" onclick="document.querySelector('.post-tools-more').classList.toggle('show')"><i class="fas fa-ellipsis-h"></i> More</button></div><div class="post-tools-more"><button class="tool-btn" onclick="S.showVoicePost=true;render()"><i class="fas fa-microphone-alt" style="color:#C41E3A"></i> Voice</button><button class="tool-btn" onclick="S.showCollabPost=true;render()"><i class="fas fa-users" style="color:#27ae60"></i> Collab</button><button class="tool-btn" onclick="S.showAIArt=true;render()"><i class="fas fa-magic" style="color:#D4A017"></i> AI Art</button><button class="tool-btn" onclick="S.showTimeCapsule=true;render()"><i class="fas fa-hourglass-half" style="color:#D4A017"></i> Capsule</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i> Anon</button></div></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><div class="post-tools-primary"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="post-tools-toggle" onclick="document.querySelector('.post-tools-more').classList.toggle('show')"><i class="fas fa-ellipsis-h"></i> More</button></div><div class="post-tools-more"><button class="tool-btn" onclick="S.showVoicePost=true;render()"><i class="fas fa-microphone-alt" style="color:#C41E3A"></i> Voice</button><button class="tool-btn" onclick="S.showCollabPost=true;render()"><i class="fas fa-users" style="color:#27ae60"></i> Collab</button><button class="tool-btn" onclick="S.showAIArt=true;render()"><i class="fas fa-magic" style="color:#D4A017"></i> AI Art</button><button class="tool-btn" onclick="S.showTimeCapsule=true;render()"><i class="fas fa-hourglass-half" style="color:#D4A017"></i> Capsule</button><button class="tool-btn" onclick="S.showWhiteboard=true;render()"><i class="fas fa-chalkboard" style="color:#3498db"></i> Draw</button><button class="tool-btn" onclick="S.showChallengeFeed=true;render()"><i class="fas fa-trophy" style="color:#D4A017"></i> Challenge</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i> Anon</button></div></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
 }
 
 function renderPost(p) {
@@ -1433,11 +1552,13 @@ function renderPost(p) {
     <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><span class="${a.online?'online-indicator':''}"><img src="${a.avatar}" class="avatar-sm"></span><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''} ${p._collab?`<span style="font-size:11px;color:#65676b;font-weight:400">with ${U(p._collab).fullName}</span>`:''}</div><div class="post-meta">${p.time}${p._edited?' · <i class="fas fa-pencil-alt" style="font-size:10px"></i> edited':''} · ${p._anon?'<i class="fas fa-mask"></i>':'<i class="fas fa-globe-americas"></i>'}</div></div></div>
     <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="openEditPost('${p.id}')"><i class="fas fa-edit"></i> Edit Post</a><a onclick="togglePin('${p.id}')"><i class="fas fa-thumbtack"></i> ${isPinned?'Unpin':'Pin to Profile'}</a><a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:`<a onclick="S.showBlockModal='${p.aid}';S.openMenus={};render()"><i class="fas fa-ban"></i> Block User</a>`}<a onclick="S.showReportModal='${p.id}';S.openMenus={};render()"><i class="fas fa-flag"></i> Report</a></div></div></div>
     <div class="post-content">${txt}</div>
+    <div class="translate-bar"><button class="translate-btn" onclick="translatePost('${p.id}')"><i class="fas fa-language"></i> ${S.showTranslate[p.id]?'Original':'Translate'}</button></div>
+    ${S.showTranslate[p.id]?`<div class="translated-text">${S.showTranslate[p.id]}</div>`:''}
     ${p.voicePost?`<div class="voice-post-card" style="margin:0 16px 12px"><div class="voice-post-controls"><button class="voice-play-btn" onclick="toast('Playing voice post...')"><i class="fas fa-play"></i></button><div class="voice-waveform" style="flex:1">${p.voicePost.bars.map(h=>`<span style="height:${h}px"></span>`).join('')}</div><span style="font-size:12px;opacity:0.7">0:${String(p.voicePost.duration).padStart(2,'0')}</span></div></div>`:''}
     ${p.collab?`<div style="padding:0 16px 8px;display:flex;align-items:center;gap:6px"><div class="collab-post-badge">${p.collab.map(id=>`<img src="${U(id).avatar}" style="width:24px;height:24px;border-radius:50%;border:2px solid white;margin-left:-6px">`).join('')}</div><span class="collab-label"><i class="fas fa-users"></i> Collaborative Post</span></div>`:''}
     ${p.aiArt?`<div style="padding:0 16px 4px"><span style="font-size:11px;color:#D4A017;font-weight:600"><i class="fas fa-magic"></i> AI Generated Art</span></div>`:''}
     ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">drukpa.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
-    ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
+    ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div>${!S.karmaBets[p.id]?`<button class="bet-btn" style="background:linear-gradient(135deg,#D4A017,#FFD700);color:#1C1C1E;margin-top:8px" onclick="S.showBetting='${p.id}';render()"><i class="fas fa-coins"></i> Bet Karma on Outcome</button>`:`<div style="font-size:12px;color:#D4A017;margin-top:6px"><i class="fas fa-coins"></i> You bet ${S.karmaBets[p.id].amount} karma on "${S.karmaBets[p.id].option}"</div>`}</div>`:''}
     ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)">${p.media.length>2?`<div class="carousel-container"><div class="carousel-track" style="transform:translateX(-${(S.carouselIdx[p.id]||0)*100}%)">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>${(S.carouselIdx[p.id]||0)>0?`<button class="carousel-btn prev" onclick="event.stopPropagation();carouselPrev('${p.id}')"><i class="fas fa-chevron-left"></i></button>`:''}${(S.carouselIdx[p.id]||0)<p.media.length-1?`<button class="carousel-btn next" onclick="event.stopPropagation();carouselNext('${p.id}',${p.media.length})"><i class="fas fa-chevron-right"></i></button>`:''}<div class="carousel-dots">${p.media.map((_,i)=>`<span class="${i===(S.carouselIdx[p.id]||0)?'active':''}" onclick="event.stopPropagation();S.carouselIdx['${p.id}']=${i};render()"></span>`).join('')}</div></div>`:`<div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>`}${S.watermarkEnabled&&p.aid===S.user.id?'<div class="watermark-overlay">@'+S.user.username+'</div>':''}</div>`:''}
     ${(p.videos||[]).length?`<div class="post-media">${p.videos.map(v=>`<video src="${v}" controls class="post-video"></video>`).join('')}</div>`:''}
     <div class="post-stats"><div class="post-stats-left"><div class="reaction-icons">${reactionIcons(p)}</div> ${p.likes.length}</div><div class="post-stats-right" onclick="toggleComments('${p.id}')">${p.comments.length} comments · ${p.shares.length} shares</div></div>
@@ -1493,10 +1614,11 @@ function renderChat() {
   const c = convos.find(x=>x.id===S.activeConv);
   const oid = c.parts.find(p=>p!==S.user.id), o = U(oid);
   const m = msgs[S.activeConv] || [];
-  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#C41E3A'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-info-circle"></i></button></div></div>
+  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#C41E3A'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.showSecretChat===S.activeConv?'#D4A017':'#C41E3A'}" onclick="toggleSecretChat('${S.activeConv}')" title="Secret Chat"><i class="fas fa-user-secret"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-info-circle"></i></button></div></div>
+    ${S.showSecretChat===S.activeConv?`<div class="secret-chat-banner"><i class="fas fa-lock"></i> Secret Chat Mode — Messages disappear after ${S.secretTimer}s. Screenshot detection active.</div>`:''}
     <div class="msg-chat-body">${m.map((x,xi)=>`<div class="chat-bubble ${x.sid===S.user.id?'sent':'received'}" style="position:relative" ondblclick="reactToMsg('${S.activeConv}',${xi})">${x.isVoice?`<div class="voice-msg"><button onclick="toast('Playing voice...')"><i class="fas fa-play"></i></button><div class="voice-wave">${Array(12).fill(0).map(()=>`<span style="height:${Math.floor(Math.random()*18)+4}px"></span>`).join('')}</div><span style="font-size:11px;opacity:0.7">${x.voiceDur||'0:03'}</span></div>`:x.isMedia?x.text:x.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}${x.disappear?`<span class="disappear-timer"><i class="fas fa-clock"></i> ${x.disappear}</span>`:''}
 <span class="bubble-time">${x.time}${x.sid===S.user.id?' <span class="read-receipt"><i class="fas fa-check-double"></i></span>':''}</span>${S.msgReactions[S.activeConv+'_'+xi]?`<span class="msg-reaction">${S.msgReactions[S.activeConv+'_'+xi]}</span>`:''}</div>`).join('')}<div class="typing-indicator" id="typingInd"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>
-    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#C41E3A'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#C41E3A" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#C41E3A">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
+    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#C41E3A'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#C41E3A" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showMusicShare=true;render()" style="background:none;font-size:16px;color:#C41E3A" title="Share Music"><i class="fas fa-music"></i></button><button class="icon-btn" onclick="S.showStickerPicker=!S.showStickerPicker;render()" style="background:none;font-size:16px;color:#C41E3A" title="Stickers"><i class="fas fa-sticky-note"></i></button><button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#C41E3A">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
 }
 
 function renderNotifications() {
@@ -1534,6 +1656,7 @@ function renderProfile() {
       <div class="profile-avatar-wrap"><img src="${p.avatar}"></div>
       <div class="profile-details">
         <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''} ${p.id===S.user.id?`<span class="karma-badge ${getKarmaLevel(S.karma)}"><i class="fas fa-${getKarmaLevel(S.karma)==='diamond'?'gem':getKarmaLevel(S.karma)==='gold'?'crown':'star'}"></i> ${getKarmaLabel(S.karma)} · ${S.karma}</span>`:''}</div>
+        ${p.id===S.user.id?`<div style="display:flex;gap:4px;margin:6px 0;flex-wrap:wrap">${S.achievements.slice(0,5).map(a=>{const icons={first_post:'fa-pencil-alt',liked_10:'fa-heart',streak_7:'fa-fire',explorer:'fa-compass',social_butterfly:'fa-users',content_creator:'fa-star',early_bird:'fa-sun',night_owl:'fa-moon',trendsetter:'fa-chart-line',helper:'fa-hands-helping'};return`<span style="background:linear-gradient(135deg,#D4A017,#FFD700);color:white;padding:3px 8px;border-radius:8px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px" title="${a}"><i class="fas ${icons[a]||'fa-award'}"></i></span>`}).join('')}<button style="background:none;border:none;color:#C41E3A;font-size:11px;font-weight:600;cursor:pointer" onclick="S.showAchievements=true;render()">+more</button></div>`:''}
         <div class="profile-username">@${p.username}</div>
         <div class="profile-bio">${p.bio}</div>
         <div class="profile-meta-info">
@@ -1684,6 +1807,15 @@ function renderStoryViewer() {
       <button class="story-close" onclick="closeStory()"><i class="fas fa-times"></i></button>
       <div class="story-nav left" onclick="prevStory()"></div>
       <div class="story-nav right" onclick="nextStoryItem()"></div>
+      <div class="ar-reaction-bar">
+        <span class="ar-reaction" onclick="storyARReact('🔥')">🔥</span>
+        <span class="ar-reaction" onclick="storyARReact('❤️')">❤️</span>
+        <span class="ar-reaction" onclick="storyARReact('😂')">😂</span>
+        <span class="ar-reaction" onclick="storyARReact('😮')">😮</span>
+        <span class="ar-reaction" onclick="storyARReact('🎉')">🎉</span>
+        <span class="ar-reaction" onclick="storyARReact('💯')">💯</span>
+      </div>
+      <div class="ar-overlay" id="arOverlay"></div>
       <div class="story-reply"><input placeholder="Reply to story..." onkeydown="if(event.key==='Enter'){toast('Reply sent!');this.value='';event.preventDefault()}"></div>
     </div>
   </div>`;
@@ -3463,6 +3595,262 @@ function renderEasterEggOverlay() {
       <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:8px">+100 Karma</p>
     </div>
   </div>`;
+}
+
+// === FEATURE: Live Collaboration Whiteboard ===
+function renderWhiteboard() {
+  return `<div class="whiteboard-container" onclick="if(event.target===this){S.showWhiteboard=false;render()}">
+    <div class="whiteboard-card">
+      <div class="whiteboard-toolbar">
+        <span style="font-weight:700;font-size:16px"><i class="fas fa-chalkboard"></i> Whiteboard</span>
+        <div style="flex:1"></div>
+        ${['#C41E3A','#E8751A','#D4A017','#27ae60','#3498db','#9b59b6','#1C1C1E','#ffffff'].map(c=>`<div class="wb-color ${S.whiteboardColor===c?'active':''}" style="background:${c};${c==='#ffffff'?'border:1px solid #ddd':''}" onclick="S.whiteboardColor='${c}';render()"></div>`).join('')}
+        <button style="background:none;font-size:16px;color:#65676b;margin-left:8px" onclick="clearWhiteboard()" title="Clear"><i class="fas fa-eraser"></i></button>
+        <button style="background:none;font-size:16px;color:#27ae60;margin-left:4px" onclick="saveWhiteboard()" title="Save as Post"><i class="fas fa-save"></i></button>
+        <button style="background:none;font-size:20px;color:#65676b;margin-left:8px" onclick="S.showWhiteboard=false;render()"><i class="fas fa-times"></i></button>
+      </div>
+      <canvas class="whiteboard-canvas" id="wbCanvas" onmousedown="wbStart(event)" onmousemove="wbDraw(event)" onmouseup="wbEnd()" onmouseleave="wbEnd()"
+        ontouchstart="wbStart(event)" ontouchmove="wbDraw(event)" ontouchend="wbEnd()"></canvas>
+    </div>
+  </div>`;
+}
+let wbDrawing = false, wbCtx = null, wbLastX = 0, wbLastY = 0;
+function wbStart(e) {
+  e.preventDefault();
+  const canvas = document.getElementById('wbCanvas');
+  if (!canvas) return;
+  wbCtx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  wbDrawing = true;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  wbLastX = touch.clientX - rect.left; wbLastY = touch.clientY - rect.top;
+  S.whiteboardLines.forEach(l => { wbCtx.strokeStyle = l.color; wbCtx.lineWidth = 3; wbCtx.lineCap = 'round'; wbCtx.beginPath(); wbCtx.moveTo(l.x1, l.y1); wbCtx.lineTo(l.x2, l.y2); wbCtx.stroke(); });
+}
+function wbDraw(e) {
+  if (!wbDrawing || !wbCtx) return;
+  e.preventDefault();
+  const canvas = document.getElementById('wbCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  const x = touch.clientX - rect.left, y = touch.clientY - rect.top;
+  wbCtx.strokeStyle = S.whiteboardColor; wbCtx.lineWidth = 3; wbCtx.lineCap = 'round';
+  wbCtx.beginPath(); wbCtx.moveTo(wbLastX, wbLastY); wbCtx.lineTo(x, y); wbCtx.stroke();
+  S.whiteboardLines.push({x1:wbLastX, y1:wbLastY, x2:x, y2:y, color:S.whiteboardColor});
+  wbLastX = x; wbLastY = y;
+}
+function wbEnd() { wbDrawing = false; }
+function clearWhiteboard() { S.whiteboardLines = []; const c = document.getElementById('wbCanvas'); if(c) c.getContext('2d').clearRect(0,0,c.width,c.height); }
+function saveWhiteboard() { toast('Drawing saved as post! 🎨'); addKarma(15,'Whiteboard creation'); S.showWhiteboard = false; render(); }
+
+// === FEATURE: Story AR Reactions ===
+function storyARReact(emoji) {
+  const overlay = document.getElementById('arOverlay');
+  if (!overlay) return;
+  for (let i = 0; i < 12; i++) {
+    const span = document.createElement('span');
+    span.className = 'ar-particle';
+    span.textContent = emoji;
+    span.style.left = (Math.random() * 80 + 10) + '%';
+    span.style.bottom = '10%';
+    span.style.animationDelay = (Math.random() * 0.5) + 's';
+    span.style.animationDuration = (1.5 + Math.random()) + 's';
+    overlay.appendChild(span);
+    setTimeout(() => span.remove(), 3000);
+  }
+  toast('Reacted with ' + emoji);
+}
+
+// === FEATURE: Secret Chat Mode ===
+function toggleSecretChat(convId) {
+  if (S.showSecretChat === convId) { S.showSecretChat = null; toast('Secret chat disabled','fa-lock-open'); }
+  else { S.showSecretChat = convId; toast('Secret chat enabled — messages will disappear','fa-lock'); }
+  render();
+}
+
+// === FEATURE: Post Challenges ===
+function renderChallengeFeed() {
+  const active = S.weeklyChallenges;
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showChallengeFeed=false;render()}">
+    <div class="modal-card" style="max-width:700px;max-height:85vh;overflow-y:auto">
+      <div class="modal-header"><h3><i class="fas fa-trophy" style="color:#D4A017"></i> Weekly Challenges</h3><button class="modal-close" onclick="S.showChallengeFeed=false;render()">✕</button></div>
+      <div style="display:flex;gap:8px;padding:0 0 16px">
+        <button class="mood-filter-btn ${S.challengeTab==='active'?'active':''}" onclick="S.challengeTab='active';render()">Active</button>
+        <button class="mood-filter-btn ${S.challengeTab==='past'?'active':''}" onclick="S.challengeTab='past';render()">Past Winners</button>
+        <button class="mood-filter-btn ${S.challengeTab==='my'?'active':''}" onclick="S.challengeTab='my';render()">My Entries</button>
+      </div>
+      ${S.challengeTab==='active'?active.map(ch=>`<div class="challenge-card">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="challenge-icon" style="background:linear-gradient(135deg,#C41E3A,#E8751A)"><i class="fas ${ch.icon}"></i></div>
+          <div style="flex:1">
+            <h3 style="font-size:16px;margin-bottom:2px">${ch.title}</h3>
+            <p style="font-size:13px;color:#65676b">${ch.desc}</p>
+          </div>
+          <span class="challenge-badge" style="background:#FDE8EC;color:#C41E3A"><i class="fas fa-clock"></i> ${ch.endDate}</span>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:13px;color:#65676b">
+          <span><i class="fas fa-users"></i> ${ch.entries} entries</span>
+          <span><i class="fas fa-trophy" style="color:#D4A017"></i> ${ch.prize}</span>
+        </div>
+        <div class="challenge-entries">${[1,2,3,4].map(i=>`<div class="challenge-entry">
+          <img src="https://picsum.photos/300/300?random=${ch.id}${i}">
+          <div class="vote-overlay"><span>@user${i}</span><button onclick="voteChallenge('${ch.id}',${i});event.stopPropagation()" style="background:rgba(255,255,255,0.2);color:white;border:none;padding:4px 12px;border-radius:12px;font-size:12px;cursor:pointer">${S.challengeVotes[ch.id]===i?'✓ Voted':'Vote'}</button></div>
+        </div>`).join('')}</div>
+        <button style="width:100%;margin-top:12px;padding:10px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:12px;font-weight:600;cursor:pointer" onclick="toast('Challenge joined! Share your entry 🏆');addKarma(10,'Joined challenge')">Join This Challenge</button>
+      </div>`).join(''):''}
+      ${S.challengeTab==='past'?`<div class="challenge-card" style="text-align:center;padding:40px"><i class="fas fa-trophy" style="font-size:48px;color:#D4A017;margin-bottom:12px"></i><h3>Last Week's Winner</h3><div style="margin:16px 0"><img src="https://i.pravatar.cc/150?img=5" style="width:64px;height:64px;border-radius:50%;border:3px solid #D4A017"></div><p style="font-weight:700">Jane Smith</p><p style="color:#65676b;font-size:13px">Won "Best Sunset" with 1,247 votes</p><p style="color:#D4A017;font-weight:700;margin-top:8px">+1000 Karma Awarded</p></div>`:''}
+      ${S.challengeTab==='my'?`<div class="challenge-card" style="text-align:center;padding:40px"><i class="fas fa-camera" style="font-size:48px;color:#C41E3A;margin-bottom:12px"></i><h3>Your Entries</h3><p style="color:#65676b">You have joined 2 challenges this week</p><div style="margin-top:16px;display:flex;gap:12px;justify-content:center"><div style="text-align:center"><strong style="font-size:24px;color:#C41E3A">24</strong><p style="font-size:12px;color:#65676b">Votes received</p></div><div style="text-align:center"><strong style="font-size:24px;color:#D4A017">3</strong><p style="font-size:12px;color:#65676b">Challenges joined</p></div></div></div>`:''}
+    </div>
+  </div>`;
+}
+function voteChallenge(chId, entry) {
+  S.challengeVotes[chId] = entry;
+  toast('Vote cast! 🗳️'); addKarma(5,'Voted in challenge');
+  render();
+}
+
+// === FEATURE: Music Sharing in Chat ===
+function renderMusicShareModal() {
+  const songs = [
+    {title:'Druk Gi Zhungdra',artist:'Traditional Bhutanese',album:'https://picsum.photos/80/80?random=m1',dur:'3:42'},
+    {title:'Mountain Echo',artist:'Tashi Dema',album:'https://picsum.photos/80/80?random=m2',dur:'4:15'},
+    {title:'Thunder Dragon',artist:'Bhutanese Youth',album:'https://picsum.photos/80/80?random=m3',dur:'3:28'},
+    {title:'Himalayan Sunset',artist:'Karma Wangchuk',album:'https://picsum.photos/80/80?random=m4',dur:'5:01'},
+    {title:'Prayer Flags',artist:'Pema Rinzin',album:'https://picsum.photos/80/80?random=m5',dur:'4:33'},
+    {title:'Valley of Dreams',artist:'Sonam Dorji',album:'https://picsum.photos/80/80?random=m6',dur:'3:56'}
+  ];
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showMusicShare=false;render()}">
+    <div class="modal-card" style="max-width:450px">
+      <div class="modal-header"><h3><i class="fas fa-music" style="color:#C41E3A"></i> Share Music</h3><button class="modal-close" onclick="S.showMusicShare=false;render()">✕</button></div>
+      <input placeholder="Search songs..." style="width:100%;padding:10px 14px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box">
+      <div style="display:flex;flex-direction:column;gap:8px;max-height:350px;overflow-y:auto">
+        ${songs.map(s=>`<div class="music-share-card" onclick="shareSong('${s.title}','${s.artist}')">
+          <img class="album-art" src="${s.album}">
+          <div style="flex:1"><div style="font-weight:600;font-size:14px">${s.title}</div><div style="font-size:12px;opacity:0.7">${s.artist}</div></div>
+          <div class="music-equalizer"><span></span><span></span><span></span><span></span></div>
+          <span style="font-size:12px;opacity:0.5">${s.dur}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+function shareSong(title, artist) {
+  if (S.activeConv) {
+    const m = msgs[S.activeConv] || [];
+    m.push({sid:S.user.id, text:`🎵 <div class="music-share-card" style="margin:0;max-width:280px"><div style="flex:1"><div style="font-weight:600;font-size:13px">${title}</div><div style="font-size:11px;opacity:0.7">${artist}</div></div><div class="music-equalizer"><span></span><span></span><span></span><span></span></div></div>`, time:'Just now', isMedia:true});
+    msgs[S.activeConv] = m;
+  }
+  S.showMusicShare = false;
+  toast('Song shared! 🎵'); addKarma(5,'Shared music');
+  render();
+}
+
+// === FEATURE: Achievement Badges ===
+function renderAchievementsModal() {
+  const allBadges = [
+    {id:'first_post',name:'First Steps',desc:'Made your first post',icon:'fa-pencil-alt',color:'#27ae60'},
+    {id:'liked_10',name:'Crowd Favorite',desc:'Got 10 likes on a post',icon:'fa-heart',color:'#e74c3c'},
+    {id:'streak_7',name:'On Fire',desc:'7-day activity streak',icon:'fa-fire',color:'#E8751A'},
+    {id:'explorer',name:'Explorer',desc:'Visited all sections of the app',icon:'fa-compass',color:'#3498db'},
+    {id:'social_butterfly',name:'Social Butterfly',desc:'Follow 10 people',icon:'fa-users',color:'#9b59b6'},
+    {id:'content_creator',name:'Content Creator',desc:'Created 10 posts',icon:'fa-star',color:'#D4A017'},
+    {id:'early_bird',name:'Early Bird',desc:'First to comment on a trending post',icon:'fa-sun',color:'#f39c12'},
+    {id:'night_owl',name:'Night Owl',desc:'Active past midnight',icon:'fa-moon',color:'#34495e'},
+    {id:'trendsetter',name:'Trendsetter',desc:'Started a trending hashtag',icon:'fa-chart-line',color:'#C41E3A'},
+    {id:'helper',name:'Helping Hand',desc:'Answered 20 questions',icon:'fa-hands-helping',color:'#27ae60'},
+    {id:'photographer',name:'Photographer',desc:'Shared 50 photos',icon:'fa-camera',color:'#e67e22'},
+    {id:'storyteller',name:'Storyteller',desc:'Shared 30 stories',icon:'fa-book-open',color:'#8e44ad'},
+    {id:'influencer',name:'Influencer',desc:'Reached 100 followers',icon:'fa-crown',color:'#D4A017'},
+    {id:'gamer',name:'Game Master',desc:'Won 10 mini games',icon:'fa-gamepad',color:'#C41E3A'},
+    {id:'whale',name:'Generous Whale',desc:'Tipped 1000 coins total',icon:'fa-gift',color:'#2ecc71'},
+    {id:'dragon',name:'Thunder Dragon',desc:'Found the secret easter egg',icon:'fa-dragon',color:'#C41E3A'}
+  ];
+  const unlocked = S.achievements.length;
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showAchievements=false;render()}">
+    <div class="modal-card" style="max-width:600px;max-height:85vh;overflow-y:auto">
+      <div class="modal-header"><h3><i class="fas fa-medal" style="color:#D4A017"></i> Achievements</h3><button class="modal-close" onclick="S.showAchievements=false;render()">✕</button></div>
+      <div style="text-align:center;padding:16px 0 20px"><div style="font-size:36px;font-weight:800;background:linear-gradient(135deg,#D4A017,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${unlocked}/${allBadges.length}</div><p style="color:#65676b;font-size:13px">Badges Unlocked</p>
+      <div style="height:8px;background:#f0f2f5;border-radius:4px;margin:12px 0;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#D4A017,#FFD700);width:${(unlocked/allBadges.length)*100}%;border-radius:4px;transition:width 0.5s"></div></div></div>
+      <div class="badge-grid">${allBadges.map(b=>{const has=S.achievements.includes(b.id);return`<div class="achievement-card ${has?'unlocked':'locked'}"><div class="achievement-icon"><i class="fas ${b.icon}"></i></div><div style="font-weight:700;font-size:13px;margin-bottom:2px">${b.name}</div><div style="font-size:11px;color:#65676b">${b.desc}</div>${has?`<div style="font-size:10px;color:#D4A017;font-weight:600;margin-top:6px"><i class="fas fa-check-circle"></i> Unlocked</div>`:''}</div>`}).join('')}</div>
+    </div>
+  </div>`;
+}
+
+// === FEATURE: Karma Betting on Polls ===
+function renderBettingModal() {
+  const p = posts.find(x=>x.id===S.showBetting);
+  if (!p || !p.poll) return '';
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showBetting=null;render()}">
+    <div class="modal-card" style="max-width:400px">
+      <div class="modal-header"><h3><i class="fas fa-coins" style="color:#D4A017"></i> Bet Karma</h3><button class="modal-close" onclick="S.showBetting=null;render()">✕</button></div>
+      <p style="font-size:13px;color:#65676b;margin-bottom:16px">Bet your karma on which option will win! Double your bet if you're right.</p>
+      <div style="background:linear-gradient(135deg,#D4A017,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:24px;font-weight:800;text-align:center;margin-bottom:16px">Your Karma: ${S.karma}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${p.poll.options.map((o,i)=>`<button style="padding:14px;background:${S._betSelection===i?'linear-gradient(135deg,#C41E3A,#E8751A)':'#f0f2f5'};color:${S._betSelection===i?'white':'#1C1C1E'};border:none;border-radius:12px;font-weight:600;cursor:pointer;text-align:left" onclick="S._betSelection=${i};render()">${o.text}</button>`).join('')}
+      </div>
+      <div style="margin-top:16px"><label style="font-size:13px;font-weight:600;color:#65676b">Bet Amount</label>
+      <div style="display:flex;gap:8px;margin-top:8px">${[10,25,50,100].map(a=>`<button style="flex:1;padding:10px;background:${S._betAmount===a?'#C41E3A':'#f0f2f5'};color:${S._betAmount===a?'white':'#1C1C1E'};border:none;border-radius:8px;font-weight:600;cursor:pointer" onclick="S._betAmount=${a};render()">${a}</button>`).join('')}</div></div>
+      <button style="width:100%;margin-top:16px;padding:14px;background:linear-gradient(135deg,#D4A017,#FFD700);color:#1C1C1E;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer" onclick="placeBet()"><i class="fas fa-coins"></i> Place Bet</button>
+    </div>
+  </div>`;
+}
+function placeBet() {
+  const amount = S._betAmount || 10;
+  const sel = S._betSelection;
+  const p = posts.find(x=>x.id===S.showBetting);
+  if (sel === undefined || !p) { toast('Select an option first!','fa-times'); return; }
+  if (S.karma < amount) { toast('Not enough karma!','fa-times'); return; }
+  S.karma -= amount;
+  S.karmaBets[S.showBetting] = {option: p.poll.options[sel].text, amount, selection: sel};
+  toast(`Bet ${amount} karma on "${p.poll.options[sel].text}" 🎰`);
+  S.showBetting = null; S._betSelection = undefined; S._betAmount = undefined;
+  render();
+}
+
+// === FEATURE: Post Translation ===
+const dzongkha = {'happy':'སེམས་སྐྱིད','hello':'ཀུ་ཟུ་ཟངས་པོ་ལགས','good':'ལེགས་ཤོམ','friend':'གྲོགས་པ','love':'བརྩེ་བ','beautiful':'མཛེས་པ','thank':'བཀའ་དྲིན་ཆེ','day':'ཉིན','world':'འཛམ་གླིང','peace':'ཞི་བདེ'};
+function translatePost(pid) {
+  if (S.showTranslate[pid]) { delete S.showTranslate[pid]; render(); return; }
+  const p = posts.find(x=>x.id===pid);
+  if (!p) return;
+  const words = p.text.split(/\s+/);
+  const translated = words.map(w => {
+    const clean = w.toLowerCase().replace(/[^a-z]/g,'');
+    return dzongkha[clean] || w;
+  }).join(' ');
+  S.showTranslate[pid] = `🇧🇹 ${translated}`;
+  addKarma(2,'Used translation');
+  render();
+}
+
+// === FEATURE: Drukpa Sticker Pack ===
+function renderStickerPicker() {
+  const bhutanStickers = ['🐉','🏔️','🙏','🎋','🪷','⛩️','🎎','🪘','🌸','🎏','🏯','🪬'];
+  const emotionStickers = ['🥰','🤩','😤','🥺','😈','👻','💀','🤡','👽','🤖','💩','🎃'];
+  const funStickers = ['🦄','🌈','💎','🔮','🎯','🎪','🎭','🎨','🎵','🌟','💫','✨'];
+  const tab = S._stickerTab || 'bhutan';
+  const stickers = tab==='bhutan'?bhutanStickers:tab==='emotion'?emotionStickers:funStickers;
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showStickerPicker=false;render()}" style="z-index:2000">
+    <div class="modal-card" style="max-width:380px">
+      <div class="modal-header"><h3>Stickers</h3><button class="modal-close" onclick="S.showStickerPicker=false;render()">✕</button></div>
+      <div class="sticker-tabs">
+        <span class="sticker-tab ${tab==='bhutan'?'active':''}" onclick="S._stickerTab='bhutan';render()">🐉</span>
+        <span class="sticker-tab ${tab==='emotion'?'active':''}" onclick="S._stickerTab='emotion';render()">😊</span>
+        <span class="sticker-tab ${tab==='fun'?'active':''}" onclick="S._stickerTab='fun';render()">🦄</span>
+      </div>
+      <div class="sticker-grid">${stickers.map(s=>`<div class="sticker-item" onclick="sendSticker('${s}')">${s}</div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+function sendSticker(emoji) {
+  if (S.activeConv) {
+    const m = msgs[S.activeConv] || [];
+    m.push({sid:S.user.id, text:`<span style="font-size:64px">${emoji}</span>`, time:'Just now', isMedia:true});
+    msgs[S.activeConv] = m;
+  }
+  S.showStickerPicker = false;
+  toast('Sticker sent!'); addKarma(2,'Sent sticker');
+  render();
 }
 
 render();
