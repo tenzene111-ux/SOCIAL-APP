@@ -2238,7 +2238,7 @@ function renderVerifyModal(){
     </ul>
     <div class="form-group"><label>Category</label><select style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"><option>Creator/Influencer</option><option>Brand/Business</option><option>Public Figure</option><option>Journalist</option></select></div>
     <div class="form-group"><label>Why should you be verified?</label><textarea placeholder="Tell us why..." style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;min-height:80px;resize:none"></textarea></div>
-    <button class="btn-primary" onclick="toast('Verification request submitted! We\\'ll review within 48hrs ✅');S.showVerifyModal=false;render()">Submit Request</button>
+    <button class="btn-primary" onclick="toast('Verification request submitted! We will review within 48hrs ✅');S.showVerifyModal=false;render()">Submit Request</button>
   </div></div>`;
 }
 
@@ -2549,7 +2549,7 @@ function renderBlockModal() {
   const isBlocked = S.blockedUsers.includes(u.id);
   return `<div class="block-modal" onclick="if(event.target===this){S.showBlockModal=null;render()}"><div class="block-content">
     <h3><i class="fas fa-ban" style="color:#e74c3c;margin-right:8px"></i> ${isBlocked?'Unblock':'Block'} ${u.fullName}?</h3>
-    <p style="font-size:13px;color:#65676b;margin:12px 0">${isBlocked?'They will be able to find your profile and posts again.':'They won\\'t be able to find your profile, posts, or message you. They won\\'t be notified.'}</p>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">${isBlocked?"They will be able to find your profile and posts again.":"They won't be able to find your profile, posts, or message you. They won't be notified."}</p>
     <div style="display:flex;gap:8px;margin-top:16px">
       <button class="btn-secondary" style="flex:1" onclick="S.showBlockModal=null;render()">Cancel</button>
       <button class="btn-danger" style="flex:1;padding:10px" onclick="${isBlocked?'unblockUser':'blockUser'}('${u.id}')">${isBlocked?'Unblock':'Block'}</button>
@@ -2579,7 +2579,7 @@ function renderReportModal() {
   </div></div>`;
 }
 function submitReport(reason) {
-  toast('Report submitted. We\\'ll review it within 24 hours.','fa-flag');
+  toast('Report submitted. We will review it within 24 hours.','fa-flag');
   S.showReportModal = null; render();
 }
 
