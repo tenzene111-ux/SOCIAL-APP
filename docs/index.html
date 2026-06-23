@@ -7,6 +7,7 @@
   <meta name="description" content="Drukpa - A full-featured social media platform">
   <meta name="theme-color" content="#667eea">
   <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Drukpa&quot;,&quot;short_name&quot;:&quot;Drukpa&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23667eea&quot;,&quot;theme_color&quot;:&quot;%23667eea&quot;}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23667eea'/%3E%3Cstop offset='100%25' stop-color='%23764ba2'/%3E%3C/linearGradient%3E%3CradialGradient id='g2' cx='40%25' cy='35%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%238b5cf6'/%3E%3Cstop offset='100%25' stop-color='%23667eea'/%3E%3C/radialGradient%3E%3Cfilter id='s'%3E%3CfeDropShadow dx='1' dy='2' stdDeviation='2' flood-color='%23000' flood-opacity='0.3'/%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23g1)'/%3E%3Cpath d='M30 70 Q25 55 30 42 Q33 35 38 32 L35 22 Q38 25 42 28 Q46 24 52 22 Q50 28 48 32 Q55 30 60 34 Q68 40 70 52 Q71 58 68 64 Q72 60 76 62 Q73 66 68 68 Q64 68 62 70 Q56 76 46 76 Q38 76 30 70Z' fill='url(%23g2)' filter='url(%23s)'/%3E%3Ccircle cx='42' cy='42' r='4' fill='%23ffd700'/%3E%3Ccircle cx='42' cy='42' r='2' fill='%231a1a2e'/%3E%3Ccircle cx='56' cy='42' r='4' fill='%23ffd700'/%3E%3Ccircle cx='56' cy='42' r='2' fill='%231a1a2e'/%3E%3Cpath d='M44 52 Q49 56 54 52' stroke='%23fff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M36 30 Q32 20 28 18 Q34 20 36 26Z' fill='%23ffd700' opacity='0.9'/%3E%3Cpath d='M52 28 Q54 18 58 16 Q56 22 54 26Z' fill='%23ffd700' opacity='0.9'/%3E%3Cpath d='M26 48 Q18 44 14 48 Q18 42 24 44Z' fill='%238b5cf6' opacity='0.7'/%3E%3Cpath d='M26 54 Q16 52 12 56 Q17 50 24 50Z' fill='%237c3aed' opacity='0.6'/%3E%3Cpath d='M68 52 Q76 48 80 52 Q76 46 70 48Z' fill='%238b5cf6' opacity='0.7'/%3E%3Cpath d='M68 58 Q78 56 82 60 Q77 54 70 54Z' fill='%237c3aed' opacity='0.6'/%3E%3Cpath d='M38 68 Q42 72 46 70 Q50 72 54 68' stroke='%236d28d9' stroke-width='2' fill='none' opacity='0.4'/%3E%3Cpath d='M35 64 Q39 68 43 66 Q47 68 51 64' stroke='%236d28d9' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Cellipse cx='40' cy='50' rx='3' ry='2' fill='%23a78bfa' opacity='0.5'/%3E%3Cellipse cx='55' cy='48' rx='3' ry='2' fill='%23a78bfa' opacity='0.5'/%3E%3C/svg%3E">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -45,7 +46,7 @@
 
     .navbar { position: fixed; top: 0; left: 0; right: 0; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.08); z-index: 1000; height: 60px; }
     .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 100%; display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-logo { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display:flex; align-items:center; }
     .nav-search { position: relative; }
     .nav-search input { padding: 10px 16px 10px 38px; border: none; background: #f0f2f5; border-radius: 24px; width: 280px; font-size: 14px; transition: all 0.3s; }
     .nav-search input:focus { width: 320px; background: #e4e6eb; }
@@ -934,9 +935,11 @@ function render() {
   }
 }
 
+const DRAGON_ICON = (sz=32) => `<svg width="${sz}" height="${sz}" viewBox="0 0 100 100" style="vertical-align:middle;margin-right:6px"><defs><linearGradient id="dbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#667eea"/><stop offset="100%" stop-color="#764ba2"/></linearGradient><radialGradient id="dbd"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#4c1d95"/></radialGradient><filter id="dsh"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity=".4"/></filter></defs><circle cx="50" cy="50" r="48" fill="url(#dbg)"/><g filter="url(#dsh)"><path d="M50 20c-15 0-25 12-25 28 0 8 3 15 8 20l17 12 17-12c5-5 8-12 8-20 0-16-10-28-25-28z" fill="url(#dbd)"/><path d="M20 40c-5-15 5-25 10-28-2 8 2 15 8 20" fill="#7c3aed" opacity=".8"/><path d="M80 40c5-15-5-25-10-28 2 8-2 15-8 20" fill="#7c3aed" opacity=".8"/><circle cx="40" cy="42" r="5" fill="#fbbf24"/><circle cx="60" cy="42" r="5" fill="#fbbf24"/><circle cx="41" cy="43" r="2" fill="#1e1b4b"/><circle cx="61" cy="43" r="2" fill="#1e1b4b"/><path d="M38 30c-3-8 0-15 5-18" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M62 30c3-8 0-15-5-18" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M42 55q8 6 16 0" stroke="#e9d5ff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 48c2 1 4 1 6 0M59 48c2 1 4 1 6 0" stroke="#c4b5fd" stroke-width="1" fill="none"/></g></svg>`;
+
 function renderLogin() {
   return `<div class="auth-page"><div class="auth-card fade-in">
-    <div class="auth-header"><h1>Drukpa</h1><p>Connect with friends and the world around you.</p></div>
+    <div class="auth-header">${DRAGON_ICON(64)}<h1>Drukpa</h1><p>Connect with friends and the world around you.</p></div>
     <div id="authError" class="error-msg hidden"></div>
     <form id="loginForm">
       <input type="email" id="loginEmail" placeholder="Email" value="john@example.com" required>
@@ -950,7 +953,7 @@ function renderLogin() {
 
 function renderRegister() {
   return `<div class="auth-page"><div class="auth-card fade-in">
-    <div class="auth-header"><h1>Drukpa</h1><p>Sign up to connect with the world.</p></div>
+    <div class="auth-header">${DRAGON_ICON(64)}<h1>Drukpa</h1><p>Sign up to connect with the world.</p></div>
     <form id="registerForm">
       <input id="regName" placeholder="Full Name" required>
       <input id="regUser" placeholder="Username" required>
@@ -966,7 +969,7 @@ function renderRegister() {
 function renderNav() {
   const u = S.user, un = unreadN();
   return `<nav class="navbar"><div class="nav-content">
-    <a class="nav-logo" onclick="go('feed')">Drukpa</a>
+    <a class="nav-logo" onclick="go('feed')">${DRAGON_ICON(32)}Drukpa</a>
     <div class="nav-search">
       <i class="fas fa-search"></i>
       <input placeholder="Search Drukpa..." id="navSearch" oninput="navSearchHandler(this.value)" onfocus="navSearchHandler(this.value)">
