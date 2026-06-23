@@ -764,6 +764,92 @@
     .install-banner { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 1600; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); }
     .install-banner button { padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; }
 
+    /* Video/Voice Call */
+    .call-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+    .call-content { text-align: center; color: white; }
+    .call-content img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #667eea; margin-bottom: 16px; }
+    .call-controls { display: flex; gap: 16px; justify-content: center; margin-top: 24px; }
+    .call-controls button { width: 56px; height: 56px; border-radius: 50%; border: none; font-size: 22px; cursor: pointer; }
+    .group-call-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px auto; max-width: 320px; }
+    .group-call-grid .call-participant { text-align: center; }
+    .group-call-grid .call-participant img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #667eea; }
+
+    /* Broadcast Channel */
+    .broadcast-badge { background: #f39c12; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+
+    /* Post Edit Modal */
+    .edit-post-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .edit-post-content { background: white; border-radius: 16px; padding: 24px; width: 500px; max-width: 90vw; }
+    .dark .edit-post-content { background: #242526; color: #e4e6eb; }
+
+    /* Carousel */
+    .carousel-container { position: relative; overflow: hidden; }
+    .carousel-track { display: flex; transition: transform 0.3s ease; }
+    .carousel-track img { min-width: 100%; max-height: 500px; object-fit: cover; }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; z-index: 5; }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+    .carousel-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0; }
+    .carousel-dots span { width: 8px; height: 8px; border-radius: 50%; background: #e4e6eb; cursor: pointer; }
+    .carousel-dots span.active { background: #667eea; }
+
+    /* Fundraiser */
+    .fundraiser-card { background: linear-gradient(135deg, #27ae60, #2ecc71); border-radius: 12px; padding: 16px; color: white; margin: 8px 0; }
+    .fundraiser-bar { height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+    .fundraiser-fill { height: 100%; background: white; border-radius: 4px; transition: width 0.5s; }
+
+    /* Anonymous Mode */
+    .anon-badge { background: #9b59b6; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .anon-indicator { position: fixed; top: 70px; left: 20px; background: #9b59b6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; z-index: 999; display: flex; align-items: center; gap: 6px; }
+
+    /* Block/Report */
+    .block-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .block-content { background: white; border-radius: 16px; padding: 24px; width: 380px; max-width: 90vw; }
+    .dark .block-content { background: #242526; color: #e4e6eb; }
+    .report-options label { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f0f2f5; font-size: 14px; cursor: pointer; }
+    .dark .report-options label { border-color: #3a3b3c; }
+
+    /* Friend Suggestions */
+    .suggestion-card { background: white; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .dark .suggestion-card { background: #242526; }
+    .suggestion-card img { width: 64px; height: 64px; border-radius: 50%; margin-bottom: 8px; }
+
+    /* 2FA */
+    .twofa-steps { counter-reset: step; }
+    .twofa-step { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0f2f5; }
+    .dark .twofa-step { border-color: #3a3b3c; }
+    .twofa-step-num { width: 28px; height: 28px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+
+    /* Nested Comments */
+    .comment-reply { margin-left: 32px; margin-top: 6px; }
+
+    /* Quote Repost */
+    .quote-repost { border: 1px solid #e4e6eb; border-radius: 12px; padding: 12px; margin: 8px 0; }
+    .dark .quote-repost { border-color: #3a3b3c; }
+
+    /* Bookmark Collections */
+    .collection-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+    .collection-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; }
+    .dark .collection-card { background: #242526; }
+    .collection-card .collection-cover { height: 100px; background: linear-gradient(135deg, #667eea, #764ba2); display: grid; grid-template-columns: 1fr 1fr; gap: 2px; overflow: hidden; }
+    .collection-card .collection-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .collection-card .collection-info { padding: 10px; }
+
+    /* Post Templates */
+    .template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .template-item { padding: 12px; border: 2px solid #e4e6eb; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 13px; }
+    .template-item:hover { border-color: #667eea; background: rgba(102,126,234,0.05); }
+    .dark .template-item { border-color: #3a3b3c; }
+
+    /* Fan Club */
+    .fanclub-card { background: linear-gradient(135deg, #f39c12, #e74c3c); border-radius: 16px; padding: 20px; color: white; }
+
+    /* Watermark */
+    .watermark-overlay { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.4); color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; z-index: 5; }
+
+    /* Paid DM */
+    .paid-dm-badge { background: linear-gradient(135deg, #f39c12, #e74c3c); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+
     @media (max-width: 1024px) { .sidebar-left, .sidebar-right { display: none; } }
     @media (max-width: 768px) {
       .nav-search { display: none; }
@@ -819,7 +905,26 @@ const S = {
   showChallenge: false, lang: 'en',
   isOffline: false, disappearTimers: {},
   storyHighlights: [{name:'Travel',img:'https://picsum.photos/100/100?random=80'},{name:'Food',img:'https://picsum.photos/100/100?random=81'},{name:'Art',img:'https://picsum.photos/100/100?random=82'}],
-  msgReactions: {}
+  msgReactions: {},
+  // Batch 3 features
+  showCall: null, callType: 'voice', groupCall: false,
+  showEditPost: null, editPostText: '',
+  anonMode: false, showBlockModal: null, showReportModal: null,
+  blockedUsers: [], mutedConvos: [],
+  twoFAEnabled: false, showTwoFA: false,
+  showQuoteRepost: null, quoteText: '',
+  bookmarkCollections: [{name:'Favorites',posts:['p1','p3']},{name:'Inspiration',posts:['p2']},{name:'Read Later',posts:['p5']}],
+  activeCollection: null, showNewCollection: false,
+  showTemplates: false,
+  showFanClub: false, fanClubMembers: 47,
+  watermarkEnabled: true,
+  showPaidDM: null, paidDMPrice: 50,
+  showBroadcast: false, broadcastChannels: [{name:'Announcements',subs:1240},{name:'Behind the Scenes',subs:890}],
+  showFundraiser: false, fundraiserGoal: 5000, fundraiserRaised: 3250,
+  showAffiliate: false,
+  carouselIdx: {},
+  msgForward: null,
+  showFriendSuggestions: false
 };
 
 const users = [
@@ -887,7 +992,7 @@ const notifs = [
   { id:'n9', type:'like', sid:'3', pid:'p2', time:'2d ago', read:true },
 ];
 
-function U(id) { return users.find(u => u.id === id); }
+function U(id) { if(id==='anon') return {id:'anon',username:'anonymous',fullName:'Anonymous',avatar:'https://i.pravatar.cc/150?img=70',bio:'',location:'',website:'',followers:[],following:[],verified:false,online:false,private:true}; return users.find(u => u.id === id); }
 function unreadN() { return notifs.filter(n => !n.read).length; }
 let postIdCounter = 100;
 let msgIdCounter = 100;
@@ -923,8 +1028,22 @@ function render() {
     if (S.showSubscriptions) modals += renderSubscriptions();
     if (S.showProfileViewers) modals += renderProfileViewers();
     if (S.showChallenge) modals += renderChallengeModal();
+    if (S.showCall) modals += renderCallModal();
+    if (S.showEditPost) modals += renderEditPostModal();
+    if (S.showBlockModal) modals += renderBlockModal();
+    if (S.showReportModal) modals += renderReportModal();
+    if (S.showTwoFA) modals += renderTwoFAModal();
+    if (S.showQuoteRepost) modals += renderQuoteRepostModal();
+    if (S.showNewCollection) modals += renderNewCollectionModal();
+    if (S.showTemplates) modals += renderTemplatesModal();
+    if (S.showFanClub) modals += renderFanClubModal();
+    if (S.showPaidDM) modals += renderPaidDMModal();
+    if (S.showBroadcast) modals += renderBroadcastModal();
+    if (S.showFundraiser) modals += renderFundraiserModal();
+    if (S.showAffiliate) modals += renderAffiliateModal();
+    if (S.showFriendSuggestions) modals += renderFriendSuggestionsModal();
     if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
-    app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
+    app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
   }
   const ptEl2 = document.getElementById('postText');
   if (ptEl2 && S._postDraft) ptEl2.value = S._postDraft;
@@ -1041,6 +1160,8 @@ function renderSidebar() {
     <div class="sidebar-item ${S.page==='map'?'active':''}" onclick="go('map')"><i class="fas fa-map-marked-alt"></i> Map Explore</div>
     <div class="sidebar-item ${S.page==='saved'?'active':''}" onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</div>
     <div class="sidebar-item" onclick="S.showLeaderboard=true;render()"><i class="fas fa-trophy"></i> Leaderboard</div>
+    <div class="sidebar-item" onclick="S.showFriendSuggestions=true;render()"><i class="fas fa-user-plus"></i> Friend Suggestions</div>
+    <div class="sidebar-item" onclick="S.showBroadcast=true;render()"><i class="fas fa-bullhorn"></i> Broadcast</div>
     <div class="sidebar-item ${S.page==='settings'?'active':''}" onclick="go('settings')"><i class="fas fa-cog"></i> Settings</div>
     <div style="padding:10px 14px;margin-top:8px;border-top:1px solid #f0f2f5">
       <div class="streak-indicator"><i class="fas fa-fire"></i> ${S.streakDays} day streak</div>
@@ -1090,7 +1211,7 @@ function renderCreatePost() {
     ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
   }
   const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
-  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i></button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
 }
 
 function renderPost(p) {
@@ -1100,12 +1221,12 @@ function renderPost(p) {
   const isPinned = S.pinnedPosts.includes(p.id);
   return `<div class="post-card fade-in">
     ${isPinned?'<div class="pinned-label"><i class="fas fa-thumbtack"></i> Pinned Post</div>':''}
-    <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><span class="${a.online?'online-indicator':''}"><img src="${a.avatar}" class="avatar-sm"></span><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''} ${p._collab?`<span style="font-size:11px;color:#65676b;font-weight:400">with ${U(p._collab).fullName}</span>`:''}</div><div class="post-meta">${p.time} · <i class="fas fa-globe-americas"></i></div></div></div>
-    <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="togglePin('${p.id}')"><i class="fas fa-thumbtack"></i> ${isPinned?'Unpin':'Pin to Profile'}</a><a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:''}<a onclick="togglePostMenu('${p.id}')"><i class="fas fa-flag"></i> Report</a></div></div></div>
+    <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><span class="${a.online?'online-indicator':''}"><img src="${a.avatar}" class="avatar-sm"></span><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''} ${p._collab?`<span style="font-size:11px;color:#65676b;font-weight:400">with ${U(p._collab).fullName}</span>`:''}</div><div class="post-meta">${p.time}${p._edited?' · <i class="fas fa-pencil-alt" style="font-size:10px"></i> edited':''} · ${p._anon?'<i class="fas fa-mask"></i>':'<i class="fas fa-globe-americas"></i>'}</div></div></div>
+    <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="openEditPost('${p.id}')"><i class="fas fa-edit"></i> Edit Post</a><a onclick="togglePin('${p.id}')"><i class="fas fa-thumbtack"></i> ${isPinned?'Unpin':'Pin to Profile'}</a><a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:`<a onclick="S.showBlockModal='${p.aid}';S.openMenus={};render()"><i class="fas fa-ban"></i> Block User</a>`}<a onclick="S.showReportModal='${p.id}';S.openMenus={};render()"><i class="fas fa-flag"></i> Report</a></div></div></div>
     <div class="post-content">${txt}</div>
     ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">drukpa.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
     ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
-    ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)"><div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div></div>`:''}
+    ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)">${p.media.length>2?`<div class="carousel-container"><div class="carousel-track" style="transform:translateX(-${(S.carouselIdx[p.id]||0)*100}%)">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>${(S.carouselIdx[p.id]||0)>0?`<button class="carousel-btn prev" onclick="event.stopPropagation();carouselPrev('${p.id}')"><i class="fas fa-chevron-left"></i></button>`:''}${(S.carouselIdx[p.id]||0)<p.media.length-1?`<button class="carousel-btn next" onclick="event.stopPropagation();carouselNext('${p.id}',${p.media.length})"><i class="fas fa-chevron-right"></i></button>`:''}<div class="carousel-dots">${p.media.map((_,i)=>`<span class="${i===(S.carouselIdx[p.id]||0)?'active':''}" onclick="event.stopPropagation();S.carouselIdx['${p.id}']=${i};render()"></span>`).join('')}</div></div>`:`<div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>`}${S.watermarkEnabled&&p.aid===S.user.id?'<div class="watermark-overlay">@'+S.user.username+'</div>':''}</div>`:''}
     ${(p.videos||[]).length?`<div class="post-media">${p.videos.map(v=>`<video src="${v}" controls class="post-video"></video>`).join('')}</div>`:''}
     <div class="post-stats"><div class="post-stats-left"><div class="reaction-icons">${reactionIcons(p)}</div> ${p.likes.length}</div><div class="post-stats-right" onclick="toggleComments('${p.id}')">${p.comments.length} comments · ${p.shares.length} shares</div></div>
     <div class="post-actions-bar">
@@ -1160,10 +1281,10 @@ function renderChat() {
   const c = convos.find(x=>x.id===S.activeConv);
   const oid = c.parts.find(p=>p!==S.user.id), o = U(oid);
   const m = msgs[S.activeConv] || [];
-  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-info-circle"></i></button></div></div>
+  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#667eea'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-info-circle"></i></button></div></div>
     <div class="msg-chat-body">${m.map((x,xi)=>`<div class="chat-bubble ${x.sid===S.user.id?'sent':'received'}" style="position:relative" ondblclick="reactToMsg('${S.activeConv}',${xi})">${x.isVoice?`<div class="voice-msg"><button onclick="toast('Playing voice...')"><i class="fas fa-play"></i></button><div class="voice-wave">${Array(12).fill(0).map(()=>`<span style="height:${Math.floor(Math.random()*18)+4}px"></span>`).join('')}</div><span style="font-size:11px;opacity:0.7">${x.voiceDur||'0:03'}</span></div>`:x.isMedia?x.text:x.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}${x.disappear?`<span class="disappear-timer"><i class="fas fa-clock"></i> ${x.disappear}</span>`:''}
 <span class="bubble-time">${x.time}${x.sid===S.user.id?' <span class="read-receipt"><i class="fas fa-check-double"></i></span>':''}</span>${S.msgReactions[S.activeConv+'_'+xi]?`<span class="msg-reaction">${S.msgReactions[S.activeConv+'_'+xi]}</span>`:''}</div>`).join('')}<div class="typing-indicator" id="typingInd"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>
-    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#667eea'}"><i class="fas fa-microphone"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#667eea">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
+    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#667eea'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#667eea" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#667eea">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
 }
 
 function renderNotifications() {
@@ -1215,7 +1336,7 @@ function renderProfile() {
         </div>
       </div>
       <div class="profile-actions">
-        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" style="margin-left:4px" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" style="margin-left:4px" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button>`}
+        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" style="margin-left:4px" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" style="margin-left:4px" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
       </div>
     </div>
     ${own?`<div class="highlights-row" style="padding:12px 24px">
@@ -1241,8 +1362,18 @@ function renderFollowersModal(uid, type) {
 
 function renderSaved() {
   const savedPosts = posts.filter(p => p.saves.includes(S.user.id));
+  if (S.activeCollection !== null) {
+    const col = S.bookmarkCollections[S.activeCollection];
+    const colPosts = col ? posts.filter(p => col.posts.includes(p.id)) : [];
+    return `<div class="app-layout"><div class="main-feed saved-page fade-in">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button class="btn-secondary" onclick="S.activeCollection=null;render()"><i class="fas fa-arrow-left"></i></button><h2>${col.name}</h2><span style="color:#65676b;font-size:14px">${colPosts.length} items</span></div>
+      ${colPosts.length ? colPosts.map(p => renderPost(p)).join('') : '<div class="empty-state"><i class="fas fa-folder-open"></i><h3>Empty Collection</h3><p>Save posts to this collection.</p></div>'}
+    </div></div>`;
+  }
   return `<div class="app-layout"><div class="main-feed saved-page fade-in">
-    <h2><i class="fas fa-bookmark" style="color:#667eea;margin-right:8px"></i> Saved Posts</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2><i class="fas fa-bookmark" style="color:#667eea;margin-right:8px"></i> Saved Posts</h2><button class="btn-primary" style="width:auto;padding:8px 16px" onclick="S.showNewCollection=true;render()"><i class="fas fa-plus"></i> New Collection</button></div>
+    <div class="collection-grid">${S.bookmarkCollections.map((col,i)=>{const colPosts=posts.filter(p=>col.posts.includes(p.id));return`<div class="collection-card" onclick="S.activeCollection=${i};render()"><div class="collection-cover">${colPosts.slice(0,4).map(p=>p.media.length?`<img src="${p.media[0]}">`:`<div style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>`).join('')}${Array(Math.max(0,4-colPosts.length)).fill('<div style="background:#f0f2f5"></div>').join('')}</div><div class="collection-info"><strong style="font-size:14px">${col.name}</strong><p style="font-size:12px;color:#65676b">${colPosts.length} posts</p></div></div>`;}).join('')}</div>
+    <h3 style="margin:16px 0 12px">All Saved</h3>
     ${savedPosts.length ? savedPosts.map(p => renderPost(p)).join('') : '<div class="empty-state"><i class="fas fa-bookmark"></i><h3>No Saved Posts</h3><p>Save posts to find them easily later.</p></div>'}
   </div></div>`;
 }
@@ -1273,11 +1404,25 @@ function renderSettings() {
       <div class="settings-section"><h4>Accessibility</h4>
         <div class="toggle-group"><span><i class="fas fa-adjust" style="margin-right:8px"></i> High Contrast Mode</span><div class="toggle ${S.highContrast?'active':''}" onclick="toggleHighContrast()"></div></div>
       </div>
-      <div class="settings-section"><h4>Privacy</h4>
-        <div class="toggle-group"><span>Private Account</span><div class="toggle ${u.private?'active':''}" onclick="this.classList.toggle('active')"></div></div>
+      <div class="settings-section"><h4>Privacy & Security</h4>
+        <div class="toggle-group"><span><i class="fas fa-lock" style="margin-right:8px"></i> Private Account</span><div class="toggle ${u.private?'active':''}" onclick="u.private=!u.private;toast(u.private?'Account is now private':'Account is now public');render()"></div></div>
         <div class="toggle-group"><span>Show Online Status</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
         <div class="toggle-group"><span>Allow Message Requests</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
         <div class="toggle-group"><span><i class="fas fa-ghost" style="margin-right:8px"></i> Vanish Mode</span><div class="toggle ${S.vanishMode?'active':''}" onclick="S.vanishMode=!S.vanishMode;toast(S.vanishMode?'Vanish mode on — messages disappear!':'Vanish mode off');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-mask" style="margin-right:8px"></i> Anonymous Posting</span><div class="toggle ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode enabled':'Anonymous mode disabled');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-copyright" style="margin-right:8px"></i> Watermark on Media</span><div class="toggle ${S.watermarkEnabled?'active':''}" onclick="S.watermarkEnabled=!S.watermarkEnabled;toast(S.watermarkEnabled?'Watermark enabled':'Watermark disabled');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-shield-alt" style="margin-right:8px"></i> Two-Factor Auth (2FA)</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:${S.twoFAEnabled?'#27ae60':'#e74c3c'}">${S.twoFAEnabled?'Enabled':'Disabled'}</span><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="S.showTwoFA=true;render()">Setup</button></div></div>
+      </div>
+      <div class="settings-section"><h4>Blocked Users</h4>
+        ${S.blockedUsers.length?S.blockedUsers.map(uid=>{const bu=U(uid);return bu?`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f2f5"><img src="${bu.avatar}" class="avatar-xs"><span style="flex:1;font-size:13px">${bu.fullName}</span><button class="btn-secondary" style="padding:4px 12px;font-size:12px" onclick="unblockUser('${uid}')">Unblock</button></div>`:'';}).join(''):'<p style="font-size:13px;color:#65676b">No blocked users</p>'}
+      </div>
+      <div class="settings-section"><h4>Creator Tools</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c;margin-right:4px"></i> Fan Club</button>
+          <button class="btn-secondary" onclick="S.showAffiliate=true;render()"><i class="fas fa-link" style="color:#27ae60;margin-right:4px"></i> Affiliate Links</button>
+          <button class="btn-secondary" onclick="S.showPaidDM='settings';render()"><i class="fas fa-coins" style="color:#f39c12;margin-right:4px"></i> Paid DMs</button>
+          <button class="btn-secondary" onclick="S.showBroadcast=true;render()"><i class="fas fa-bullhorn" style="color:#3498db;margin-right:4px"></i> Broadcast</button>
+        </div>
       </div>
       <div class="settings-section"><h4>Close Friends</h4>
         <p style="font-size:13px;color:#65676b;margin-bottom:8px">Only close friends can see your stories marked as close friends only.</p>
@@ -1340,7 +1485,25 @@ function togglePostMenu(id) { S.openMenus[id] = !S.openMenus[id]; render(); }
 function addComment(id) {
   const el = document.getElementById('ci-'+id);
   if (!el || !el.value.trim()) return;
-  posts.find(x=>x.id===id).comments.push({uid:S.user.id, text:el.value, t:'just now'});
+  const p = posts.find(x=>x.id===id);
+  const text = el.value.trim();
+  if (text.startsWith('@')) {
+    const mentioned = text.match(/^@(\w+)\s/);
+    if (mentioned) {
+      const parentComment = p.comments.find(c => U(c.uid)?.username === mentioned[1]);
+      if (parentComment) {
+        if (!parentComment.replies) parentComment.replies = [];
+        parentComment.replies.push({uid:S.user.id, text:text.replace(/^@\w+\s/, ''), t:'just now'});
+        toast('Reply added!','fa-reply');
+        gainXP(5);
+        render();
+        S.openComments[id] = true;
+        render();
+        return;
+      }
+    }
+  }
+  p.comments.push({uid:S.user.id, text:text, t:'just now', replies:[]});
   toast('Comment added!','fa-comment');
   gainXP(5);
   render();
@@ -1595,6 +1758,20 @@ document.addEventListener('keydown', e => {
     if(S.showSubscriptions){S.showSubscriptions=false;render();}
     if(S.showProfileViewers){S.showProfileViewers=false;render();}
     if(S.showChallenge){S.showChallenge=false;render();}
+    if(S.showCall){S.showCall=null;render();}
+    if(S.showEditPost){S.showEditPost=null;render();}
+    if(S.showBlockModal){S.showBlockModal=null;render();}
+    if(S.showReportModal){S.showReportModal=null;render();}
+    if(S.showTwoFA){S.showTwoFA=false;render();}
+    if(S.showQuoteRepost){S.showQuoteRepost=null;render();}
+    if(S.showNewCollection){S.showNewCollection=false;render();}
+    if(S.showTemplates){S.showTemplates=false;render();}
+    if(S.showFanClub){S.showFanClub=false;render();}
+    if(S.showPaidDM){S.showPaidDM=null;render();}
+    if(S.showBroadcast){S.showBroadcast=false;render();}
+    if(S.showFundraiser){S.showFundraiser=false;render();}
+    if(S.showAffiliate){S.showAffiliate=false;render();}
+    if(S.showFriendSuggestions){S.showFriendSuggestions=false;render();}
     document.querySelector('.modal-overlay')?.remove();
   }
   if(!S.user)return;
@@ -1678,6 +1855,8 @@ function renderShareModal() {
     <h3>Share Post</h3>
     <div class="share-options">
       <div class="share-opt" onclick="sharePost('${S.showShareModal}');S.showShareModal=null;render()"><i class="fas fa-retweet" style="color:#27ae60"></i><span>Repost</span></div>
+      <div class="share-opt" onclick="S.showQuoteRepost=S.showShareModal;S.showShareModal=null;render()"><i class="fas fa-quote-left" style="color:#9b59b6"></i><span>Quote</span></div>
+      <div class="share-opt" onclick="forwardPost('${S.showShareModal}')"><i class="fas fa-paper-plane" style="color:#3498db"></i><span>Forward</span></div>
       <div class="share-opt" onclick="copyLink()"><i class="fas fa-link" style="color:#667eea"></i><span>Copy Link</span></div>
       <div class="share-opt" onclick="toast('Opening WhatsApp...','fa-share');S.showShareModal=null;render()"><i class="fab fa-whatsapp" style="color:#25d366"></i><span>WhatsApp</span></div>
       <div class="share-opt" onclick="toast('Opening Twitter...','fa-share');S.showShareModal=null;render()"><i class="fab fa-twitter" style="color:#1da1f2"></i><span>Twitter</span></div>
@@ -2235,6 +2414,356 @@ function sendMediaMsg(files) {
   };
   reader.readAsDataURL(files[0]);
 }
+
+// ===== VIDEO/VOICE CALLING =====
+function startCall(uid, type) {
+  S.showCall = uid; S.callType = type; S.groupCall = false; render();
+  playNotifSound();
+}
+function startGroupCall() {
+  S.showCall = 'group'; S.callType = 'video'; S.groupCall = true; render();
+}
+function renderCallModal() {
+  if (S.groupCall) {
+    const participants = users.filter(u=>u.id!==S.user.id).slice(0,4);
+    return `<div class="call-modal" onclick="if(event.target===this){S.showCall=null;render()}"><div class="call-content">
+      <h2 style="margin-bottom:16px">Group ${S.callType==='video'?'Video':'Voice'} Call</h2>
+      <div class="group-call-grid">${participants.map(u=>`<div class="call-participant"><img src="${u.avatar}"><p style="margin-top:6px;font-size:13px">${u.fullName.split(' ')[0]}</p></div>`).join('')}</div>
+      <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹':'🎤'} ${Math.floor(Math.random()*5)+2}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</p>
+      <div class="call-controls">
+        <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+        ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+        <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
+        <button style="background:#3a3b3c;color:white" onclick="toast('Screen shared!')"><i class="fas fa-desktop"></i></button>
+      </div>
+    </div></div>`;
+  }
+  const u = U(S.showCall);
+  if(!u) return '';
+  return `<div class="call-modal" onclick="if(event.target===this){S.showCall=null;render()}"><div class="call-content">
+    <img src="${u.avatar}">
+    <h2>${u.fullName}</h2>
+    <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹 Video Call':'🎤 Voice Call'} — Ringing...</p>
+    <div class="call-controls">
+      <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+      ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+      <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
+      <button style="background:#27ae60;color:white" onclick="toast('Connected! 📞');setTimeout(()=>{S.showCall=null;render()},2000)"><i class="fas fa-phone"></i></button>
+    </div>
+    <button style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 16px;border-radius:20px;margin-top:16px;font-size:12px;cursor:pointer" onclick="startGroupCall()"><i class="fas fa-user-plus"></i> Add Participants</button>
+  </div></div>`;
+}
+
+// ===== EDIT POST =====
+function openEditPost(pid) {
+  const p = posts.find(x=>x.id===pid);
+  if(!p) return;
+  S.showEditPost = pid;
+  S.editPostText = p.text;
+  S.openMenus = {};
+  render();
+}
+function renderEditPostModal() {
+  return `<div class="edit-post-modal" onclick="if(event.target===this){S.showEditPost=null;render()}"><div class="edit-post-content">
+    <h3><i class="fas fa-edit" style="color:#667eea;margin-right:8px"></i> Edit Post</h3>
+    <textarea id="editPostText" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;min-height:120px;font-size:15px;resize:none;margin:16px 0">${S.editPostText}</textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="S.showEditPost=null;render()">Cancel</button>
+      <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="saveEditPost()">Save Changes</button>
+    </div>
+  </div></div>`;
+}
+function saveEditPost() {
+  const p = posts.find(x=>x.id===S.showEditPost);
+  const el = document.getElementById('editPostText');
+  if(p && el) { p.text = el.value; p._edited = true; toast('Post updated! ✏️'); }
+  S.showEditPost = null; render();
+}
+
+// ===== BLOCK / REPORT =====
+function renderBlockModal() {
+  const u = U(S.showBlockModal);
+  if(!u) return '';
+  const isBlocked = S.blockedUsers.includes(u.id);
+  return `<div class="block-modal" onclick="if(event.target===this){S.showBlockModal=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-ban" style="color:#e74c3c;margin-right:8px"></i> ${isBlocked?'Unblock':'Block'} ${u.fullName}?</h3>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">${isBlocked?'They will be able to find your profile and posts again.':'They won\\'t be able to find your profile, posts, or message you. They won\\'t be notified.'}</p>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="S.showBlockModal=null;render()">Cancel</button>
+      <button class="btn-danger" style="flex:1;padding:10px" onclick="${isBlocked?'unblockUser':'blockUser'}('${u.id}')">${isBlocked?'Unblock':'Block'}</button>
+    </div>
+  </div></div>`;
+}
+function blockUser(uid) {
+  if(!S.blockedUsers.includes(uid)) S.blockedUsers.push(uid);
+  S.user.following = S.user.following.filter(f=>f!==uid);
+  const u = U(uid);
+  if(u) u.followers = u.followers.filter(f=>f!==S.user.id);
+  toast('User blocked','fa-ban');
+  S.showBlockModal = null; render();
+}
+function unblockUser(uid) {
+  S.blockedUsers = S.blockedUsers.filter(x=>x!==uid);
+  toast('User unblocked','fa-check');
+  S.showBlockModal = null; render();
+}
+function renderReportModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showReportModal=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-flag" style="color:#e74c3c;margin-right:8px"></i> Report Content</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Why are you reporting this?</p>
+    <div class="report-options">
+      ${['Spam or misleading','Harassment or bullying','Hate speech','Violence or threats','Nudity or sexual content','False information','Intellectual property violation','Other'].map(r=>`<label onclick="submitReport('${r}')"><input type="radio" name="report"> ${r}</label>`).join('')}
+    </div>
+  </div></div>`;
+}
+function submitReport(reason) {
+  toast('Report submitted. We\\'ll review it within 24 hours.','fa-flag');
+  S.showReportModal = null; render();
+}
+
+// ===== 2FA =====
+function renderTwoFAModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showTwoFA=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-shield-alt" style="color:#667eea;margin-right:8px"></i> Two-Factor Authentication</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Add an extra layer of security to your account.</p>
+    <div class="twofa-steps">
+      <div class="twofa-step"><div class="twofa-step-num">1</div><div><strong style="font-size:14px">Download Authenticator App</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Get Google Authenticator or Authy on your phone.</p></div></div>
+      <div class="twofa-step"><div class="twofa-step-num">2</div><div><strong style="font-size:14px">Scan QR Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Scan the code below with your authenticator app.</p>
+        <div style="width:120px;height:120px;background:#f0f2f5;border-radius:8px;margin:8px 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-qrcode" style="font-size:64px;color:#1a1a2e"></i></div></div></div>
+      <div class="twofa-step"><div class="twofa-step-num">3</div><div><strong style="font-size:14px">Enter Verification Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Enter the 6-digit code from your authenticator.</p>
+        <div style="display:flex;gap:6px;margin-top:8px">${Array(6).fill(0).map(()=>`<input style="width:38px;height:44px;text-align:center;border:2px solid #e4e6eb;border-radius:8px;font-size:18px;font-weight:700" maxlength="1" oninput="this.nextElementSibling?.focus()">`).join('')}</div></div></div>
+    </div>
+    <button class="btn-primary" style="margin-top:16px" onclick="S.twoFAEnabled=true;toast('2FA enabled! Your account is now more secure 🔒');S.showTwoFA=false;render()">Enable 2FA</button>
+  </div></div>`;
+}
+
+// ===== QUOTE REPOST =====
+function renderQuoteRepostModal() {
+  const op = posts.find(x=>x.id===S.showQuoteRepost);
+  if(!op) return '';
+  const oa = U(op.aid);
+  return `<div class="edit-post-modal" onclick="if(event.target===this){S.showQuoteRepost=null;render()}"><div class="edit-post-content">
+    <h3><i class="fas fa-quote-left" style="color:#9b59b6;margin-right:8px"></i> Quote Repost</h3>
+    <textarea id="quoteText" placeholder="Add your thoughts..." style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;min-height:80px;font-size:15px;resize:none;margin:12px 0"></textarea>
+    <div class="quote-repost">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><img src="${oa.avatar}" class="avatar-xs"><strong style="font-size:13px">${oa.fullName}</strong><span style="font-size:11px;color:#65676b">${op.time}</span></div>
+      <p style="font-size:13px;color:#65676b">${op.text.slice(0,100)}${op.text.length>100?'...':''}</p>
+    </div>
+    <button class="btn-primary" style="margin-top:8px" onclick="publishQuoteRepost()">Repost</button>
+  </div></div>`;
+}
+function publishQuoteRepost() {
+  const op = posts.find(x=>x.id===S.showQuoteRepost);
+  const qt = document.getElementById('quoteText')?.value || '';
+  if(!op) return;
+  const oa = U(op.aid);
+  posts.unshift({id:'p'+(++postIdCounter), aid:S.user.id, text:qt+'\n\n📎 Quoting @'+oa.username+': "'+op.text.slice(0,80)+'..."', media:[], likes:[], comments:[], shares:[], saves:[], time:'just now', _quote:op.id});
+  toast('Quote reposted! 💬');
+  gainXP(10);
+  S.showQuoteRepost = null; render();
+}
+
+// ===== BOOKMARK COLLECTIONS =====
+function renderNewCollectionModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showNewCollection=false;render()}"><div class="block-content">
+    <h3><i class="fas fa-folder-plus" style="color:#667eea;margin-right:8px"></i> New Collection</h3>
+    <div class="form-group" style="margin-top:16px"><label>Collection Name</label><input id="newColName" placeholder="e.g., Travel ideas, Recipes..." style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <button class="btn-primary" style="margin-top:8px" onclick="createCollection()">Create Collection</button>
+  </div></div>`;
+}
+function createCollection() {
+  const name = document.getElementById('newColName')?.value?.trim();
+  if(!name) return toast('Enter a collection name!','fa-exclamation');
+  S.bookmarkCollections.push({name, posts:[]});
+  toast('Collection "'+name+'" created!','fa-folder-plus');
+  S.showNewCollection = false; render();
+}
+
+// ===== POST TEMPLATES =====
+function renderTemplatesModal() {
+  const templates = [
+    {icon:'📸',name:'Photo Share',text:'Check out this amazing shot! 📸\n\n#photography #art'},
+    {icon:'💡',name:'Tip / Advice',text:'💡 Quick tip:\n\n[Your tip here]\n\nHope this helps! #tips'},
+    {icon:'📢',name:'Announcement',text:'📢 Big announcement!\n\n[Your news here]\n\nStay tuned for more updates!'},
+    {icon:'❓',name:'Question',text:'I have a question for you all:\n\n[Your question here]\n\nDrop your thoughts below! 👇'},
+    {icon:'📊',name:'Poll / Opinion',text:'What do you think about [topic]?\n\nA) Option 1\nB) Option 2\n\nVote in the comments! 📊'},
+    {icon:'🎉',name:'Celebration',text:'🎉 Exciting news!\n\n[What you are celebrating]\n\nThank you all for your support! ❤️'},
+  ];
+  return `<div class="block-modal" onclick="if(event.target===this){S.showTemplates=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-file-alt" style="color:#e67e22;margin-right:8px"></i> Post Templates</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Choose a template to get started quickly.</p>
+    <div class="template-grid">${templates.map(t=>`<div class="template-item" onclick="useTemplate('${t.text.replace(/'/g,"\\'")}')"><span style="font-size:24px;display:block;margin-bottom:4px">${t.icon}</span><strong>${t.name}</strong></div>`).join('')}</div>
+  </div></div>`;
+}
+function useTemplate(text) {
+  S._postDraft = text;
+  S.showTemplates = false;
+  toast('Template applied!','fa-file-alt');
+  render();
+  const el = document.getElementById('postText');
+  if(el) el.value = text;
+}
+
+// ===== FAN CLUB =====
+function renderFanClubModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFanClub=false;render()}"><div class="block-content" style="width:420px">
+    <div class="fanclub-card" style="margin-bottom:16px">
+      <h3><i class="fas fa-heart"></i> Fan Club</h3>
+      <p style="font-size:14px;margin-top:8px;opacity:0.9">${S.fanClubMembers} members</p>
+      <p style="font-size:12px;margin-top:4px;opacity:0.8">Exclusive content for your biggest supporters</p>
+    </div>
+    <h4 style="margin-bottom:8px">Fan Club Benefits</h4>
+    <ul style="font-size:13px;line-height:2;margin-left:16px;color:#65676b">
+      <li>Exclusive posts and stories</li><li>Early access to content</li><li>Fan badge next to name</li><li>Monthly Q&A sessions</li><li>Behind-the-scenes content</li>
+    </ul>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-primary" style="flex:1" onclick="toast('Fan Club pricing set!');S.showFanClub=false;render()">Set Price ($4.99/mo)</button>
+      <button class="btn-secondary" style="flex:1" onclick="S.showFanClub=false;render()">Close</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== PAID DMs =====
+function renderPaidDMModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showPaidDM=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-coins" style="color:#f39c12;margin-right:8px"></i> Paid DMs</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Charge non-followers to send you direct messages.</p>
+    <div class="form-group" style="margin-top:16px"><label>Price per message (coins)</label>
+      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#667eea':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(102,126,234,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">${p}</button>`).join('')}</div>
+    </div>
+    <div class="toggle-group" style="margin-top:8px"><span>Enable Paid DMs</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+    <button class="btn-primary" style="margin-top:16px" onclick="toast('Paid DM settings saved! 💰');S.showPaidDM=null;render()">Save Settings</button>
+  </div></div>`;
+}
+
+// ===== BROADCAST CHANNELS =====
+function renderBroadcastModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showBroadcast=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-bullhorn" style="color:#3498db;margin-right:8px"></i> Broadcast Channels</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Send one-way messages to your subscribers.</p>
+    ${S.broadcastChannels.map((ch,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px;cursor:pointer" onclick="toast('Composing broadcast for ${ch.name}...')">
+      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white"><i class="fas fa-bullhorn"></i></div>
+      <div style="flex:1"><strong style="font-size:14px">${ch.name}</strong><p style="font-size:12px;color:#65676b">${formatNum(ch.subs)} subscribers</p></div>
+      <span class="broadcast-badge">BROADCAST</span>
+    </div>`).join('')}
+    <div style="margin-top:12px">
+      <input id="newBroadcastName" placeholder="New channel name..." style="width:100%;padding:10px 14px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;margin-bottom:8px">
+      <button class="btn-primary" onclick="createBroadcast()">Create Channel</button>
+    </div>
+  </div></div>`;
+}
+function createBroadcast() {
+  const name = document.getElementById('newBroadcastName')?.value?.trim();
+  if(!name) return toast('Enter a channel name!','fa-exclamation');
+  S.broadcastChannels.push({name, subs:0});
+  toast('Broadcast channel "'+name+'" created!','fa-bullhorn');
+  render();
+}
+
+// ===== FUNDRAISER =====
+function renderFundraiserModal() {
+  const pct = Math.round((S.fundraiserRaised/S.fundraiserGoal)*100);
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFundraiser=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-hand-holding-heart" style="color:#27ae60;margin-right:8px"></i> Create Fundraiser</h3>
+    <div class="fundraiser-card" style="margin:16px 0">
+      <h4>Community Garden Project 🌱</h4>
+      <div class="fundraiser-bar"><div class="fundraiser-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span>$${S.fundraiserRaised.toLocaleString()} raised</span><span>$${S.fundraiserGoal.toLocaleString()} goal</span></div>
+      <p style="font-size:12px;margin-top:6px;opacity:0.8">${pct}% funded · 142 donors</p>
+    </div>
+    <div class="form-group"><label>Fundraiser Title</label><input placeholder="What are you raising funds for?" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <div class="form-group"><label>Goal Amount ($)</label><input type="number" placeholder="5000" value="5000" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" style="flex:1" onclick="toast('Fundraiser created! 🌱');S.showFundraiser=false;render()">Create Fundraiser</button>
+      <button style="flex:0;padding:10px 16px;background:#27ae60;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="S.fundraiserRaised=Math.min(S.fundraiserRaised+50,S.fundraiserGoal);toast('$50 donated! 💚');render()">Donate $50</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== AFFILIATE LINKS =====
+function renderAffiliateModal() {
+  const links = [{name:'Photography Course',url:'course.drukpa.app/photo',clicks:234,earnings:45.60},{name:'Art Supplies',url:'shop.drukpa.app/art',clicks:567,earnings:89.30},{name:'Tech Gadgets',url:'tech.drukpa.app/gear',clicks:123,earnings:23.10}];
+  return `<div class="block-modal" onclick="if(event.target===this){S.showAffiliate=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-link" style="color:#27ae60;margin-right:8px"></i> Affiliate Links</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Earn commission when followers buy through your links.</p>
+    ${links.map(l=>`<div style="padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:14px">${l.name}</strong><span style="color:#27ae60;font-weight:700;font-size:14px">$${l.earnings.toFixed(2)}</span></div>
+      <p style="font-size:11px;color:#65676b;margin-top:4px">${l.url} · ${l.clicks} clicks</p>
+    </div>`).join('')}
+    <div style="border-top:1px solid #e4e6eb;padding-top:12px;margin-top:8px">
+      <strong style="font-size:13px">Total Earnings: <span style="color:#27ae60">$${links.reduce((s,l)=>s+l.earnings,0).toFixed(2)}</span></strong>
+    </div>
+    <input placeholder="Paste product URL to create affiliate link..." style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;margin-top:12px;font-size:13px">
+    <button class="btn-primary" style="margin-top:8px" onclick="toast('Affiliate link created!','fa-link');S.showAffiliate=false;render()">Create Affiliate Link</button>
+  </div></div>`;
+}
+
+// ===== FRIEND SUGGESTIONS =====
+function renderFriendSuggestionsModal() {
+  const suggestions = users.filter(u=>u.id!==S.user.id&&!S.user.following.includes(u.id)&&!S.blockedUsers.includes(u.id));
+  const mutuals = users.filter(u=>u.id!==S.user.id&&S.user.following.includes(u.id));
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFriendSuggestions=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-user-plus" style="color:#667eea;margin-right:8px"></i> Friend Suggestions</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">People you might know based on mutual connections.</p>
+    ${suggestions.length?suggestions.map(u=>{const mutual=mutuals.filter(m=>m.following.includes(u.id)).length;return`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f2f5">
+      <img src="${u.avatar}" class="avatar-md" style="cursor:pointer" onclick="S.showFriendSuggestions=false;goProfile('${u.username}')">
+      <div style="flex:1"><strong style="font-size:14px;cursor:pointer" onclick="S.showFriendSuggestions=false;goProfile('${u.username}')">${u.fullName}</strong><p style="font-size:12px;color:#65676b">${mutual} mutual friend${mutual!==1?'s':''}</p></div>
+      <button class="btn-follow not-following" onclick="toggleFollow('${u.id}')">Follow</button>
+    </div>`;}).join(''):'<p style="text-align:center;color:#65676b;padding:20px">No suggestions right now. Follow more people to get recommendations!</p>'}
+  </div></div>`;
+}
+
+// ===== CAROUSEL NAVIGATION =====
+function carouselPrev(pid) { S.carouselIdx[pid] = Math.max(0, (S.carouselIdx[pid]||0) - 1); render(); }
+function carouselNext(pid, max) { S.carouselIdx[pid] = Math.min(max-1, (S.carouselIdx[pid]||0) + 1); render(); }
+
+// ===== MUTE CONVERSATIONS =====
+function toggleMuteConvo(cid) {
+  const i = S.mutedConvos.indexOf(cid);
+  if(i===-1) { S.mutedConvos.push(cid); toast('Conversation muted','fa-bell-slash'); }
+  else { S.mutedConvos.splice(i,1); toast('Conversation unmuted','fa-bell'); }
+  render();
+}
+
+// ===== MESSAGE FORWARDING =====
+function forwardPost(pid) {
+  const p = posts.find(x=>x.id===pid);
+  if(!p) return;
+  const a = U(p.aid);
+  toast('Select a conversation to forward to...','fa-paper-plane');
+  S.showShareModal = null;
+  if(convos.length>0) {
+    const c = convos[0];
+    const oid = c.parts.find(x=>x!==S.user.id);
+    if(!msgs[c.id]) msgs[c.id]=[];
+    msgs[c.id].push({id:'m'+(++msgIdCounter), sid:S.user.id, text:'📎 Forwarded: "'+p.text.slice(0,60)+'..." — @'+a.username, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+    c.last = '📎 Forwarded message'; c.lastT = 'now';
+    toast('Message forwarded to '+U(oid).fullName+'!','fa-paper-plane');
+  }
+  render();
+}
+
+// ===== ANONYMOUS POST =====
+const origNewPost = newPost;
+newPost = function() {
+  const el = document.getElementById('postText');
+  let text = el ? el.value.trim() : '';
+  if (S.postFeeling) text += (text ? ' ' : '') + '— feeling ' + (FEELINGS[S.postFeeling]||S.postFeeling);
+  if (S.postPoll && S.postPoll.question && S.postPoll.options.filter(o=>o).length>=2) {
+    const opts = S.postPoll.options.filter(o=>o);
+    text += (text ? '\n\n' : '') + '📊 ' + S.postPoll.question;
+    var pollHtml = opts;
+  }
+  if (!text && !S.postPhotos.length && !(S.postVideos||[]).length) return;
+  const allMedia = [...S.postPhotos, ...(S.postVideos||[])];
+  const p = { id:'p'+(++postIdCounter), aid:S.anonMode?'anon':S.user.id, text:text, media:allMedia.filter(m=>!m.startsWith('data:video')), videos:(S.postVideos||[]), likes:[], comments:[], shares:[], saves:[], time:'just now', _anon:S.anonMode };
+  if (pollHtml && Array.isArray(pollHtml)) p.poll = { question: S.postPoll.question, options: pollHtml.map(o=>({text:o,votes:[]})) };
+  posts.unshift(p);
+  S.postPhotos=[]; S.postVideos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null; S._postDraft='';
+  toast(S.anonMode?'Posted anonymously! 🎭':'Post published! 🎉','fa-check-circle');
+  gainXP(25);
+  render();
+};
 
 render();
 </script>
