@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Drukpa</string>
+    <string name="title_activity_main">Drukpa</string>
+    <string name="package_name">com.drukpa.social</string>
+    <string name="custom_url_scheme">com.drukpa.social</string>
+</resources>

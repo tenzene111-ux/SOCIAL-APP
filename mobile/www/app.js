@@ -1,0 +1,2044 @@
+const S = {
+  user: null, page: 'login', viewProfile: null, viewStory: null, storyIdx: 0,
+  activeConv: null, profileTab: 'posts', exploreTab: 'trending', notifTab: 'all',
+  openComments: {}, openMenus: {}, storyTimer: null,
+  postPhotos: [], postVideos: [], postFeeling: '', postPoll: null, postAttachMode: null,
+  darkMode: false, highContrast: false, showReactions: null, showShareModal: null, showEmojiPicker: null,
+  showFollowers: null, showFollowing: null,
+  // Advanced features state
+  reelsIdx: 0, showAIChat: false, aiMessages: [],
+  showLive: false, liveComments: [], liveViewers: 1243,
+  showTips: null, coins: 5000,
+  dashboardTab: 'overview',
+  showVerifyModal: false,
+  communityTab: 'discover', activeCommunity: null,
+  closeFriends: ['2','4'], vanishMode: false,
+  showAudioRoom: false, audioRoomSpeakers: [],
+  showGifSearch: false, gifQuery: '',
+  trendingTab: 'hashtags',
+  showReelsEditor: false,
+  // Gamification
+  xp: 2450, level: 12, streakDays: 7, lastStreakDate: new Date().toDateString(),
+  badges: ['early_bird','social_butterfly','content_creator','streak_7'],
+  showLeaderboard: false, showBadges: false, showLevelUp: false,
+  // PWA
+  showInstallPrompt: false,
+  // Keyboard shortcuts modal
+  showShortcuts: false,
+  // New batch 2 features
+  showQR: false, showShop: false, showSubscriptions: false,
+  showMapExplore: false, showProfileViewers: false,
+  followedHashtags: ['AI','digitalart','coding'],
+  pinnedPosts: ['p2'], scheduledPosts: [],
+  isRecordingVoice: false, voiceTimer: 0,
+  showChallenge: false, lang: 'en',
+  isOffline: false, disappearTimers: {},
+  storyHighlights: [{name:'Travel',img:'https://picsum.photos/100/100?random=80'},{name:'Food',img:'https://picsum.photos/100/100?random=81'},{name:'Art',img:'https://picsum.photos/100/100?random=82'}],
+  msgReactions: {},
+  // Batch 3 features
+  showCall: null, callType: 'voice', groupCall: false,
+  showEditPost: null, editPostText: '',
+  anonMode: false, showBlockModal: null, showReportModal: null,
+  blockedUsers: [], mutedConvos: [],
+  twoFAEnabled: false, showTwoFA: false,
+  showQuoteRepost: null, quoteText: '',
+  bookmarkCollections: [{name:'Favorites',posts:['p1','p3']},{name:'Inspiration',posts:['p2']},{name:'Read Later',posts:['p5']}],
+  activeCollection: null, showNewCollection: false,
+  showTemplates: false,
+  showFanClub: false, fanClubMembers: 47,
+  watermarkEnabled: true,
+  showPaidDM: null, paidDMPrice: 50,
+  showBroadcast: false, broadcastChannels: [{name:'Announcements',subs:1240},{name:'Behind the Scenes',subs:890}],
+  showFundraiser: false, fundraiserGoal: 5000, fundraiserRaised: 3250,
+  showAffiliate: false,
+  carouselIdx: {},
+  msgForward: null,
+  showFriendSuggestions: false,
+  // Utility features
+  showExport: false, showDeactivate: false, showActivityLog: false,
+  fontSize: 15, deactivateConfirm: ''
+};
+
+const users = [
+  { id:'1', username:'johndoe', fullName:'John Doe', email:'john@example.com', pw:'123456', avatar:'https://i.pravatar.cc/150?img=1', bio:'Software developer | Coffee lover ☕ | Building the future', location:'San Francisco, CA', website:'https://johndoe.dev', followers:['2','3','4','5'], following:['2','3'], verified:true, online:true, private:false },
+  { id:'2', username:'janesmith', fullName:'Jane Smith', email:'jane@example.com', pw:'123456', avatar:'https://i.pravatar.cc/150?img=5', bio:'Digital artist & photographer 📸', location:'New York, NY', website:'', followers:['1','3'], following:['1','4'], verified:true, online:true, private:false },
+  { id:'3', username:'mikejohn', fullName:'Mike Johnson', email:'mike@example.com', pw:'123456', avatar:'https://i.pravatar.cc/150?img=3', bio:'Traveler | Foodie | Life explorer 🌎', location:'London, UK', website:'', followers:['1','2'], following:['1','2','5'], verified:false, online:false, private:false },
+  { id:'4', username:'sarahwil', fullName:'Sarah Wilson', email:'sarah@example.com', pw:'123456', avatar:'https://i.pravatar.cc/150?img=9', bio:'Fashion & lifestyle blogger ✨', location:'Paris, France', website:'', followers:['2','5'], following:['1','3'], verified:true, online:true, private:false },
+  { id:'5', username:'alexchen', fullName:'Alex Chen', email:'alex@example.com', pw:'123456', avatar:'https://i.pravatar.cc/150?img=7', bio:'Tech entrepreneur | Startup mentor 🚀', location:'Tokyo, Japan', website:'', followers:['1','3'], following:['1','4'], verified:false, online:false, private:false },
+];
+
+const posts = [
+  { id:'p1', aid:'2', text:'Just finished my latest digital art piece! What do you think? 🎨\n\n#digitalart #creative #artwork', media:['https://picsum.photos/600/400?random=1'], likes:['1','3','4','5'], comments:[{uid:'1',text:'This is amazing! 🔥',t:'2h ago'},{uid:'3',text:'Love the colors!',t:'1h ago'}], shares:['3'], saves:['1'], time:'3h ago' },
+  { id:'p2', aid:'1', text:'Beautiful morning hike in the mountains. Nature never fails to amaze me. 🏔️✨\n\n#nature #hiking #mountains', media:['https://picsum.photos/600/500?random=2','https://picsum.photos/600/500?random=3'], likes:['2','3','4'], comments:[{uid:'2',text:'Gorgeous views! Where is this?',t:'5h ago'},{uid:'4',text:'So peaceful 🙏',t:'4h ago'}], shares:['2'], saves:['3','4'], time:'6h ago' },
+  { id:'p3', aid:'4', text:'New collection drop next week! Stay tuned for something special 💫\n\n#fashion #newcollection #style', media:['https://picsum.photos/600/700?random=4'], likes:['1','2','3','5'], comments:[{uid:'5',text:"Can't wait! 🙌",t:'1h ago'}], shares:['1'], saves:['2'], time:'8h ago' },
+  { id:'p4', aid:'3', text:'Trying the best ramen in Tokyo! The broth is incredible 🍜\n\n#foodie #tokyo #ramen #travel', media:['https://picsum.photos/600/400?random=5'], likes:['1','2','4','5'], comments:[{uid:'1',text:'Looks delicious! 😄',t:'3h ago'},{uid:'4',text:'Adding this to my list!',t:'2h ago'},{uid:'2',text:'I miss Tokyo food so much',t:'1h ago'}], shares:[], saves:['1','5'], time:'12h ago' },
+  { id:'p5', aid:'5', text:'Exciting news! Our startup just closed Series A funding! 🚀\n\nThank you to everyone who believed in us.\n\n#startup #funding #tech', media:[], likes:['1','2','3','4'], comments:[{uid:'1',text:'Congratulations Alex! 🎉',t:'6h ago'},{uid:'2',text:'So proud of you!',t:'5h ago'}], shares:['1','3'], saves:[], time:'1d ago' },
+  { id:'p6', aid:'1', text:'Just shipped a new feature. The feeling of pushing to production on a Friday... living dangerously 😅\n\n#coding #developer #fridaydeploy', media:[], likes:['2','3','5'], comments:[{uid:'3',text:'Bold move! 😂',t:'4h ago'}], shares:[], saves:['5'], time:'1d ago' },
+];
+
+const stories = [
+  { id:'s1', uid:'2', media:'https://picsum.photos/400/700?random=10', text:'', bg:'', time:'2h ago' },
+  { id:'s2', uid:'2', media:'https://picsum.photos/400/700?random=11', text:'', bg:'', time:'1h ago' },
+  { id:'s3', uid:'4', media:'', text:'New collection dropping soon! 🔥', bg:'linear-gradient(135deg, #667eea, #764ba2)', time:'4h ago' },
+  { id:'s4', uid:'3', media:'https://picsum.photos/400/700?random=12', text:'', bg:'', time:'6h ago' },
+  { id:'s5', uid:'5', media:'', text:'Never stop learning. Never stop growing. 📚', bg:'linear-gradient(135deg, #f093fb, #f5576c)', time:'8h ago' },
+];
+
+const convos = [
+  { id:'c1', parts:['1','2'], last:'Hey! How are you?', lastT:'2m ago', unread:2 },
+  { id:'c2', parts:['1','3'], last:'See you tomorrow!', lastT:'1h ago', unread:0 },
+  { id:'c3', parts:['1','4'], last:'Love your latest post!', lastT:'3h ago', unread:1 },
+];
+
+const msgs = {
+  c1: [
+    { id:'m1', sid:'2', text:'Hey John! How are you doing?', time:'10:30 AM' },
+    { id:'m2', sid:'1', text:"Hey Jane! I'm good, thanks! Working on a new project.", time:'10:32 AM' },
+    { id:'m3', sid:'2', text:'That sounds exciting! What kind of project?', time:'10:33 AM' },
+    { id:'m4', sid:'1', text:'A social media platform actually 😄', time:'10:35 AM' },
+    { id:'m5', sid:'2', text:"No way! That's awesome. Let me know if you need any design help!", time:'10:36 AM' },
+    { id:'m6', sid:'2', text:'Hey! How are you?', time:'11:00 AM' },
+  ],
+  c2: [
+    { id:'m7', sid:'3', text:'Yo! Want to grab dinner tonight?', time:'5:00 PM' },
+    { id:'m8', sid:'1', text:'Sure! Where were you thinking?', time:'5:05 PM' },
+    { id:'m9', sid:'3', text:'How about that new Thai place downtown?', time:'5:06 PM' },
+    { id:'m10', sid:'1', text:'Sounds perfect! See you tomorrow!', time:'5:10 PM' },
+  ],
+  c3: [
+    { id:'m11', sid:'4', text:'Hey! I loved your mountain hike post 😍', time:'2:00 PM' },
+    { id:'m12', sid:'1', text:'Thanks Sarah! It was so beautiful there', time:'2:05 PM' },
+    { id:'m13', sid:'4', text:'Love your latest post!', time:'3:00 PM' },
+  ],
+};
+
+const notifs = [
+  { id:'n1', type:'like', sid:'2', pid:'p2', time:'2m ago', read:false },
+  { id:'n2', type:'comment', sid:'3', pid:'p2', time:'15m ago', read:false },
+  { id:'n3', type:'follow', sid:'5', time:'1h ago', read:false },
+  { id:'n4', type:'mention', sid:'4', pid:'p3', time:'2h ago', read:false },
+  { id:'n5', type:'share', sid:'4', pid:'p6', time:'3h ago', read:true },
+  { id:'n6', type:'like', sid:'4', pid:'p6', time:'4h ago', read:true },
+  { id:'n7', type:'comment', sid:'2', pid:'p6', time:'5h ago', read:true },
+  { id:'n8', type:'follow', sid:'4', time:'1d ago', read:true },
+  { id:'n9', type:'like', sid:'3', pid:'p2', time:'2d ago', read:true },
+];
+
+function U(id) { if(id==='anon') return {id:'anon',username:'anonymous',fullName:'Anonymous',avatar:'https://i.pravatar.cc/150?img=70',bio:'',location:'',website:'',followers:[],following:[],verified:false,online:false,private:true}; return users.find(u => u.id === id); }
+function unreadN() { return notifs.filter(n => !n.read).length; }
+let postIdCounter = 100;
+let msgIdCounter = 100;
+
+function toast(msg, icon='fa-check-circle') {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ===== RENDER =====
+function render() {
+  const app = document.getElementById('app');
+  const ptEl = document.getElementById('postText');
+  if (ptEl) S._postDraft = ptEl.value;
+  if (!S.user) {
+    app.innerHTML = S.page === 'register' ? renderRegister() : renderLogin();
+  } else {
+    let modals = '';
+    if (S.showAIChat) modals += renderAIChatWindow();
+    if (S.showLeaderboard) modals += renderLeaderboard();
+    if (S.showBadges) modals += renderBadgesModal();
+    if (S.showLevelUp) modals += renderLevelUp();
+    if (S.showTips) modals += renderTipsModal();
+    if (S.showVerifyModal) modals += renderVerifyModal();
+    if (S.showAudioRoom) modals += renderAudioRoom();
+    if (S.showGifSearch) modals += renderGifSearch();
+    if (S.showShortcuts) modals += renderShortcutsModal();
+    if (S.showInstallPrompt) modals += renderInstallPrompt();
+    if (S.showQR) modals += renderQRModal();
+    if (S.showSubscriptions) modals += renderSubscriptions();
+    if (S.showProfileViewers) modals += renderProfileViewers();
+    if (S.showChallenge) modals += renderChallengeModal();
+    if (S.showCall) modals += renderCallModal();
+    if (S.showEditPost) modals += renderEditPostModal();
+    if (S.showBlockModal) modals += renderBlockModal();
+    if (S.showReportModal) modals += renderReportModal();
+    if (S.showTwoFA) modals += renderTwoFAModal();
+    if (S.showQuoteRepost) modals += renderQuoteRepostModal();
+    if (S.showNewCollection) modals += renderNewCollectionModal();
+    if (S.showTemplates) modals += renderTemplatesModal();
+    if (S.showFanClub) modals += renderFanClubModal();
+    if (S.showPaidDM) modals += renderPaidDMModal();
+    if (S.showBroadcast) modals += renderBroadcastModal();
+    if (S.showFundraiser) modals += renderFundraiserModal();
+    if (S.showAffiliate) modals += renderAffiliateModal();
+    if (S.showFriendSuggestions) modals += renderFriendSuggestionsModal();
+    if (S.showExport) modals += renderExportModal();
+    if (S.showDeactivate) modals += renderDeactivateModal();
+    if (S.showActivityLog) modals += renderActivityLogModal();
+    if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
+    app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
+  }
+  const ptEl2 = document.getElementById('postText');
+  if (ptEl2 && S._postDraft) ptEl2.value = S._postDraft;
+  attachEvents();
+  if (S.page === 'messages' && S.activeConv) {
+    const body = document.querySelector('.msg-chat-body');
+    if (body) body.scrollTop = body.scrollHeight;
+  }
+}
+
+
+function renderLogin() {
+  return `<div class="auth-page"><div class="auth-card fade-in">
+    <div class="auth-header"><h1>Drukpa</h1><p>Connect with friends and the world around you.</p></div>
+    <div id="authError" class="error-msg hidden"></div>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" value="john@example.com" required>
+      <input type="password" id="loginPass" placeholder="Password" value="123456" required>
+      <button type="submit" class="btn-primary">Log In</button>
+    </form>
+    <div class="auth-divider"><span>OR</span></div>
+    <div class="auth-footer"><p>Don't have an account? <a onclick="S.page='register';render()">Sign Up</a></p></div>
+  </div></div>`;
+}
+
+function renderRegister() {
+  return `<div class="auth-page"><div class="auth-card fade-in">
+    <div class="auth-header"><h1>Drukpa</h1><p>Sign up to connect with the world.</p></div>
+    <form id="registerForm">
+      <input id="regName" placeholder="Full Name" required>
+      <input id="regUser" placeholder="Username" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPass" placeholder="Password (min 6 chars)" required minlength="6">
+      <button type="submit" class="btn-primary">Sign Up</button>
+    </form>
+    <div class="auth-divider"><span>OR</span></div>
+    <div class="auth-footer"><p>Have an account? <a onclick="S.page='login';render()">Log In</a></p></div>
+  </div></div>`;
+}
+
+function renderNav() {
+  const u = S.user, un = unreadN();
+  return `<nav class="navbar"><div class="nav-content">
+    <a class="nav-logo" onclick="go('feed')">Drukpa</a>
+    <div class="nav-search">
+      <i class="fas fa-search"></i>
+      <input placeholder="Search Drukpa..." id="navSearch" oninput="navSearchHandler(this.value)" onfocus="navSearchHandler(this.value)">
+      <div class="nav-search-results" id="navSearchResults"></div>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link ${S.page==='feed'?'active':''}" onclick="go('feed')" title="Home"><i class="fas fa-home"></i></a>
+      <a class="nav-link ${S.page==='explore'?'active':''}" onclick="go('explore')" title="Explore"><i class="fas fa-compass"></i></a>
+      <a class="nav-link ${S.page==='messages'?'active':''}" onclick="go('messages')" title="Messages"><i class="fas fa-comment-dots"></i></a>
+      <a class="nav-link ${S.page==='reels'?'active':''}" onclick="go('reels')" title="Reels"><i class="fas fa-film"></i></a>
+      <a class="nav-link ${S.page==='notifications'?'active':''}" onclick="go('notifications')" title="Notifications">${un?`<span class="nav-badge">${un}</span>`:''}<i class="fas fa-bell"></i></a>
+      <div style="position:relative">
+        <img src="${u.avatar}" class="nav-avatar" onclick="document.getElementById('navDrop').classList.toggle('show')">
+        <div class="nav-dropdown" id="navDrop">
+          <a onclick="goProfile('${u.username}')"><i class="fas fa-user"></i> My Profile</a>
+          <a onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</a>
+          <a onclick="go('settings')"><i class="fas fa-cog"></i> Settings</a>
+          <a onclick="toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
+          <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+        </div>
+      </div>
+    </div>
+  </div></nav>`;
+}
+
+function renderPage() {
+  const p = S.page;
+  if (p==='feed') return renderFeed();
+  if (p==='explore') return renderExplore();
+  if (p==='messages') return renderMessages();
+  if (p==='notifications') return renderNotifications();
+  if (p==='profile') return renderProfile();
+  if (p==='saved') return renderSaved();
+  if (p==='settings') return renderSettings();
+  if (p==='reels') return renderReels();
+  if (p==='communities') return renderCommunities();
+  if (p==='live') return renderLive();
+  if (p==='dashboard') return renderDashboard();
+  if (p==='shop') return renderShop();
+  if (p==='map') return renderMapExplore();
+  return renderFeed();
+}
+
+function renderFeed() {
+  const storyUsers = [...new Set(stories.map(s => s.uid))];
+  return `<div class="app-layout"><div class="sidebar-left">${renderSidebar()}</div><div class="main-feed fade-in">
+    <div class="stories-section">
+      <div class="story-card create-story" onclick="createStoryPrompt()"><i class="fas fa-plus"></i><span>Your Story</span></div>
+      ${storyUsers.map(uid => { const u=U(uid); return `<div class="story-card" onclick="openStory('${uid}')"><img class="story-bg" src="https://picsum.photos/200/350?random=${uid}"><div class="story-overlay"></div><img src="${u.avatar}" class="story-user"><span class="story-name">${u.fullName.split(' ')[0]}</span></div>`; }).join('')}
+    </div>
+    ${renderCreatePost()}
+    <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#667eea;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
+    ${posts.map(p => renderPost(p)).join('')}
+  </div><div class="sidebar-right">${renderRight()}</div></div>${S.viewStory ? renderStoryViewer() : ''}${S.showStoryCreate ? renderStoryCreate() : ''}${S.showShareModal ? renderShareModal() : ''}`;
+}
+
+function renderSidebar() {
+  const u = S.user;
+  return `<div class="sidebar-menu">
+    <div class="sidebar-item" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-xs"> ${u.fullName}</div>
+    <div class="sidebar-item ${S.page==='feed'?'active':''}" onclick="go('feed')"><i class="fas fa-newspaper"></i> Feed</div>
+    <div class="sidebar-item ${S.page==='explore'?'active':''}" onclick="go('explore')"><i class="fas fa-compass"></i> Explore</div>
+    <div class="sidebar-item ${S.page==='messages'?'active':''}" onclick="go('messages')"><i class="fas fa-comment-dots"></i> Messages</div>
+    <div class="sidebar-item ${S.page==='notifications'?'active':''}" onclick="go('notifications')"><i class="fas fa-bell"></i> Notifications</div>
+    <div class="sidebar-item ${S.page==='reels'?'active':''}" onclick="go('reels')"><i class="fas fa-film"></i> Reels</div>
+    <div class="sidebar-item ${S.page==='communities'?'active':''}" onclick="go('communities')"><i class="fas fa-users"></i> Communities</div>
+    <div class="sidebar-item ${S.page==='live'?'active':''}" onclick="go('live')"><i class="fas fa-broadcast-tower"></i> Live</div>
+    <div class="sidebar-item ${S.page==='dashboard'?'active':''}" onclick="go('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</div>
+    <div class="sidebar-item ${S.page==='shop'?'active':''}" onclick="go('shop')"><i class="fas fa-store"></i> Shop</div>
+    <div class="sidebar-item ${S.page==='map'?'active':''}" onclick="go('map')"><i class="fas fa-map-marked-alt"></i> Map Explore</div>
+    <div class="sidebar-item ${S.page==='saved'?'active':''}" onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</div>
+    <div class="sidebar-item" onclick="S.showLeaderboard=true;render()"><i class="fas fa-trophy"></i> Leaderboard</div>
+    <div class="sidebar-item" onclick="S.showFriendSuggestions=true;render()"><i class="fas fa-user-plus"></i> Friend Suggestions</div>
+    <div class="sidebar-item" onclick="S.showBroadcast=true;render()"><i class="fas fa-bullhorn"></i> Broadcast</div>
+    <div class="sidebar-item ${S.page==='settings'?'active':''}" onclick="go('settings')"><i class="fas fa-cog"></i> Settings</div>
+    <div style="padding:10px 14px;margin-top:8px;border-top:1px solid #f0f2f5">
+      <div class="streak-indicator"><i class="fas fa-fire"></i> ${S.streakDays} day streak</div>
+      <div class="xp-bar-wrap"><div style="display:flex;justify-content:space-between;font-size:11px;color:#65676b;margin-bottom:2px"><span>Level ${S.level}</span><span>${S.xp % 500}/${500} XP</span></div><div class="xp-bar"><div class="xp-bar-fill" style="width:${(S.xp%500)/5}%"></div></div></div>
+    </div>
+  </div>`;
+}
+
+function renderRight() {
+  const sugg = users.filter(u => u.id !== S.user.id && !S.user.following.includes(u.id)).slice(0,3);
+  return `<div class="suggested-widget"><h4>Suggested for you</h4>
+    ${sugg.map(u => `<div class="suggested-user"><img src="${u.avatar}" class="avatar-sm"><div class="suggested-user-info"><strong onclick="goProfile('${u.username}')">${u.fullName}</strong><span>@${u.username}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')}
+  </div>
+  <div class="trending-widget"><h4>Trending</h4>
+    <div class="trending-item"><div class="trending-category">Technology</div><div class="trending-tag">#AI</div><div class="trending-posts-count">12.5K posts</div></div>
+    <div class="trending-item"><div class="trending-category">Art</div><div class="trending-tag">#digitalart</div><div class="trending-posts-count">8.2K posts</div></div>
+    <div class="trending-item"><div class="trending-category">Travel</div><div class="trending-tag">#wanderlust</div><div class="trending-posts-count">6.1K posts</div></div>
+    <div class="trending-item"><div class="trending-category">Fitness</div><div class="trending-tag">#workout</div><div class="trending-posts-count">4.8K posts</div></div>
+  </div>`;
+}
+
+function renderCreatePost() {
+  let attachArea = '';
+  if (S.postAttachMode === 'photo') {
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-image"></i> Add Photos</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPhotos=[];render()">✕</button></div>
+    <div class="file-upload-zone" onclick="document.getElementById('photoFile').click()" id="photoDropZone">
+      <i class="fas fa-cloud-upload-alt"></i><p>Click to upload or drag & drop</p><span>JPG, PNG, GIF up to 10MB</span>
+      <input type="file" id="photoFile" accept="image/*" multiple capture="environment" onchange="handlePhotoFiles(this.files)" style="display:none">
+    </div>
+    ${S.postPhotos.length?`<div class="photo-previews">${S.postPhotos.map((u,i)=>`<div class="photo-preview"><img src="${u}"><button class="remove-photo" onclick="S.postPhotos.splice(${i},1);render()">✕</button></div>`).join('')}</div>`:''}</div>`;
+  } else if (S.postAttachMode === 'video') {
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-video"></i> Add Video</span><button class="close-attach" onclick="S.postAttachMode=null;S.postVideos=[];render()">✕</button></div>
+    <div class="file-upload-zone" onclick="document.getElementById('videoFile').click()" id="videoDropZone">
+      <i class="fas fa-film"></i><p>Click to upload or drag & drop</p><span>MP4, MOV, AVI up to 50MB</span>
+      <input type="file" id="videoFile" accept="video/*" capture="environment" onchange="handleVideoFiles(this.files)" style="display:none">
+    </div>
+    ${(S.postVideos||[]).length?`<div class="video-previews">${S.postVideos.map((v,i)=>`<div class="video-preview"><video src="${v}" controls></video><button class="remove-photo" onclick="S.postVideos.splice(${i},1);render()">✕</button></div>`).join('')}</div>`:''}</div>`;
+  } else if (S.postAttachMode === 'feeling') {
+    const feelings = [['happy','😊 Happy'],['sad','😢 Sad'],['celebrating','🥳 Celebrating'],['inlove','😍 In Love'],['angry','😤 Angry'],['thoughtful','🤔 Thoughtful'],['tired','😴 Tired'],['motivated','🔥 Motivated'],['excited','🎉 Excited'],['cool','😎 Cool'],['grateful','🙏 Grateful'],['strong','💪 Strong']];
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-smile"></i> How are you feeling?</span><button class="close-attach" onclick="S.postAttachMode=null;S.postFeeling='';render()">✕</button></div>
+    <div class="feelings-grid">${feelings.map(([k,label])=>`<button class="feeling-btn ${S.postFeeling===k?'active':''}" onclick="setFeeling('${k}')">${label}</button>`).join('')}</div></div>`;
+  } else if (S.postAttachMode === 'poll') {
+    if (!S.postPoll) S.postPoll = {question:'',options:['','']};
+    attachArea = `<div class="attach-area"><div class="attach-header"><span><i class="fas fa-poll"></i> Create Poll</span><button class="close-attach" onclick="S.postAttachMode=null;S.postPoll=null;render()">✕</button></div>
+    <input type="text" id="pollQ" placeholder="Ask a question..." class="attach-input" value="${S.postPoll.question}" onchange="S.postPoll.question=this.value">
+    ${S.postPoll.options.map((o,i)=>`<div class="poll-option-row"><input type="text" class="attach-input poll-opt" placeholder="Option ${i+1}" value="${o}" onchange="S.postPoll.options[${i}]=this.value"><button class="remove-photo" onclick="if(S.postPoll.options.length>2){S.postPoll.options.splice(${i},1);render()}">✕</button></div>`).join('')}
+    ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
+  }
+  const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i></button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
+}
+
+function renderPost(p) {
+  const a = U(p.aid), liked = p.likes.includes(S.user.id), saved = p.saves.includes(S.user.id);
+  const txt = p.text.replace(/#(\w+)/g,'<span class="hashtag">#$1</span>').replace(/@(\w+)/g,'<span class="mention">@$1</span>');
+  const showComments = S.openComments[p.id];
+  const isPinned = S.pinnedPosts.includes(p.id);
+  return `<div class="post-card fade-in">
+    ${isPinned?'<div class="pinned-label"><i class="fas fa-thumbtack"></i> Pinned Post</div>':''}
+    <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><span class="${a.online?'online-indicator':''}"><img src="${a.avatar}" class="avatar-sm"></span><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''} ${p._collab?`<span style="font-size:11px;color:#65676b;font-weight:400">with ${U(p._collab).fullName}</span>`:''}</div><div class="post-meta">${p.time}${p._edited?' · <i class="fas fa-pencil-alt" style="font-size:10px"></i> edited':''} · ${p._anon?'<i class="fas fa-mask"></i>':'<i class="fas fa-globe-americas"></i>'}</div></div></div>
+    <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="openEditPost('${p.id}')"><i class="fas fa-edit"></i> Edit Post</a><a onclick="togglePin('${p.id}')"><i class="fas fa-thumbtack"></i> ${isPinned?'Unpin':'Pin to Profile'}</a><a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:`<a onclick="S.showBlockModal='${p.aid}';S.openMenus={};render()"><i class="fas fa-ban"></i> Block User</a>`}<a onclick="S.showReportModal='${p.id}';S.openMenus={};render()"><i class="fas fa-flag"></i> Report</a></div></div></div>
+    <div class="post-content">${txt}</div>
+    ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">drukpa.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
+    ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
+    ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)">${p.media.length>2?`<div class="carousel-container"><div class="carousel-track" style="transform:translateX(-${(S.carouselIdx[p.id]||0)*100}%)">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>${(S.carouselIdx[p.id]||0)>0?`<button class="carousel-btn prev" onclick="event.stopPropagation();carouselPrev('${p.id}')"><i class="fas fa-chevron-left"></i></button>`:''}${(S.carouselIdx[p.id]||0)<p.media.length-1?`<button class="carousel-btn next" onclick="event.stopPropagation();carouselNext('${p.id}',${p.media.length})"><i class="fas fa-chevron-right"></i></button>`:''}<div class="carousel-dots">${p.media.map((_,i)=>`<span class="${i===(S.carouselIdx[p.id]||0)?'active':''}" onclick="event.stopPropagation();S.carouselIdx['${p.id}']=${i};render()"></span>`).join('')}</div></div>`:`<div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>`}${S.watermarkEnabled&&p.aid===S.user.id?'<div class="watermark-overlay">@'+S.user.username+'</div>':''}</div>`:''}
+    ${(p.videos||[]).length?`<div class="post-media">${p.videos.map(v=>`<video src="${v}" controls class="post-video"></video>`).join('')}</div>`:''}
+    <div class="post-stats"><div class="post-stats-left"><div class="reaction-icons">${reactionIcons(p)}</div> ${p.likes.length}</div><div class="post-stats-right" onclick="toggleComments('${p.id}')">${p.comments.length} comments · ${p.shares.length} shares</div></div>
+    <div class="post-actions-bar">
+      <div style="flex:1;position:relative"><button class="action-btn ${liked?'liked':''}" onclick="toggleLike('${p.id}')" onmouseenter="showReactions('${p.id}')" style="width:100%"><i class="fas fa-heart"></i> ${p.reaction&&p.reaction[S.user.id]?{love:'Loved',haha:'Haha',wow:'Wow',sad:'Sad',angry:'Angry'}[p.reaction[S.user.id]]||(liked?'Liked':'Like'):liked?'Liked':'Like'}</button>${S.showReactions===p.id?`<div class="reactions-popup" onmouseleave="S.showReactions=null;render()"><button class="reaction-btn" onclick="react('${p.id}','like')">👍</button><button class="reaction-btn" onclick="react('${p.id}','love')">❤️</button><button class="reaction-btn" onclick="react('${p.id}','haha')">😂</button><button class="reaction-btn" onclick="react('${p.id}','wow')">😮</button><button class="reaction-btn" onclick="react('${p.id}','sad')">😢</button><button class="reaction-btn" onclick="react('${p.id}','angry')">😡</button></div>`:''}</div>
+      <button class="action-btn" onclick="toggleComments('${p.id}')" style="flex:1"><i class="fas fa-comment"></i> Comment</button>
+      <button class="action-btn" onclick="openShareModal('${p.id}')" style="flex:1"><i class="fas fa-share"></i> Share</button>
+      <button class="action-btn ${saved?'saved':''}" onclick="toggleSave('${p.id}')" style="flex:1"><i class="fas fa-bookmark"></i> ${saved?'Saved':'Save'}</button>
+      ${p.aid!==S.user.id?`<button class="action-btn" onclick="S.showTips='${p.id}';render()" style="flex:1"><i class="fas fa-gift"></i> Tip</button>`:''}
+    </div>
+    ${showComments?`<div class="comments-section">
+      ${p.comments.map((c,ci)=>{const cu=U(c.uid);return`<div class="comment"><img src="${cu.avatar}" class="avatar-xs"><div><div class="comment-bubble"><span class="comment-author" onclick="goProfile('${cu.username}')">${cu.fullName}</span><div class="comment-text">${c.text}</div></div><div class="comment-actions"><span onclick="likeComment('${p.id}',${ci})">${(c.cLikes||0)?'❤️ '+c.cLikes:'Like'}</span><span onclick="document.getElementById('ci-${p.id}').value='@${cu.username} ';document.getElementById('ci-${p.id}').focus()">Reply</span><span>${c.t}</span></div>${(c.replies||[]).map(r=>{const ru=U(r.uid);return`<div class="comment" style="margin-left:24px;margin-top:6px"><img src="${ru.avatar}" class="avatar-xs"><div><div class="comment-bubble"><span class="comment-author" onclick="goProfile('${ru.username}')">${ru.fullName}</span><div class="comment-text">${r.text}</div></div><div class="comment-actions"><span>${r.t}</span></div></div></div>`;}).join('')}</div></div>`;}).join('')}
+      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">${getSmartReplies().map(r=>`<button style="background:#f0f2f5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="document.getElementById('ci-${p.id}').value='${r}';addComment('${p.id}')">${r}</button>`).join('')}</div>
+      <div class="comment-form" style="position:relative"><img src="${S.user.avatar}" class="avatar-xs"><input placeholder="Write a comment..." id="ci-${p.id}" onkeydown="if(event.key==='Enter'){addComment('${p.id}');event.preventDefault()}"><button onclick="toggleEmojiPicker('ci-${p.id}')" style="font-size:16px">😊</button><button onclick="S.showGifSearch=true;render()" style="font-size:14px;background:none;color:#667eea;padding:4px">GIF</button><button onclick="addComment('${p.id}')">Post</button>${S.showEmojiPicker==='ci-'+p.id?renderEmojiPicker('ci-'+p.id):''}</div>
+    </div>`:''}
+    ${p.aid===S.user.id?`<div class="post-analytics"><span><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)+200} views</span><span><i class="fas fa-chart-line"></i> ${Math.floor(Math.random()*500)+50} reach</span><span><i class="fas fa-percentage"></i> ${(Math.random()*15+2).toFixed(1)}% engagement</span></div>`:''}
+  </div>`;
+}
+
+function renderExplore() {
+  let content = '';
+  if (S.exploreTab === 'trending' || S.exploreTab === 'photos') {
+    content = `<div class="explore-grid">${[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`<div class="explore-grid-item"><img src="https://picsum.photos/400/400?random=${i+20}"><div class="overlay"><span><i class="fas fa-heart"></i> ${Math.floor(Math.random()*1000+100)}</span><span><i class="fas fa-comment"></i> ${Math.floor(Math.random()*100+10)}</span></div></div>`).join('')}</div>`;
+  } else if (S.exploreTab === 'people') {
+    content = `<div class="people-results">${users.filter(u=>u.id!==S.user.id).map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')}</div>`;
+  } else if (S.exploreTab === 'videos') {
+    content = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">${[30,31,32,33,34,35].map(i=>`<div style="aspect-ratio:9/16;position:relative;border-radius:8px;overflow:hidden;cursor:pointer" onclick="go('reels')"><img src="https://picsum.photos/300/500?random=${i}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:8px;left:8px;color:white;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,0.5)"><i class="fas fa-play"></i> ${formatNum(Math.floor(Math.random()*10000)+500)}</div></div>`).join('')}</div>`;
+  } else if (S.exploreTab === 'hashtags') {
+    const tags = [['#AI','12.5K'],['#digitalart','8.2K'],['#coding','15.1K'],['#travel','22K'],['#fashion','18K'],['#foodie','9.4K'],['#fitness','11K'],['#startup','6.7K']];
+    content = `<div style="display:flex;flex-direction:column;gap:8px">${tags.map(([tag,count])=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:white;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer" onclick="toast('Viewing ${tag}')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:18px">#</div><div style="flex:1"><strong style="font-size:14px">${tag}</strong><p style="font-size:12px;color:#65676b">${count} posts</p></div>${S.followedHashtags.includes(tag.slice(1))?`<button class="hashtag-follow-btn" style="background:#e4e6eb;color:#1a1a2e" onclick="event.stopPropagation();unfollowHashtag('${tag.slice(1)}')">Following</button>`:`<button class="hashtag-follow-btn" onclick="event.stopPropagation();followHashtag('${tag.slice(1)}')">Follow</button>`}</div>`).join('')}</div>`;
+  }
+  return `<div class="app-layout"><div class="main-feed explore-page fade-in" style="max-width:900px">
+    <div class="explore-search"><i class="fas fa-search"></i><input placeholder="Search people, hashtags, topics..." id="exploreSearch" oninput="exploreSearchHandler(this.value)"></div>
+    <div class="explore-tabs">
+      ${['trending','people','photos','videos','hashtags'].map(t=>`<span class="explore-tab ${S.exploreTab===t?'active':''}" onclick="S.exploreTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
+    </div>
+    <div id="exploreContent">${content}</div>
+  </div></div>`;
+}
+
+function renderMessages() {
+  return `<div class="app-layout"><div class="main-feed messages-page fade-in" style="max-width:900px">
+    <div class="msg-sidebar">
+      <div class="msg-sidebar-header"><h3>Chats</h3><div style="display:flex;gap:8px"><button style="background:none;font-size:18px;color:#667eea" onclick="S.showAudioRoom=true;render()" title="Audio Room"><i class="fas fa-headphones"></i></button><button style="background:none;font-size:18px;color:#667eea" title="New Chat"><i class="fas fa-edit"></i></button></div></div>
+      <div class="msg-search"><input placeholder="Search messages..."></div>
+      <div class="msg-list">${convos.map(c=>{const oid=c.parts.find(p=>p!==S.user.id),o=U(oid);return`<div class="msg-item ${S.activeConv===c.id?'active':''}" onclick="openConv('${c.id}')"><img src="${o.avatar}" class="avatar-md">${o.online?'<div class="online-dot"></div>':''}<div class="msg-item-info"><div class="msg-item-name">${o.fullName}</div><div class="msg-item-last">${c.last}</div></div><div><div class="msg-item-time">${c.lastT}</div>${c.unread?`<div class="msg-unread-badge">${c.unread}</div>`:''}</div></div>`;}).join('')}</div>
+    </div>
+    <div class="msg-chat">${S.activeConv ? renderChat() : '<div class="msg-empty"><i class="fas fa-comment-dots"></i><h3>Your Messages</h3><p>Select a conversation to start chatting</p></div>'}</div>
+  </div></div>`;
+}
+
+function renderChat() {
+  const c = convos.find(x=>x.id===S.activeConv);
+  const oid = c.parts.find(p=>p!==S.user.id), o = U(oid);
+  const m = msgs[S.activeConv] || [];
+  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#667eea'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-info-circle"></i></button></div></div>
+    <div class="msg-chat-body">${m.map((x,xi)=>`<div class="chat-bubble ${x.sid===S.user.id?'sent':'received'}" style="position:relative" ondblclick="reactToMsg('${S.activeConv}',${xi})">${x.isVoice?`<div class="voice-msg"><button onclick="toast('Playing voice...')"><i class="fas fa-play"></i></button><div class="voice-wave">${Array(12).fill(0).map(()=>`<span style="height:${Math.floor(Math.random()*18)+4}px"></span>`).join('')}</div><span style="font-size:11px;opacity:0.7">${x.voiceDur||'0:03'}</span></div>`:x.isMedia?x.text:x.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}${x.disappear?`<span class="disappear-timer"><i class="fas fa-clock"></i> ${x.disappear}</span>`:''}
+<span class="bubble-time">${x.time}${x.sid===S.user.id?' <span class="read-receipt"><i class="fas fa-check-double"></i></span>':''}</span>${S.msgReactions[S.activeConv+'_'+xi]?`<span class="msg-reaction">${S.msgReactions[S.activeConv+'_'+xi]}</span>`:''}</div>`).join('')}<div class="typing-indicator" id="typingInd"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>
+    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#667eea'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#667eea" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#667eea">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
+}
+
+function renderNotifications() {
+  const filtered = S.notifTab === 'all' ? notifs : notifs.filter(n => !n.read);
+  return `<div class="app-layout"><div class="main-feed notifications-page fade-in">
+    <div class="notif-header"><h2>Notifications</h2><button class="btn-secondary" onclick="markRead()"><i class="fas fa-check-double"></i> Mark all read</button></div>
+    <div class="notif-tabs">
+      <span class="notif-tab ${S.notifTab==='all'?'active':''}" onclick="S.notifTab='all';render()">All</span>
+      <span class="notif-tab ${S.notifTab==='unread'?'active':''}" onclick="S.notifTab='unread';render()">Unread (${unreadN()})</span>
+    </div>
+    ${filtered.length ? filtered.map(n=>{const s=U(n.sid);const ic={like:'fa-heart',comment:'fa-comment',follow:'fa-user-plus',share:'fa-share',mention:'fa-at'};const ms={like:'liked your post',comment:'commented on your post',follow:'started following you',share:'shared your post',mention:'mentioned you in a post'};const cl={like:'like',comment:'comment',follow:'follow',share:'share',mention:'mention'};const p=n.pid?posts.find(x=>x.id===n.pid):null;return`<div class="notif-item ${n.read?'':'unread'}" onclick="n_click('${n.id}','${s.username}')"><div class="notif-icon ${cl[n.type]}"><i class="fas ${ic[n.type]}"></i></div><img src="${s.avatar}" class="avatar-sm"><div class="notif-content"><p><strong>${s.fullName}</strong> ${ms[n.type]}</p><div class="notif-time">${n.time}</div></div>${p&&p.media.length?`<img src="${p.media[0]}" class="notif-thumb">`:''}</div>`;}).join('') : '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>No notifications</h3><p>You\'re all caught up!</p></div>'}
+  </div></div>`;
+}
+
+function renderProfile() {
+  const p = S.viewProfile || S.user;
+  const own = p.id === S.user.id;
+  const following = S.user.following.includes(p.id);
+  const up = posts.filter(x => x.aid === p.id);
+  const likedP = posts.filter(x => x.likes.includes(p.id));
+  const mediaP = up.filter(x => x.media.length > 0);
+
+  let tabContent = '';
+  if (S.profileTab === 'posts') {
+    tabContent = up.length ? up.map(x => renderPost(x)).join('') : '<div class="empty-state"><i class="fas fa-camera"></i><h3>No Posts Yet</h3><p>When they post, their posts will show up here.</p></div>';
+  } else if (S.profileTab === 'media') {
+    tabContent = mediaP.length ? `<div class="media-grid">${mediaP.flatMap(x => x.media).map(m => `<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>` : '<div class="empty-state"><i class="fas fa-image"></i><h3>No Media Yet</h3></div>';
+  } else if (S.profileTab === 'likes') {
+    tabContent = likedP.length ? likedP.map(x => renderPost(x)).join('') : '<div class="empty-state"><i class="fas fa-heart"></i><h3>No Liked Posts</h3></div>';
+  }
+
+  return `<div class="app-layout"><div class="main-feed profile-page fade-in" style="max-width:900px">
+    <div class="profile-cover"><img src="https://picsum.photos/1200/400?random=${p.id}"></div>
+    <div class="profile-main">
+      <div class="profile-avatar-wrap"><img src="${p.avatar}"></div>
+      <div class="profile-details">
+        <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</div>
+        <div class="profile-username">@${p.username}</div>
+        <div class="profile-bio">${p.bio}</div>
+        <div class="profile-meta-info">
+          ${p.location?`<span><i class="fas fa-map-marker-alt"></i> ${p.location}</span>`:''}
+          ${p.website?`<span><i class="fas fa-link"></i> ${p.website}</span>`:''}
+          <span><i class="fas fa-calendar"></i> Joined Jan 2024</span>
+        </div>
+        <div class="profile-stats-bar">
+          <div class="profile-stat"><strong>${up.length}</strong><span>Posts</span></div>
+          <div class="profile-stat" onclick="S.showFollowers='${p.id}';render()"><strong>${p.followers.length}</strong><span>Followers</span></div>
+          <div class="profile-stat" onclick="S.showFollowing='${p.id}';render()"><strong>${p.following.length}</strong><span>Following</span></div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" style="margin-left:4px" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" style="margin-left:4px" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
+      </div>
+    </div>
+    ${own?`<div class="highlights-row" style="padding:12px 24px">
+      <div class="highlight-item"><div class="highlight-add" onclick="toast('Add highlight from stories')">+</div><p>New</p></div>
+      ${S.storyHighlights.map(h=>`<div class="highlight-item" onclick="toast('Viewing ${h.name} highlights')"><img src="${h.img}"><p>${h.name}</p></div>`).join('')}
+    </div>`:''}
+    ${own?`<div style="padding:0 24px"><button style="background:none;border:none;color:#667eea;font-size:13px;font-weight:600;cursor:pointer" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
+    <div class="profile-tabs">
+      ${['posts','media','likes'].map(t => `<span class="profile-tab ${S.profileTab===t?'active':''}" onclick="S.profileTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
+    </div>
+    <div class="profile-content">${tabContent}</div>
+  </div></div>${S.showFollowers?renderFollowersModal(S.showFollowers,'Followers'):''}${S.showFollowing?renderFollowersModal(S.showFollowing,'Following'):''}`;
+}
+
+function renderFollowersModal(uid, type) {
+  const u = U(uid); if(!u) return '';
+  const list = type==='Followers' ? u.followers.map(id=>U(id)) : u.following.map(id=>U(id));
+  return `<div class="followers-modal" onclick="if(event.target===this){S.showFollowers=null;S.showFollowing=null;render()}"><div class="followers-modal-content">
+    <div class="followers-modal-header"><span>${type}</span><button onclick="S.showFollowers=null;S.showFollowing=null;render()" style="background:none;font-size:20px">✕</button></div>
+    <div class="followers-modal-list">${list.length?list.map(f=>`<div class="follower-item" onclick="S.showFollowers=null;S.showFollowing=null;goProfile('${f.username}')"><span class="${f.online?'online-indicator':''}"><img src="${f.avatar}" class="avatar-sm"></span><div class="follower-item-info"><strong>${f.fullName} ${f.verified?'<i class="fas fa-check-circle" style="color:#667eea;font-size:12px"></i>':''}</strong><span>@${f.username}</span></div>${f.id!==S.user.id?`<button class="btn-follow ${S.user.following.includes(f.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${f.id}')">${S.user.following.includes(f.id)?'Following':'Follow'}</button>`:''}</div>`).join(''):'<div style="padding:20px;text-align:center;color:#65676b">No ${type.toLowerCase()} yet</div>'}</div>
+  </div></div>`;
+}
+
+function renderSaved() {
+  const savedPosts = posts.filter(p => p.saves.includes(S.user.id));
+  if (S.activeCollection !== null) {
+    const col = S.bookmarkCollections[S.activeCollection];
+    const colPosts = col ? posts.filter(p => col.posts.includes(p.id)) : [];
+    return `<div class="app-layout"><div class="main-feed saved-page fade-in">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><button class="btn-secondary" onclick="S.activeCollection=null;render()"><i class="fas fa-arrow-left"></i></button><h2>${col.name}</h2><span style="color:#65676b;font-size:14px">${colPosts.length} items</span></div>
+      ${colPosts.length ? colPosts.map(p => renderPost(p)).join('') : '<div class="empty-state"><i class="fas fa-folder-open"></i><h3>Empty Collection</h3><p>Save posts to this collection.</p></div>'}
+    </div></div>`;
+  }
+  return `<div class="app-layout"><div class="main-feed saved-page fade-in">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2><i class="fas fa-bookmark" style="color:#667eea;margin-right:8px"></i> Saved Posts</h2><button class="btn-primary" style="width:auto;padding:8px 16px" onclick="S.showNewCollection=true;render()"><i class="fas fa-plus"></i> New Collection</button></div>
+    <div class="collection-grid">${S.bookmarkCollections.map((col,i)=>{const colPosts=posts.filter(p=>col.posts.includes(p.id));return`<div class="collection-card" onclick="S.activeCollection=${i};render()"><div class="collection-cover">${colPosts.slice(0,4).map(p=>p.media.length?`<img src="${p.media[0]}">`:`<div style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>`).join('')}${Array(Math.max(0,4-colPosts.length)).fill('<div style="background:#f0f2f5"></div>').join('')}</div><div class="collection-info"><strong style="font-size:14px">${col.name}</strong><p style="font-size:12px;color:#65676b">${colPosts.length} posts</p></div></div>`;}).join('')}</div>
+    <h3 style="margin:16px 0 12px">All Saved</h3>
+    ${savedPosts.length ? savedPosts.map(p => renderPost(p)).join('') : '<div class="empty-state"><i class="fas fa-bookmark"></i><h3>No Saved Posts</h3><p>Save posts to find them easily later.</p></div>'}
+  </div></div>`;
+}
+
+function renderSettings() {
+  const u = S.user;
+  return `<div class="app-layout"><div class="main-feed settings-page fade-in">
+    <div class="settings-card">
+      <h2><i class="fas fa-cog" style="color:#667eea;margin-right:8px"></i> Settings</h2>
+      <div class="settings-section"><h4>Profile Photo</h4>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <img src="${u.avatar}" class="avatar-md" style="width:70px;height:70px">
+          <div><button class="btn-secondary" onclick="document.getElementById('avatarFile').click()"><i class="fas fa-camera"></i> Change Photo</button>
+          <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="changeAvatar(this.files)">
+          <p style="font-size:12px;color:#65676b;margin-top:4px">JPG, PNG. Max 5MB</p></div>
+        </div>
+      </div>
+      <div class="settings-section"><h4>Appearance</h4>
+        <div class="toggle-group"><span><i class="fas fa-moon" style="margin-right:8px"></i> Dark Mode</span><div class="toggle ${S.darkMode?'active':''}" onclick="toggleDarkMode()"></div></div>
+      </div>
+      <div class="settings-section"><h4>Profile Information</h4>
+        <div class="form-group"><label>Full Name</label><input id="sName" value="${u.fullName}"></div>
+        <div class="form-group"><label>Username</label><input id="sUser" value="${u.username}"></div>
+        <div class="form-group"><label>Bio</label><textarea id="sBio">${u.bio}</textarea></div>
+        <div class="form-group"><label>Location</label><input id="sLoc" value="${u.location}"></div>
+        <div class="form-group"><label>Website</label><input id="sWeb" value="${u.website||''}"></div>
+      </div>
+      <div class="settings-section"><h4>Accessibility</h4>
+        <div class="toggle-group"><span><i class="fas fa-adjust" style="margin-right:8px"></i> High Contrast Mode</span><div class="toggle ${S.highContrast?'active':''}" onclick="toggleHighContrast()"></div></div>
+        <div style="padding:12px 0;border-bottom:1px solid #f0f2f5">
+          <span style="font-size:14px;font-weight:500"><i class="fas fa-text-height" style="margin-right:8px"></i> Font Size</span>
+          <input type="range" class="font-slider" min="12" max="22" value="${S.fontSize}" oninput="changeFontSize(this.value)">
+          <div class="font-preview"><span>A</span><span style="font-size:${S.fontSize}px">Aa</span><span>A</span></div>
+        </div>
+        <div class="toggle-group"><span><i class="fas fa-universal-access" style="margin-right:8px"></i> Screen Reader Labels</span><div class="toggle active" onclick="this.classList.toggle('active');toast(this.classList.contains('active')?'ARIA labels enabled':'ARIA labels disabled')"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-hand-pointer" style="margin-right:8px"></i> Reduce Animations</span><div class="toggle" onclick="this.classList.toggle('active');document.body.style.setProperty('--anim-speed',this.classList.contains('active')?'0s':'0.3s');toast(this.classList.contains('active')?'Animations reduced':'Animations restored')"></div></div>
+      </div>
+      <div class="settings-section"><h4>Privacy & Security</h4>
+        <div class="toggle-group"><span><i class="fas fa-lock" style="margin-right:8px"></i> Private Account</span><div class="toggle ${u.private?'active':''}" onclick="u.private=!u.private;toast(u.private?'Account is now private':'Account is now public');render()"></div></div>
+        <div class="toggle-group"><span>Show Online Status</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+        <div class="toggle-group"><span>Allow Message Requests</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-ghost" style="margin-right:8px"></i> Vanish Mode</span><div class="toggle ${S.vanishMode?'active':''}" onclick="S.vanishMode=!S.vanishMode;toast(S.vanishMode?'Vanish mode on — messages disappear!':'Vanish mode off');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-mask" style="margin-right:8px"></i> Anonymous Posting</span><div class="toggle ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode enabled':'Anonymous mode disabled');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-copyright" style="margin-right:8px"></i> Watermark on Media</span><div class="toggle ${S.watermarkEnabled?'active':''}" onclick="S.watermarkEnabled=!S.watermarkEnabled;toast(S.watermarkEnabled?'Watermark enabled':'Watermark disabled');render()"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-shield-alt" style="margin-right:8px"></i> Two-Factor Auth (2FA)</span><div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:${S.twoFAEnabled?'#27ae60':'#e74c3c'}">${S.twoFAEnabled?'Enabled':'Disabled'}</span><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="S.showTwoFA=true;render()">Setup</button></div></div>
+      </div>
+      <div class="settings-section"><h4>Blocked Users</h4>
+        ${S.blockedUsers.length?S.blockedUsers.map(uid=>{const bu=U(uid);return bu?`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f2f5"><img src="${bu.avatar}" class="avatar-xs"><span style="flex:1;font-size:13px">${bu.fullName}</span><button class="btn-secondary" style="padding:4px 12px;font-size:12px" onclick="unblockUser('${uid}')">Unblock</button></div>`:'';}).join(''):'<p style="font-size:13px;color:#65676b">No blocked users</p>'}
+      </div>
+      <div class="settings-section"><h4>Creator Tools</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c;margin-right:4px"></i> Fan Club</button>
+          <button class="btn-secondary" onclick="S.showAffiliate=true;render()"><i class="fas fa-link" style="color:#27ae60;margin-right:4px"></i> Affiliate Links</button>
+          <button class="btn-secondary" onclick="S.showPaidDM='settings';render()"><i class="fas fa-coins" style="color:#f39c12;margin-right:4px"></i> Paid DMs</button>
+          <button class="btn-secondary" onclick="S.showBroadcast=true;render()"><i class="fas fa-bullhorn" style="color:#3498db;margin-right:4px"></i> Broadcast</button>
+        </div>
+      </div>
+      <div class="settings-section"><h4>Close Friends</h4>
+        <p style="font-size:13px;color:#65676b;margin-bottom:8px">Only close friends can see your stories marked as close friends only.</p>
+        <div>${users.filter(x=>x.id!==S.user.id).map(x=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f2f5"><img src="${x.avatar}" class="avatar-xs"><span style="flex:1;font-size:13px">${x.fullName}</span><div class="toggle ${S.closeFriends.includes(x.id)?'active':''}" onclick="toggleCloseFriend('${x.id}')"></div></div>`).join('')}</div>
+      </div>
+      <div class="settings-section"><h4>Language</h4>
+        <div class="lang-selector">${[['en','English'],['es','Español'],['fr','Français'],['de','Deutsch'],['ja','日本語'],['ko','한국어'],['zh','中文'],['ar','العربية'],['hi','हिन्दी'],['pt','Português']].map(([c,n])=>`<button class="lang-btn ${S.lang===c?'active':''}" onclick="S.lang='${c}';toast('Language changed to ${n}');render()">${n}</button>`).join('')}</div>
+      </div>
+      <div class="settings-section"><h4>Notifications</h4>
+        <div class="toggle-group"><span>Push Notifications</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+        <div class="toggle-group"><span>Email Notifications</span><div class="toggle" onclick="this.classList.toggle('active')"></div></div>
+        <div class="toggle-group"><span>Sound</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+      </div>
+      <button class="btn-primary" onclick="saveSett()">Save Changes</button>
+      <div class="settings-section" style="margin-top:24px"><h4>Account Management</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="S.showExport=true;render()"><i class="fas fa-download" style="color:#667eea;margin-right:4px"></i> Export Data</button>
+          <button class="btn-secondary" onclick="S.showActivityLog=true;render()"><i class="fas fa-history" style="color:#f39c12;margin-right:4px"></i> Activity Log</button>
+          <button class="btn-danger" onclick="S.showDeactivate=true;render()"><i class="fas fa-user-slash" style="margin-right:4px"></i> Deactivate Account</button>
+        </div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function renderStoryViewer() {
+  const us = stories.filter(s => s.uid === S.viewStory);
+  if (!us.length) return '';
+  const st = us[S.storyIdx];
+  const u = U(st.uid);
+  return `<div class="story-viewer">
+    <div class="story-viewer-content">
+      ${st.media ? `<img class="story-main" src="${st.media}">` : `<div class="story-text-content" style="background:${st.bg}">${st.text}</div>`}
+      <div class="story-progress-bar">${us.map((_,i) => `<div class="bar ${i<S.storyIdx?'active':''} ${i===S.storyIdx?'animating':''}"><div class="fill"></div></div>`).join('')}</div>
+      <div class="story-viewer-header"><img src="${u.avatar}"><span class="story-user-name">${u.username}</span><span class="story-time">${st.time}</span></div>
+      <button class="story-close" onclick="closeStory()"><i class="fas fa-times"></i></button>
+      <div class="story-nav left" onclick="prevStory()"></div>
+      <div class="story-nav right" onclick="nextStoryItem()"></div>
+      <div class="story-reply"><input placeholder="Reply to story..." onkeydown="if(event.key==='Enter'){toast('Reply sent!');this.value='';event.preventDefault()}"></div>
+    </div>
+  </div>`;
+}
+
+// ===== ACTIONS =====
+function go(page) { S.page = page; S.viewProfile = null; S.profileTab = 'posts'; closeDrop(); render(); window.scrollTo(0,0); }
+function goProfile(uname) { S.viewProfile = users.find(u => u.username === uname); S.page = 'profile'; S.profileTab = 'posts'; closeDrop(); render(); window.scrollTo(0,0); }
+function closeDrop() { document.getElementById('navDrop')?.classList.remove('show'); document.getElementById('navSearchResults')?.classList.remove('show'); }
+
+function toggleLike(id) {
+  const p = posts.find(x => x.id === id);
+  const i = p.likes.indexOf(S.user.id);
+  if (i === -1) { p.likes.push(S.user.id); toast('Post liked! ❤️','fa-heart'); gainXP(2); } else p.likes.splice(i,1);
+  render();
+}
+
+function toggleSave(id) {
+  const p = posts.find(x => x.id === id);
+  const i = p.saves.indexOf(S.user.id);
+  if (i === -1) { p.saves.push(S.user.id); toast('Post saved!','fa-bookmark'); } else { p.saves.splice(i,1); toast('Post unsaved','fa-bookmark'); }
+  S.openMenus = {};
+  render();
+}
+
+function toggleComments(id) { S.openComments[id] = !S.openComments[id]; render(); }
+function togglePostMenu(id) { S.openMenus[id] = !S.openMenus[id]; render(); }
+
+function addComment(id) {
+  const el = document.getElementById('ci-'+id);
+  if (!el || !el.value.trim()) return;
+  const p = posts.find(x=>x.id===id);
+  const text = el.value.trim();
+  if (text.startsWith('@')) {
+    const mentioned = text.match(/^@(\w+)\s/);
+    if (mentioned) {
+      const parentComment = p.comments.find(c => U(c.uid)?.username === mentioned[1]);
+      if (parentComment) {
+        if (!parentComment.replies) parentComment.replies = [];
+        parentComment.replies.push({uid:S.user.id, text:text.replace(/^@\w+\s/, ''), t:'just now'});
+        toast('Reply added!','fa-reply');
+        gainXP(5);
+        render();
+        S.openComments[id] = true;
+        render();
+        return;
+      }
+    }
+  }
+  p.comments.push({uid:S.user.id, text:text, t:'just now', replies:[]});
+  toast('Comment added!','fa-comment');
+  gainXP(5);
+  render();
+  S.openComments[id] = true;
+  render();
+}
+
+const FEELINGS = {happy:'😊 Happy',sad:'😢 Sad',celebrating:'🥳 Celebrating',inlove:'😍 In Love',angry:'😤 Angry',thoughtful:'🤔 Thoughtful',tired:'😴 Tired',motivated:'🔥 Motivated',excited:'🎉 Excited',cool:'😎 Cool',grateful:'🙏 Grateful',strong:'💪 Strong'};
+function setFeeling(k) { S.postFeeling = k; render(); }
+function handlePhotoFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { S.postPhotos.push(e.target.result); render(); toast('Photo added!','fa-image'); };
+    reader.readAsDataURL(file);
+  });
+}
+function handleVideoFiles(files) {
+  if (!S.postVideos) S.postVideos = [];
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('video/')) return;
+    const reader = new FileReader();
+    reader.onload = e => { S.postVideos.push(e.target.result); render(); toast('Video added!','fa-video'); };
+    reader.readAsDataURL(file);
+  });
+}
+function newPost() {
+  const el = document.getElementById('postText');
+  let text = el ? el.value.trim() : '';
+  if (S.postFeeling) text += (text ? ' ' : '') + `— feeling ${FEELINGS[S.postFeeling]||S.postFeeling}`;
+  let pollHtml = '';
+  if (S.postPoll && S.postPoll.question && S.postPoll.options.filter(o=>o).length>=2) {
+    const opts = S.postPoll.options.filter(o=>o);
+    text += (text ? '\n\n' : '') + '📊 ' + S.postPoll.question;
+    pollHtml = opts;
+  }
+  if (!text && !S.postPhotos.length && !(S.postVideos||[]).length) return;
+  const allMedia = [...S.postPhotos, ...(S.postVideos||[])];
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:text, media:allMedia.filter(m=>!m.startsWith('data:video')), videos:(S.postVideos||[]), likes:[], comments:[], shares:[], saves:[], time:'just now' };
+  if (pollHtml && Array.isArray(pollHtml)) p.poll = { question: S.postPoll.question, options: pollHtml.map(o=>({text:o,votes:[]})) };
+  posts.unshift(p);
+  S.postPhotos=[]; S.postVideos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null; S._postDraft='';
+  toast('Post published! 🎉','fa-check-circle');
+  gainXP(25);
+  render();
+}
+
+function votePoll(pid, oi) {
+  const p = posts.find(x=>x.id===pid); if(!p||!p.poll) return;
+  p.poll.options.forEach(o => { const idx=o.votes.indexOf(S.user.id); if(idx!==-1) o.votes.splice(idx,1); });
+  p.poll.options[oi].votes.push(S.user.id); render();
+}
+function deletePost(id) {
+  const i = posts.findIndex(p => p.id === id);
+  if (i !== -1) { posts.splice(i,1); toast('Post deleted','fa-trash'); S.openMenus={}; render(); }
+}
+
+function sharePost(id) {
+  const p = posts.find(x=>x.id===id);
+  if (!p.shares.includes(S.user.id)) p.shares.push(S.user.id);
+  toast('Post shared!','fa-share');
+  render();
+}
+
+function toggleFollow(id) {
+  const i = S.user.following.indexOf(id);
+  const t = U(id);
+  if (i===-1) { S.user.following.push(id); t.followers.push(S.user.id); toast(`Following ${t.fullName}!`,'fa-user-plus'); }
+  else { S.user.following.splice(i,1); t.followers=t.followers.filter(f=>f!==S.user.id); toast(`Unfollowed ${t.fullName}`,'fa-user-minus'); }
+  render();
+}
+
+function openStory(uid) { S.viewStory=uid; S.storyIdx=0; clearTimeout(S.storyTimer); render(); autoAdvanceStory(); }
+function closeStory() { S.viewStory=null; clearTimeout(S.storyTimer); render(); }
+function nextStoryItem() {
+  const us = stories.filter(s=>s.uid===S.viewStory);
+  clearTimeout(S.storyTimer);
+  if (S.storyIdx < us.length-1) { S.storyIdx++; render(); autoAdvanceStory(); }
+  else {
+    const allUsers = [...new Set(stories.map(s=>s.uid))];
+    const curIdx = allUsers.indexOf(S.viewStory);
+    if (curIdx < allUsers.length-1) { S.viewStory = allUsers[curIdx+1]; S.storyIdx=0; render(); autoAdvanceStory(); }
+    else closeStory();
+  }
+}
+function prevStory() {
+  clearTimeout(S.storyTimer);
+  if (S.storyIdx > 0) { S.storyIdx--; render(); autoAdvanceStory(); }
+}
+function autoAdvanceStory() { S.storyTimer = setTimeout(nextStoryItem, 5000); }
+function createStoryPrompt() { toast('Story creation coming soon!','fa-camera'); }
+
+function openConv(id) { S.activeConv=id; const c=convos.find(x=>x.id===id); if(c)c.unread=0; render(); }
+function msgUser(uid) {
+  let c = convos.find(x => x.parts.includes(uid) && x.parts.includes(S.user.id));
+  if (!c) { c={id:'c'+(convos.length+1),parts:[S.user.id,uid],last:'',lastT:'now',unread:0}; convos.push(c); msgs[c.id]=[]; }
+  S.activeConv=c.id; S.page='messages'; render();
+}
+function sendMsg() {
+  const el=document.getElementById('msgIn');
+  if(!el||!el.value.trim())return;
+  if(!msgs[S.activeConv])msgs[S.activeConv]=[];
+  const now=new Date();
+  const newMsg = {id:'m'+(++msgIdCounter),sid:S.user.id,text:el.value,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})};
+  if(S.vanishMode) newMsg.disappear = '30s';
+  msgs[S.activeConv].push(newMsg);
+  const c=convos.find(x=>x.id===S.activeConv);
+  if(c){c.last=el.value;c.lastT='now';}
+  render();
+  simulateReply();
+}
+
+function markRead() { notifs.forEach(n=>n.read=true); toast('All notifications marked as read','fa-check-double'); render(); }
+function n_click(nid, uname) { const n=notifs.find(x=>x.id===nid); if(n)n.read=true; goProfile(uname); }
+
+function changeAvatar(files) {
+  if (!files.length) return;
+  const reader = new FileReader();
+  reader.onload = e => { S.user.avatar = e.target.result; toast('Profile photo updated!','fa-camera'); render(); };
+  reader.readAsDataURL(files[0]);
+}
+function saveSett() {
+  S.user.fullName=document.getElementById('sName').value;
+  S.user.username=document.getElementById('sUser').value;
+  S.user.bio=document.getElementById('sBio').value;
+  S.user.location=document.getElementById('sLoc').value;
+  S.user.website=document.getElementById('sWeb').value;
+  toast('Settings saved! ✨','fa-check-circle');
+  render();
+}
+
+function navSearchHandler(q) {
+  const res = document.getElementById('navSearchResults');
+  if (q.length > 0) {
+    const r = users.filter(u => u.fullName.toLowerCase().includes(q.toLowerCase()) || u.username.includes(q.toLowerCase()));
+    res.innerHTML = r.map(u=>`<div class="search-item" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-xs"><span>${u.fullName} ${u.verified?'✓':''}</span></div>`).join('') || '<div style="padding:14px;color:#65676b;text-align:center">No results</div>';
+    res.classList.add('show');
+  } else res.classList.remove('show');
+}
+
+function exploreSearchHandler(q) {
+  const el = document.getElementById('exploreContent');
+  if (q.length > 0) {
+    const r = users.filter(u => u.fullName.toLowerCase().includes(q.toLowerCase()) || u.username.includes(q.toLowerCase()));
+    el.innerHTML = `<div class="people-results">${r.map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')||'<div class="empty-state"><i class="fas fa-search"></i><h3>No results</h3></div>'}</div>`;
+  } else render();
+}
+
+function openMedia(src) {
+  const ov=document.createElement('div'); ov.className='modal-overlay'; ov.onclick=()=>ov.remove();
+  ov.innerHTML=`<img src="${src}">`; document.body.appendChild(ov);
+}
+
+// ===== REAL-TIME SIMULATION =====
+const botReplies = [
+  "That's awesome! 😄","Haha, love it!","Sounds great!","Tell me more!","I totally agree 👍",
+  "Nice! When are we meeting?","Can't wait!","That's so cool 🔥","LOL 😂","Absolutely!",
+  "You're the best!","I was just thinking the same thing","Let's do it! 🙌","Wow, really?","👀"
+];
+
+function simulateReply() {
+  const c = convos.find(x=>x.id===S.activeConv);
+  if (!c) return;
+  const oid = c.parts.find(p=>p!==S.user.id);
+  const ti = document.getElementById('typingInd');
+  if (ti) ti.classList.add('show');
+  setTimeout(() => {
+    const reply = botReplies[Math.floor(Math.random()*botReplies.length)];
+    if(!msgs[S.activeConv])msgs[S.activeConv]=[];
+    const now = new Date();
+    msgs[S.activeConv].push({id:'m'+(++msgIdCounter),sid:oid,text:reply,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+    c.last=reply; c.lastT='now';
+    render();
+  }, 1500 + Math.random()*2000);
+}
+
+function simulateNotification() {
+  const others = users.filter(u=>u.id!==S.user?.id);
+  if (!others.length || !S.user) return;
+  const sender = others[Math.floor(Math.random()*others.length)];
+  const types = ['like','comment','follow','share','mention'];
+  const type = types[Math.floor(Math.random()*types.length)];
+  const userPosts = posts.filter(p=>p.aid===S.user.id);
+  const pid = userPosts.length ? userPosts[Math.floor(Math.random()*userPosts.length)].id : null;
+  notifs.unshift({id:'n'+(Date.now()),type,sid:sender.id,pid:(type!=='follow'?pid:undefined),time:'just now',read:false});
+  if (type==='like' && pid) { const p=posts.find(x=>x.id===pid); if(p&&!p.likes.includes(sender.id))p.likes.push(sender.id); }
+  if (type==='comment' && pid) { const p=posts.find(x=>x.id===pid); if(p)p.comments.push({uid:sender.id,text:botReplies[Math.floor(Math.random()*botReplies.length)],t:'just now'}); }
+  if (type==='follow' && !sender.following.includes(S.user.id)) { sender.following.push(S.user.id); S.user.followers.push(sender.id); }
+  toast(`${sender.fullName} ${type==='like'?'liked your post':type==='comment'?'commented on your post':type==='follow'?'followed you':type==='share'?'shared your post':'mentioned you'}`, type==='like'?'fa-heart':type==='comment'?'fa-comment':'fa-bell');
+  playNotifSound();
+  render();
+}
+
+setInterval(() => { if (S.user) simulateNotification(); }, 15000 + Math.random()*15000);
+
+function simulateOnlineStatus() {
+  users.forEach(u => { if (u.id !== S.user?.id) u.online = Math.random() > 0.4; });
+}
+setInterval(simulateOnlineStatus, 10000);
+
+// ===== EVENTS =====
+function attachEvents() {
+  document.getElementById('loginForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const em=document.getElementById('loginEmail').value, pw=document.getElementById('loginPass').value;
+    const u = users.find(x=>x.email===em&&x.pw===pw);
+    if (u) { S.user=u; S.page='feed'; setTimeout(()=>{S.showInstallPrompt=true;render();},3000); render(); }
+    else { const err=document.getElementById('authError'); err.textContent='Invalid credentials. Try john@example.com / 123456'; err.classList.remove('hidden'); }
+  });
+  document.getElementById('registerForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const nu = { id:String(users.length+1), fullName:document.getElementById('regName').value, username:document.getElementById('regUser').value, email:document.getElementById('regEmail').value, pw:document.getElementById('regPass').value, avatar:`https://i.pravatar.cc/150?img=${users.length+10}`, bio:'',location:'',website:'',followers:[],following:[],verified:false,online:true,private:false };
+    users.push(nu); S.user=nu; S.page='feed'; render();
+  });
+  ['photoDropZone','videoDropZone'].forEach(id => {
+    const zone = document.getElementById(id);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='#667eea'; zone.style.background='#f0f0ff'; });
+    zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white'; });
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white';
+      if (id==='photoDropZone') handlePhotoFiles(e.dataTransfer.files);
+      else handleVideoFiles(e.dataTransfer.files);
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-profile') && !e.target.closest('.nav-avatar')) document.getElementById('navDrop')?.classList.remove('show');
+    if (!e.target.closest('.nav-search')) document.getElementById('navSearchResults')?.classList.remove('show');
+    if (!e.target.closest('.post-menu-wrap')) { S.openMenus={}; document.querySelectorAll('.post-menu-dropdown.show').forEach(el=>el.classList.remove('show')); }
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') {
+    if (e.key==='Escape') e.target.blur();
+    return;
+  }
+  if (e.key==='Escape') {
+    if(S.viewStory)closeStory();
+    if(S.showShareModal){S.showShareModal=null;render();}
+    if(S.showFollowers||S.showFollowing){S.showFollowers=null;S.showFollowing=null;render();}
+    if(S.showStoryCreate){S.showStoryCreate=false;render();}
+    if(S.showEmojiPicker){S.showEmojiPicker=null;render();}
+    if(S.showAIChat){S.showAIChat=false;render();}
+    if(S.showLeaderboard){S.showLeaderboard=false;render();}
+    if(S.showBadges){S.showBadges=false;render();}
+    if(S.showTips){S.showTips=null;render();}
+    if(S.showVerifyModal){S.showVerifyModal=false;render();}
+    if(S.showAudioRoom){S.showAudioRoom=false;render();}
+    if(S.showGifSearch){S.showGifSearch=false;render();}
+    if(S.showShortcuts){S.showShortcuts=false;render();}
+    if(S.showQR){S.showQR=false;render();}
+    if(S.showSubscriptions){S.showSubscriptions=false;render();}
+    if(S.showProfileViewers){S.showProfileViewers=false;render();}
+    if(S.showChallenge){S.showChallenge=false;render();}
+    if(S.showCall){S.showCall=null;render();}
+    if(S.showEditPost){S.showEditPost=null;render();}
+    if(S.showBlockModal){S.showBlockModal=null;render();}
+    if(S.showReportModal){S.showReportModal=null;render();}
+    if(S.showTwoFA){S.showTwoFA=false;render();}
+    if(S.showQuoteRepost){S.showQuoteRepost=null;render();}
+    if(S.showNewCollection){S.showNewCollection=false;render();}
+    if(S.showTemplates){S.showTemplates=false;render();}
+    if(S.showFanClub){S.showFanClub=false;render();}
+    if(S.showPaidDM){S.showPaidDM=null;render();}
+    if(S.showBroadcast){S.showBroadcast=false;render();}
+    if(S.showFundraiser){S.showFundraiser=false;render();}
+    if(S.showAffiliate){S.showAffiliate=false;render();}
+    if(S.showFriendSuggestions){S.showFriendSuggestions=false;render();}
+    if(S.showExport){S.showExport=false;render();}
+    if(S.showDeactivate){S.showDeactivate=false;render();}
+    if(S.showActivityLog){S.showActivityLog=false;render();}
+    document.querySelector('.modal-overlay')?.remove();
+  }
+  if(!S.user)return;
+  if(e.key==='h'||e.key==='H')go('feed');
+  if(e.key==='e'&&!e.ctrlKey)go('explore');
+  if(e.key==='m'&&!e.ctrlKey)go('messages');
+  if(e.key==='n'&&!e.ctrlKey)go('notifications');
+  if(e.key==='r'&&!e.ctrlKey)go('reels');
+  if(e.key==='d'&&!e.ctrlKey)toggleDarkMode();
+  if(e.key==='s'&&!e.ctrlKey)go('shop');
+  if(e.key==='c'&&!e.ctrlKey)go('communities');
+  if(e.key==='l'&&!e.ctrlKey)go('live');
+  if(e.key==='?')S.showShortcuts=!S.showShortcuts,render();
+  if(e.key==='j')window.scrollBy(0,300);
+  if(e.key==='k')window.scrollBy(0,-300);
+});
+
+function toggleDarkMode() {
+  S.darkMode = !S.darkMode;
+  document.body.classList.toggle('dark', S.darkMode);
+  closeDrop(); toast(S.darkMode ? 'Dark mode enabled' : 'Light mode enabled', 'fa-moon');
+  render();
+}
+function toggleHighContrast() {
+  S.highContrast = !S.highContrast;
+  document.body.classList.toggle('high-contrast', S.highContrast);
+  toast(S.highContrast ? 'High contrast mode enabled' : 'High contrast mode disabled');
+  render();
+}
+function toggleCloseFriend(id) {
+  const i = S.closeFriends.indexOf(id);
+  if (i===-1) { S.closeFriends.push(id); toast('Added to close friends','fa-star'); }
+  else { S.closeFriends.splice(i,1); toast('Removed from close friends','fa-star'); }
+  render();
+}
+
+function showReactions(pid) { S.showReactions = pid; render(); }
+function react(pid, type) {
+  const p = posts.find(x=>x.id===pid);
+  if (!p.reaction) p.reaction = {};
+  if (type === 'like') { toggleLike(pid); }
+  else {
+    if (!p.likes.includes(S.user.id)) p.likes.push(S.user.id);
+    p.reaction[S.user.id] = type;
+    toast({love:'Loved!',haha:'Haha!',wow:'Wow!',sad:'Sad react',angry:'Angry react'}[type]||'Reacted!', 'fa-heart');
+  }
+  S.showReactions = null;
+  render();
+}
+
+function reactionIcons(p) {
+  const r = p.reaction || {};
+  const types = new Set(Object.values(r));
+  if (p.likes.length === 0) return '';
+  const icons = {like:'👍',love:'❤️',haha:'😂',wow:'😮',sad:'😢',angry:'😡'};
+  let shown = [];
+  if (types.size === 0) shown = ['<span style="background:#e74c3c;color:white">❤️</span>','<span style="background:#3498db;color:white">👍</span>'];
+  else [...types].slice(0,3).forEach(t => shown.push(`<span style="background:transparent;font-size:14px">${icons[t]||'👍'}</span>`));
+  return shown.join('');
+}
+
+function dblTapLike(pid, el) {
+  const p = posts.find(x=>x.id===pid);
+  if (!p.likes.includes(S.user.id)) { p.likes.push(S.user.id); toast('Post liked! ❤️','fa-heart'); }
+  const heart = document.createElement('div');
+  heart.className = 'dbl-tap-heart'; heart.textContent = '❤️';
+  el.appendChild(heart);
+  setTimeout(() => heart.remove(), 900);
+  render();
+}
+
+function likeComment(pid, ci) {
+  const p = posts.find(x=>x.id===pid);
+  if (p && p.comments[ci]) { p.comments[ci].cLikes = (p.comments[ci].cLikes || 0) + 1; render(); }
+}
+
+function openShareModal(pid) { S.showShareModal = pid; render(); }
+function renderShareModal() {
+  const link = 'https://drukpa.app/post/' + S.showShareModal;
+  return `<div class="share-modal" onclick="if(event.target===this){S.showShareModal=null;render()}"><div class="share-modal-content">
+    <h3>Share Post</h3>
+    <div class="share-options">
+      <div class="share-opt" onclick="sharePost('${S.showShareModal}');S.showShareModal=null;render()"><i class="fas fa-retweet" style="color:#27ae60"></i><span>Repost</span></div>
+      <div class="share-opt" onclick="S.showQuoteRepost=S.showShareModal;S.showShareModal=null;render()"><i class="fas fa-quote-left" style="color:#9b59b6"></i><span>Quote</span></div>
+      <div class="share-opt" onclick="forwardPost('${S.showShareModal}')"><i class="fas fa-paper-plane" style="color:#3498db"></i><span>Forward</span></div>
+      <div class="share-opt" onclick="copyLink()"><i class="fas fa-link" style="color:#667eea"></i><span>Copy Link</span></div>
+      <div class="share-opt" onclick="toast('Opening WhatsApp...','fa-share');S.showShareModal=null;render()"><i class="fab fa-whatsapp" style="color:#25d366"></i><span>WhatsApp</span></div>
+      <div class="share-opt" onclick="toast('Opening Twitter...','fa-share');S.showShareModal=null;render()"><i class="fab fa-twitter" style="color:#1da1f2"></i><span>Twitter</span></div>
+    </div>
+    <div class="share-link-row"><input value="${link}" id="shareLinkInput" readonly><button onclick="copyLink()">Copy</button></div>
+  </div></div>`;
+}
+function copyLink() {
+  const el = document.getElementById('shareLinkInput');
+  if (el) { navigator.clipboard?.writeText(el.value).then(()=>toast('Link copied!','fa-link')).catch(()=>{el.select();document.execCommand('copy');toast('Link copied!','fa-link');}); }
+  S.showShareModal=null; render();
+}
+
+const EMOJIS = ['😀','😂','🥰','😍','🤩','😎','🥳','😇','🤗','🤔','😮','😢','😡','👍','👎','❤️','🔥','🎉','💯','🙌','👀','💪','🙏','✨','🌟','⭐','🎵','📸','🏆','🎯','💡','🚀','🌈','🍕','🎮','⚽','🌍','💐','🎁','📌','🤝','✅','💬','📢','🛒','🏠','✈️','🎭','🎨','📚','🔑','💎','🌸','🦋','🐱','🐶','🌺','🍀','☀️','🌙','⛄','🎃','🎄','💀'];
+
+function toggleEmojiPicker(targetId) {
+  S.showEmojiPicker = S.showEmojiPicker === targetId ? null : targetId;
+  render();
+}
+function renderEmojiPicker(targetId) {
+  return `<div class="emoji-picker"><div class="emoji-grid">${EMOJIS.map(e=>`<button class="emoji-item" onclick="insertEmoji('${targetId}','${e}')">${e}</button>`).join('')}</div></div>`;
+}
+function insertEmoji(targetId, emoji) {
+  const el = document.getElementById(targetId);
+  if (el) { el.value += emoji; el.focus(); }
+  S.showEmojiPicker = null; render();
+}
+
+function createStoryPrompt() { S.showStoryCreate = true; S._storyType = 'text'; S._storyBg = 'linear-gradient(135deg, #667eea, #764ba2)'; render(); }
+function renderStoryCreate() {
+  const bgs = ['linear-gradient(135deg, #667eea, #764ba2)','linear-gradient(135deg, #f093fb, #f5576c)','linear-gradient(135deg, #4facfe, #00f2fe)','linear-gradient(135deg, #43e97b, #38f9d7)','linear-gradient(135deg, #fa709a, #fee140)','linear-gradient(135deg, #a18cd1, #fbc2eb)','linear-gradient(135deg, #ff9a9e, #fecfef)','linear-gradient(135deg, #667eea, #f093fb)'];
+  return `<div class="story-create-modal" onclick="if(event.target===this){S.showStoryCreate=false;render()}"><div class="story-create-content">
+    <h3>Create Story</h3>
+    <div class="story-type-btns">
+      <div class="story-type-btn ${S._storyType==='text'?'active':''}" onclick="S._storyType='text';render()"><i class="fas fa-font"></i>Text</div>
+      <div class="story-type-btn ${S._storyType==='photo'?'active':''}" onclick="S._storyType='photo';render()"><i class="fas fa-image"></i>Photo</div>
+    </div>
+    ${S._storyType==='text'?`
+      <textarea id="storyText" placeholder="Type your story..." style="width:100%;padding:12px;border:1px solid #dadce0;border-radius:8px;min-height:80px;font-size:15px;resize:none"></textarea>
+      <div style="font-size:13px;font-weight:600;margin-top:8px;color:#65676b">Background</div>
+      <div class="story-bg-picker">${bgs.map(bg=>`<div class="story-bg-opt ${S._storyBg===bg?'active':''}" style="background:${bg}" onclick="S._storyBg='${bg}';render()"></div>`).join('')}</div>
+    `:`
+      <div class="file-upload-zone" onclick="document.getElementById('storyPhotoFile').click()" style="margin-bottom:12px">
+        <i class="fas fa-cloud-upload-alt"></i><p>Upload Photo</p><span>Choose from gallery or camera</span>
+        <input type="file" id="storyPhotoFile" accept="image/*" capture="environment" onchange="handleStoryPhoto(this.files)" style="display:none">
+      </div>
+      ${S._storyPhoto?`<img src="${S._storyPhoto}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px">`:''}`}
+    <button class="btn-primary" style="margin-top:16px" onclick="publishStory()">Share Story</button>
+  </div></div>`;
+}
+function handleStoryPhoto(files) {
+  if (!files.length) return;
+  const reader = new FileReader();
+  reader.onload = e => { S._storyPhoto = e.target.result; render(); };
+  reader.readAsDataURL(files[0]);
+}
+function publishStory() {
+  if (S._storyType === 'text') {
+    const txt = document.getElementById('storyText')?.value;
+    if (!txt) return toast('Write something!','fa-exclamation');
+    stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:'',text:txt,bg:S._storyBg||'linear-gradient(135deg,#667eea,#764ba2)',time:'just now'});
+  } else {
+    if (!S._storyPhoto) return toast('Upload a photo!','fa-exclamation');
+    stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:S._storyPhoto,text:'',bg:'',time:'just now'});
+  }
+  S.showStoryCreate=false; S._storyPhoto=null;
+  toast('Story published!','fa-check-circle');
+  render();
+}
+
+// ===== DEMO DATA FOR NEW FEATURES =====
+const communities = [
+  {id:'com1',name:'Tech Innovators',desc:'Discuss the latest in technology',members:12450,banner:'https://picsum.photos/400/200?random=50',admin:'1',posts:342},
+  {id:'com2',name:'Digital Artists Hub',desc:'Share your digital art and get feedback',members:8900,banner:'https://picsum.photos/400/200?random=51',admin:'2',posts:567},
+  {id:'com3',name:'Fitness Warriors',desc:'Your daily fitness motivation',members:15200,banner:'https://picsum.photos/400/200?random=52',admin:'4',posts:891},
+  {id:'com4',name:'Foodie Adventures',desc:'Share recipes and food discoveries',members:11300,banner:'https://picsum.photos/400/200?random=53',admin:'3',posts:456},
+  {id:'com5',name:'Startup Founders',desc:'Connect with fellow entrepreneurs',members:6700,banner:'https://picsum.photos/400/200?random=54',admin:'5',posts:234},
+  {id:'com6',name:'Photography Club',desc:'Tips, tricks and stunning shots',members:9800,banner:'https://picsum.photos/400/200?random=55',admin:'2',posts:678}
+];
+
+const reelsData = [
+  {id:'r1',uid:'2',media:'https://picsum.photos/400/700?random=60',desc:'My latest artwork process 🎨 #art #creative',music:'Original Audio - janesmith',likes:4523,comments:231},
+  {id:'r2',uid:'4',media:'https://picsum.photos/400/700?random=61',desc:'OOTD vibes ✨ #fashion #style',music:'Trendy Beat - DJ Mix',likes:8901,comments:445},
+  {id:'r3',uid:'3',media:'https://picsum.photos/400/700?random=62',desc:'Street food in Bangkok! 🍜 #travel #food',music:'Chill Vibes - LoFi',likes:3456,comments:178},
+  {id:'r4',uid:'5',media:'https://picsum.photos/400/700?random=63',desc:'Day in the life of a startup founder 🚀',music:'Hustle Mode - Motivate',likes:6789,comments:334},
+  {id:'r5',uid:'1',media:'https://picsum.photos/400/700?random=64',desc:'Coding at 3AM be like... 😅 #dev #coding',music:'Lo-Fi Beats - Study',likes:5432,comments:267}
+];
+
+const ALL_BADGES = {
+  early_bird:{name:'Early Bird',icon:'🐦',desc:'Joined in the first month'},
+  social_butterfly:{name:'Social Butterfly',icon:'🦋',desc:'Made 50+ connections'},
+  content_creator:{name:'Content Creator',icon:'🎨',desc:'Published 10+ posts'},
+  streak_7:{name:'Week Warrior',icon:'🔥',desc:'7 day streak'},
+  streak_30:{name:'Monthly Master',icon:'💎',desc:'30 day streak'},
+  first_like:{name:'First Like',icon:'❤️',desc:'Received first like'},
+  viral:{name:'Going Viral',icon:'🚀',desc:'Post reached 1000+ views'},
+  helper:{name:'Community Helper',icon:'🤝',desc:'Helped 10+ users'},
+  verified_badge:{name:'Verified',icon:'✅',desc:'Account verified'},
+  top_creator:{name:'Top Creator',icon:'👑',desc:'Reached top 10 leaderboard'}
+};
+
+const aiResponses = [
+  "I'd be happy to help! What would you like to know about Drukpa?",
+  "That's a great question! Here are some tips for growing your following: 1) Post consistently, 2) Engage with your community, 3) Use trending hashtags.",
+  "You can customize your profile by going to Settings. Try adding a bio and profile photo to stand out!",
+  "To create a Reel, go to the Reels section and tap the + button. You can add music, effects, and text!",
+  "Communities are a great way to connect with like-minded people. Check out the Communities tab to discover groups!",
+  "Your streak is looking great! Keep posting daily to maintain it and earn XP rewards.",
+  "I can help you with: posting tips, account settings, privacy, communities, reels, and more. Just ask!",
+  "Pro tip: Use keyboard shortcuts for faster navigation. Press ? to see all shortcuts!"
+];
+
+const smartReplies = [
+  "Thanks! 😊", "Love this! ❤️", "Absolutely! 💯", "So true! 👏",
+  "Amazing work! 🔥", "Count me in! 🙌", "Congratulations! 🎉", "Well said! 👍"
+];
+
+// ===== REELS =====
+function renderReels() {
+  const reel = reelsData[S.reelsIdx];
+  const u = U(reel.uid);
+  const liked = reel._liked;
+  return `<div class="reels-page">
+    <div class="reel-card">
+      <img src="${reel.media}">
+      <div class="reel-overlay"></div>
+      <div class="reel-info">
+        <div class="reel-user"><img src="${u.avatar}" class="avatar-sm" style="border:2px solid white" onclick="goProfile('${u.username}')"><strong>${u.username}</strong>
+          ${u.id!==S.user.id?`<button style="background:none;border:1px solid white;color:white;padding:2px 12px;border-radius:4px;font-size:12px;margin-left:4px" onclick="toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button>`:''}</div>
+        <div class="reel-desc">${reel.desc}</div>
+        <div class="reel-music"><i class="fas fa-music"></i> ${reel.music}</div>
+      </div>
+      <div class="reel-actions">
+        <button class="reel-action-btn" onclick="likeReel()"><i class="fas fa-heart" style="${liked?'color:#e74c3c':''}"></i><span>${formatNum(reel.likes)}</span></button>
+        <button class="reel-action-btn" onclick="toast('Comments coming soon!')"><i class="fas fa-comment"></i><span>${formatNum(reel.comments)}</span></button>
+        <button class="reel-action-btn" onclick="openShareModal('reel')"><i class="fas fa-share"></i><span>Share</span></button>
+        <button class="reel-action-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons"></i><span>GIF</span></button>
+      </div>
+      <div class="reel-nav bottom">
+        <button onclick="prevReel()"><i class="fas fa-chevron-up"></i></button>
+        <button onclick="nextReel()"><i class="fas fa-chevron-down"></i></button>
+      </div>
+    </div>
+  </div>${S.showShareModal?renderShareModal():''}`;
+}
+function likeReel(){const r=reelsData[S.reelsIdx];r._liked=!r._liked;r.likes+=r._liked?1:-1;gainXP(5);render();}
+function nextReel(){S.reelsIdx=(S.reelsIdx+1)%reelsData.length;render();}
+function prevReel(){S.reelsIdx=(S.reelsIdx-1+reelsData.length)%reelsData.length;render();}
+function formatNum(n){return n>=1000?(n/1000).toFixed(1)+'K':String(n);}
+
+// ===== COMMUNITIES =====
+function renderCommunities() {
+  if (S.activeCommunity) return renderCommunityDetail();
+  return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2><i class="fas fa-users" style="color:#667eea;margin-right:8px"></i> Communities</h2>
+      <button class="btn-primary" style="width:auto;padding:8px 20px" onclick="toast('Create community coming soon!')"><i class="fas fa-plus"></i> Create</button>
+    </div>
+    <div class="explore-tabs" style="margin-bottom:16px">
+      ${['discover','joined','manage'].map(t=>`<span class="explore-tab ${S.communityTab===t?'active':''}" onclick="S.communityTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
+    </div>
+    <div class="communities-grid">
+      ${communities.map(c=>`<div class="community-card" onclick="S.activeCommunity='${c.id}';render()">
+        <div class="community-banner"><img src="${c.banner}"></div>
+        <div class="community-body"><h4>${c.name}</h4><p>${c.desc}</p>
+          <div class="community-meta"><span><i class="fas fa-users"></i> ${formatNum(c.members)} members</span><span><i class="fas fa-file-alt"></i> ${c.posts} posts</span></div>
+        </div></div>`).join('')}
+    </div>
+  </div></div>`;
+}
+function renderCommunityDetail() {
+  const c = communities.find(x=>x.id===S.activeCommunity);
+  if(!c) return '';
+  return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
+    <button class="btn-secondary" onclick="S.activeCommunity=null;render()" style="margin-bottom:12px"><i class="fas fa-arrow-left"></i> Back</button>
+    <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)">
+      <div style="height:180px;overflow:hidden"><img src="${c.banner}" style="width:100%;height:100%;object-fit:cover"></div>
+      <div style="padding:20px">
+        <h2>${c.name}</h2><p style="color:#65676b;margin-top:4px">${c.desc}</p>
+        <div style="display:flex;gap:20px;margin-top:12px;font-size:14px;color:#65676b">
+          <span><strong style="color:#1a1a2e">${formatNum(c.members)}</strong> members</span>
+          <span><strong style="color:#1a1a2e">${c.posts}</strong> posts</span>
+          <span>Admin: <strong style="color:#1a1a2e">${U(c.admin).fullName}</strong></span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn-primary" style="width:auto;padding:8px 24px" onclick="toast('Joined community! 🎉')">Join Community</button>
+          <button class="btn-secondary" onclick="toast('Invite link copied!','fa-link')"><i class="fas fa-share"></i> Invite</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px">${posts.slice(0,3).map(p=>renderPost(p)).join('')}</div>
+  </div></div>`;
+}
+
+// ===== LIVE STREAMING =====
+function renderLive() {
+  return `<div class="app-layout"><div class="main-feed live-page fade-in" style="max-width:900px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2><i class="fas fa-broadcast-tower" style="color:#e74c3c;margin-right:8px"></i> Live</h2>
+      <button class="btn-primary" style="width:auto;padding:8px 20px;background:linear-gradient(135deg,#e74c3c,#c0392b)" onclick="toast('Starting your live stream... 📡','fa-broadcast-tower')"><i class="fas fa-video"></i> Go Live</button>
+    </div>
+    <div class="live-stream-container">
+      <img src="https://picsum.photos/900/500?random=70" style="width:100%;height:100%;object-fit:cover">
+      <div class="live-badge">LIVE</div>
+      <div class="live-viewers"><i class="fas fa-eye"></i> ${formatNum(S.liveViewers)}</div>
+      <div class="live-comments-overlay">
+        ${S.liveComments.map(c=>`<div class="live-comment"><img src="${U(c.uid).avatar}" class="avatar-xs"><strong>${U(c.uid).username}</strong> ${c.text}</div>`).join('')}
+      </div>
+      <div class="live-input-bar">
+        <input placeholder="Say something..." id="liveCommentIn" onkeydown="if(event.key==='Enter'){addLiveComment();event.preventDefault()}">
+        <button class="live-gift-btn" onclick="S.showTips='live';render()"><i class="fas fa-gift"></i> Gift</button>
+      </div>
+    </div>
+    <div style="margin-top:16px"><h3 style="margin-bottom:12px">Live Now</h3>
+      <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px">
+        ${users.filter(u=>u.id!==S.user.id).slice(0,4).map(u=>`<div style="min-width:140px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer" onclick="toast('Joining ${u.fullName}\\'s live...')">
+          <div style="height:180px;position:relative"><img src="https://picsum.photos/200/250?random=${u.id}0" style="width:100%;height:100%;object-fit:cover"><div class="live-badge" style="top:8px;left:8px;font-size:10px;padding:2px 8px">LIVE</div><span style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);color:white;padding:2px 6px;border-radius:10px;font-size:10px"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)}</span></div>
+          <div style="padding:8px"><strong style="font-size:12px">${u.fullName}</strong><p style="font-size:11px;color:#65676b">Live now</p></div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div></div>`;
+}
+function addLiveComment(){const el=document.getElementById('liveCommentIn');if(!el||!el.value.trim())return;S.liveComments.push({uid:S.user.id,text:el.value});gainXP(2);render();}
+
+// ===== CREATOR DASHBOARD =====
+function renderDashboard() {
+  const up=posts.filter(p=>p.aid===S.user.id);
+  const totalLikes=up.reduce((s,p)=>s+p.likes.length,0);
+  const totalComments=up.reduce((s,p)=>s+p.comments.length,0);
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals=[45,62,38,75,52,88,65];
+  const maxVal=Math.max(...vals);
+  return `<div class="app-layout"><div class="main-feed dashboard-page fade-in" style="max-width:900px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2><i class="fas fa-chart-line" style="color:#667eea;margin-right:8px"></i> Creator Dashboard</h2>
+      <button class="btn-secondary" onclick="S.showVerifyModal=true;render()"><i class="fas fa-check-circle"></i> Request Verification</button>
+    </div>
+    <div class="dashboard-stats">
+      <div class="dash-stat-card"><div class="stat-num">${up.length}</div><div class="stat-label">Posts</div><div class="stat-change">+${Math.floor(Math.random()*5)+1} this week</div></div>
+      <div class="dash-stat-card"><div class="stat-num">${formatNum(S.user.followers.length*312)}</div><div class="stat-label">Followers</div><div class="stat-change">+${Math.floor(Math.random()*50)+10} this week</div></div>
+      <div class="dash-stat-card"><div class="stat-num">${formatNum(totalLikes*47)}</div><div class="stat-label">Total Likes</div><div class="stat-change">+${Math.floor(Math.random()*200)+50} this week</div></div>
+      <div class="dash-stat-card"><div class="stat-num">${formatNum(totalComments*23)}</div><div class="stat-label">Comments</div><div class="stat-change">+${Math.floor(Math.random()*30)+5} this week</div></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:12px">Engagement This Week</h4>
+      <div class="chart-bars">${days.map((d,i)=>`<div class="chart-bar" style="height:${(vals[i]/maxVal)*100}%"><span class="chart-bar-label">${d}</span></div>`).join('')}</div>
+      <div style="height:20px"></div>
+    </div>
+    <div class="dash-chart">
+      <h4 style="margin-bottom:12px">Top Performing Posts</h4>
+      ${up.slice(0,3).map((p,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i<2?'border-bottom:1px solid #f0f2f5':''}">
+        <span style="font-weight:700;color:#667eea;font-size:18px">#${i+1}</span>
+        ${p.media.length?`<img src="${p.media[0]}" style="width:48px;height:48px;border-radius:8px;object-fit:cover">`:'<div style="width:48px;height:48px;border-radius:8px;background:#f0f2f5;display:flex;align-items:center;justify-content:center"><i class="fas fa-file-alt" style="color:#65676b"></i></div>'}
+        <div style="flex:1"><p style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px">${p.text.slice(0,60)}...</p><span style="font-size:11px;color:#65676b">${p.time}</span></div>
+        <div style="text-align:right"><strong style="font-size:14px">${p.likes.length*47}</strong><span style="font-size:11px;color:#65676b;display:block">engagements</span></div>
+      </div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="dash-chart"><h4 style="margin-bottom:8px">Your Badges</h4>
+        <div>${S.badges.map(b=>ALL_BADGES[b]?`<span class="badge-item">${ALL_BADGES[b].icon} ${ALL_BADGES[b].name}</span>`:'').join('')}</div>
+        <button style="background:none;color:#667eea;font-weight:600;font-size:13px;margin-top:8px;border:none;cursor:pointer" onclick="S.showBadges=true;render()">View all badges →</button>
+      </div>
+      <div class="dash-chart"><h4 style="margin-bottom:8px">Earnings</h4>
+        <div class="coin-balance" style="margin:8px 0"><i class="fas fa-coins"></i> ${S.coins}</div>
+        <p style="font-size:12px;color:#65676b">Earned from tips and gifts</p>
+        <button class="btn-secondary" style="margin-top:8px;font-size:12px" onclick="toast('Payout requested! 💰')">Request Payout</button>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+// ===== AI CHATBOT =====
+function renderAIChatBtn() {
+  return `<div class="ai-chat-widget"><button class="ai-chat-btn" onclick="S.showAIChat=!S.showAIChat;render()" title="AI Assistant"><i class="fas fa-robot"></i></button></div>`;
+}
+function renderAIChatWindow() {
+  return `<div class="ai-chat-window">
+    <div class="ai-chat-header"><div class="ai-avatar"><i class="fas fa-robot"></i></div><div><strong>AI Assistant</strong><div style="font-size:11px;opacity:0.8">Always here to help</div></div><button onclick="S.showAIChat=false;render()" style="margin-left:auto;background:none;color:white;font-size:18px;border:none;cursor:pointer">✕</button></div>
+    <div class="ai-chat-body">
+      <div class="ai-msg bot">Hi! I'm your AI assistant. I can help with posting tips, account settings, navigation, and more. What can I help you with? 🤖</div>
+      ${S.aiMessages.map(m=>`<div class="ai-msg ${m.from}">${m.text}</div>`).join('')}
+    </div>
+    <div style="padding:4px 12px;display:flex;gap:4px;flex-wrap:wrap">${['How to grow followers?','Post tips','Keyboard shortcuts'].map(q=>`<button style="background:#f0f2f5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="sendAIMsg('${q}')">${q}</button>`).join('')}</div>
+    <div class="ai-chat-input"><input placeholder="Ask me anything..." id="aiMsgIn" onkeydown="if(event.key==='Enter'){sendAIMsg();event.preventDefault()}"><button onclick="sendAIMsg()" style="background:none;color:#667eea;font-size:18px;border:none;cursor:pointer"><i class="fas fa-paper-plane"></i></button></div>
+  </div>`;
+}
+function sendAIMsg(preset) {
+  const el=document.getElementById('aiMsgIn');
+  const text=preset||(el?el.value.trim():'');
+  if(!text)return;
+  S.aiMessages.push({from:'user',text});
+  const reply=aiResponses[Math.floor(Math.random()*aiResponses.length)];
+  setTimeout(()=>{S.aiMessages.push({from:'bot',text:reply});render();},500);
+  render();
+}
+
+// ===== TIPS/GIFTS =====
+function renderTipsModal() {
+  const gifts=[{emoji:'🌹',name:'Rose',cost:10},{emoji:'⭐',name:'Star',cost:50},{emoji:'💎',name:'Diamond',cost:100},{emoji:'🚀',name:'Rocket',cost:200},{emoji:'👑',name:'Crown',cost:500},{emoji:'🎆',name:'Firework',cost:1000}];
+  return `<div class="tips-modal" onclick="if(event.target===this){S.showTips=null;render()}"><div class="tips-content">
+    <h3><i class="fas fa-gift" style="color:#f39c12"></i> Send a Gift</h3>
+    <div class="coin-balance"><i class="fas fa-coins"></i> ${S.coins} coins</div>
+    <div class="gift-grid">${gifts.map(g=>`<div class="gift-item" onclick="sendGift(${g.cost},'${g.emoji}','${g.name}')"><div class="gift-emoji">${g.emoji}</div><div style="font-size:12px;margin-top:4px">${g.name}</div><div class="gift-cost">${g.cost} coins</div></div>`).join('')}</div>
+    <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="S.showTips=null;render()">Cancel</button>
+  </div></div>`;
+}
+function sendGift(cost,emoji,name){if(S.coins<cost)return toast('Not enough coins!','fa-exclamation-triangle');S.coins-=cost;gainXP(cost/2);toast(emoji+' '+name+' sent!','fa-gift');S.showTips=null;render();}
+
+// ===== VERIFICATION =====
+function renderVerifyModal(){
+  return `<div class="verify-modal" onclick="if(event.target===this){S.showVerifyModal=false;render()}"><div class="verify-content">
+    <h3><i class="fas fa-check-circle" style="color:#667eea"></i> Request Verification</h3>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">Submit your request for a verified badge. Requirements:</p>
+    <ul style="font-size:13px;color:#65676b;margin:8px 0 16px 20px;line-height:2">
+      <li>Account must be at least 30 days old</li><li>Must have a complete profile (bio, photo)</li><li>Must have at least 100 followers</li><li>Must be an active content creator</li>
+    </ul>
+    <div class="form-group"><label>Category</label><select style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"><option>Creator/Influencer</option><option>Brand/Business</option><option>Public Figure</option><option>Journalist</option></select></div>
+    <div class="form-group"><label>Why should you be verified?</label><textarea placeholder="Tell us why..." style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;min-height:80px;resize:none"></textarea></div>
+    <button class="btn-primary" onclick="toast('Verification request submitted! We\\'ll review within 48hrs ✅');S.showVerifyModal=false;render()">Submit Request</button>
+  </div></div>`;
+}
+
+// ===== AUDIO ROOMS =====
+function renderAudioRoom(){
+  const speakers=users.slice(0,4);
+  return `<div class="audio-room-modal" onclick="if(event.target===this){S.showAudioRoom=false;render()}"><div class="audio-room-content">
+    <h3>🎙️ Tech Talk Live</h3>
+    <div class="audio-room-topic">Discussing the future of AI and social media</div>
+    <div class="speakers-grid">
+      ${speakers.map((u,i)=>`<div class="speaker-item ${i<2?'speaking':''}"><img src="${u.avatar}"><p>${u.fullName.split(' ')[0]}</p><span style="font-size:10px;color:#65676b">${i===0?'Host':i<2?'Speaker':'Listener'}</span></div>`).join('')}
+    </div>
+    <p style="font-size:12px;color:#65676b;text-align:center">${Math.floor(Math.random()*200)+50} listening</p>
+    <div class="audio-controls">
+      <button style="background:#e4e6eb;color:#1a1a2e;border:none" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i> Mute</button>
+      <button style="background:#e74c3c;color:white;border:none" onclick="S.showAudioRoom=false;render()"><i class="fas fa-phone-slash"></i> Leave</button>
+      <button style="background:#667eea;color:white;border:none" onclick="toast('Hand raised! ✋')"><i class="fas fa-hand-paper"></i> Raise</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== GAMIFICATION =====
+function gainXP(amount){
+  S.xp+=amount;
+  const newLevel=Math.floor(S.xp/500)+1;
+  if(newLevel>S.level){S.level=newLevel;S.showLevelUp=true;showConfetti();setTimeout(()=>{S.showLevelUp=false;render();},3000);}
+}
+function renderLeaderboard(){
+  const lb=users.map(u=>({...u,xp:u.id===S.user.id?S.xp:Math.floor(Math.random()*5000)+500})).sort((a,b)=>b.xp-a.xp);
+  return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showLeaderboard=false;render()}"><div class="leaderboard-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3><i class="fas fa-trophy" style="color:#f39c12"></i> Leaderboard</h3><button onclick="S.showLeaderboard=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    <div style="overflow-y:auto;max-height:60vh">${lb.map((u,i)=>`<div class="lb-item"><span class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i<3?['🥇','🥈','🥉'][i]:i+1}</span><img src="${u.avatar}" class="avatar-sm"><div><strong style="font-size:13px">${u.fullName}${u.id===S.user.id?' (You)':''}</strong><div style="font-size:11px;color:#65676b">Level ${Math.floor(u.xp/500)+1}</div></div><span class="lb-xp">${formatNum(u.xp)} XP</span></div>`).join('')}</div>
+  </div></div>`;
+}
+function renderBadgesModal(){
+  return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showBadges=false;render()}"><div class="leaderboard-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3>🏆 All Badges</h3><button onclick="S.showBadges=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    <div style="padding:12px">${Object.entries(ALL_BADGES).map(([k,b])=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f2f5">
+      <span style="font-size:28px">${b.icon}</span><div style="flex:1"><strong style="font-size:13px">${b.name}</strong><p style="font-size:11px;color:#65676b">${b.desc}</p></div>
+      ${S.badges.includes(k)?'<span style="color:#27ae60;font-size:12px;font-weight:600">✅ Earned</span>':'<span style="color:#65676b;font-size:12px">🔒 Locked</span>'}
+    </div>`).join('')}</div>
+  </div></div>`;
+}
+function renderLevelUp(){
+  return `<div class="level-up-modal" onclick="S.showLevelUp=false;render()"><div class="level-up-content">
+    <div style="font-size:18px;margin-bottom:8px">🎉 LEVEL UP! 🎉</div>
+    <div class="level-num">${S.level}</div>
+    <div style="font-size:16px;margin-top:8px">Keep going!</div>
+  </div></div>`;
+}
+
+// ===== GIF SEARCH =====
+function renderGifSearch(){
+  const gifs=[71,72,73,74,75,76,77,78].map(i=>`https://picsum.photos/200/200?random=${i}`);
+  return `<div class="gif-modal" onclick="if(event.target===this){S.showGifSearch=false;render()}"><div class="gif-content">
+    <div style="padding:12px 12px 0"><input placeholder="Search GIFs..." style="width:100%;padding:10px 14px;border:none;background:#f0f2f5;border-radius:24px;font-size:14px" oninput="S.gifQuery=this.value"></div>
+    <div class="gif-grid">${gifs.map(g=>`<img src="${g}" onclick="toast('GIF added! 🎉');S.showGifSearch=false;render()">`).join('')}</div>
+  </div></div>`;
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+function renderShortcutsModal(){
+  const shortcuts=[['H','Go to Home/Feed'],['E','Go to Explore'],['M','Go to Messages'],['N','Go to Notifications'],['R','Go to Reels'],['D','Toggle Dark Mode'],['S','Go to Shop'],['C','Go to Communities'],['L','Go to Live'],['?','Show Shortcuts'],['Esc','Close modal/dialog'],['J','Next post (scroll)'],['K','Previous post (scroll)']];
+  return `<div class="shortcuts-modal" onclick="if(event.target===this){S.showShortcuts=false;render()}"><div class="shortcuts-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3>⌨️ Keyboard Shortcuts</h3><button onclick="S.showShortcuts=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    ${shortcuts.map(([k,d])=>`<div class="shortcut-row"><span>${d}</span><span class="shortcut-key">${k}</span></div>`).join('')}
+  </div></div>`;
+}
+
+// ===== INSTALL PROMPT =====
+function renderInstallPrompt(){
+  return `<div class="install-banner">
+    <i class="fas fa-download" style="font-size:24px"></i>
+    <div style="flex:1"><strong>Install Drukpa</strong><p style="font-size:12px;opacity:0.9">Add to home screen for the best experience</p></div>
+    <button style="background:white;color:#667eea;border:none" onclick="toast('App installed! 📱');S.showInstallPrompt=false;render()">Install</button>
+    <button style="background:rgba(255,255,255,0.2);color:white;border:none" onclick="S.showInstallPrompt=false;render()">Later</button>
+  </div>`;
+}
+
+// ===== SMART REPLIES (add to comment sections) =====
+function getSmartReplies(){return smartReplies.sort(()=>Math.random()-0.5).slice(0,3);}
+
+// ===== SHOP / MARKETPLACE =====
+const shopItems = [
+  {id:'sh1',name:'Digital Art Pack',price:29.99,img:'https://picsum.photos/400/300?random=90',seller:'2'},
+  {id:'sh2',name:'Photography Presets',price:14.99,img:'https://picsum.photos/400/300?random=91',seller:'2'},
+  {id:'sh3',name:'Social Media Templates',price:19.99,img:'https://picsum.photos/400/300?random=92',seller:'4'},
+  {id:'sh4',name:'Startup Guide eBook',price:9.99,img:'https://picsum.photos/400/300?random=93',seller:'5'},
+  {id:'sh5',name:'Fitness Workout Plan',price:24.99,img:'https://picsum.photos/400/300?random=94',seller:'3'},
+  {id:'sh6',name:'Recipe Collection',price:12.99,img:'https://picsum.photos/400/300?random=95',seller:'3'},
+];
+function renderShop(){
+  return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2><i class="fas fa-store" style="color:#667eea;margin-right:8px"></i> Marketplace</h2>
+      <button class="btn-primary" style="width:auto;padding:8px 20px" onclick="toast('Create listing coming soon!')"><i class="fas fa-plus"></i> Sell</button>
+    </div>
+    <div class="explore-search" style="margin-bottom:16px"><i class="fas fa-search"></i><input placeholder="Search products..."></div>
+    <div class="shop-grid">${shopItems.map(item=>{const seller=U(item.seller);return`<div class="shop-item" onclick="toast('Product details coming soon!')">
+      <img src="${item.img}"><div class="shop-item-info"><h4>${item.name}</h4><div class="shop-price">$${item.price}</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:6px"><img src="${seller.avatar}" class="avatar-xs"><span style="font-size:11px;color:#65676b">${seller.fullName}</span></div></div></div>`;}).join('')}</div>
+  </div></div>`;
+}
+
+// ===== MAP EXPLORE =====
+function renderMapExplore(){
+  const pins = users.map((u,i)=>({user:u,x:15+Math.random()*70,y:10+Math.random()*75}));
+  return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
+    <h2 style="margin-bottom:16px"><i class="fas fa-map-marked-alt" style="color:#667eea;margin-right:8px"></i> Map Explore</h2>
+    <div class="map-container">
+      <div style="position:absolute;inset:0;background:url('https://picsum.photos/900/400?random=96');background-size:cover;opacity:0.3"></div>
+      ${pins.map(p=>`<div class="map-pin" style="left:${p.x}%;top:${p.y}%" onclick="goProfile('${p.user.username}')"><img src="${p.user.avatar}" title="${p.user.fullName} — ${p.user.location}"></div>`).join('')}
+      <div style="position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.9);padding:8px 14px;border-radius:8px;font-size:12px"><i class="fas fa-info-circle" style="color:#667eea"></i> Tap a pin to view profile</div>
+    </div>
+    <div style="margin-top:16px"><h3 style="margin-bottom:12px">Nearby Posts</h3>
+      ${posts.slice(0,2).map(p=>renderPost(p)).join('')}
+    </div>
+  </div></div>`;
+}
+
+// ===== QR CODE =====
+function renderQRModal(){
+  const cells=[];for(let i=0;i<121;i++){const r=Math.floor(i/11),c=i%11;const isCorner=(r<3&&c<3)||(r<3&&c>7)||(r>7&&c<3);cells.push(isCorner||Math.random()>0.5?'':'w');}
+  return `<div class="qr-modal" onclick="if(event.target===this){S.showQR=false;render()}"><div class="qr-content">
+    <h3>Your QR Code</h3><p style="font-size:13px;color:#65676b">Scan to follow @${S.user.username}</p>
+    <div class="qr-code"><div class="qr-grid">${cells.map(c=>`<div class="qr-cell ${c}"></div>`).join('')}</div></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:center">
+      <button class="btn-secondary" onclick="toast('QR saved to photos!','fa-download')"><i class="fas fa-download"></i> Save</button>
+      <button class="btn-primary" style="width:auto" onclick="toast('Link copied!','fa-link');S.showQR=false;render()"><i class="fas fa-share"></i> Share Link</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== SUBSCRIPTIONS =====
+function renderSubscriptions(){
+  return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showSubscriptions=false;render()}"><div class="leaderboard-content" style="width:600px;max-width:90vw">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3><i class="fas fa-crown" style="color:#f39c12"></i> Subscription Tiers</h3><button onclick="S.showSubscriptions=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    <div style="padding:16px"><div class="sub-tiers">
+      <div class="sub-tier" onclick="toast('Free tier — you are here!')"><h4>Free</h4><div class="tier-price">$0<span>/mo</span></div><ul><li>Basic posting</li><li>Follow & like</li><li>5 DMs/day</li><li>Standard support</li></ul><button class="btn-secondary" style="width:100%">Current Plan</button></div>
+      <div class="sub-tier popular" onclick="toast('Premium subscription coming soon!')"><div class="pop-badge">POPULAR</div><h4>Premium</h4><div class="tier-price">$9.99<span>/mo</span></div><ul><li>Everything in Free</li><li>Verified badge</li><li>Unlimited DMs</li><li>Post analytics</li><li>Priority support</li></ul><button class="btn-primary" style="width:100%;padding:10px">Upgrade</button></div>
+      <div class="sub-tier" onclick="toast('VIP subscription coming soon!')"><h4>VIP</h4><div class="tier-price">$24.99<span>/mo</span></div><ul><li>Everything in Premium</li><li>Custom themes</li><li>Exclusive content</li><li>Revenue sharing</li><li>Creator tools</li><li>Dedicated manager</li></ul><button class="btn-primary" style="width:100%;padding:10px;background:linear-gradient(135deg,#f39c12,#e74c3c)">Go VIP</button></div>
+    </div></div>
+  </div></div>`;
+}
+
+// ===== PROFILE VIEWERS =====
+function renderProfileViewers(){
+  const viewers=users.filter(u=>u.id!==S.user.id).map(u=>({...u,viewTime:Math.floor(Math.random()*24)+1+'h ago'}));
+  return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showProfileViewers=false;render()}"><div class="leaderboard-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3><i class="fas fa-eye" style="color:#667eea"></i> Profile Viewers</h3><button onclick="S.showProfileViewers=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    <div style="overflow-y:auto;max-height:60vh">${viewers.map(v=>`<div class="lb-item" style="cursor:pointer" onclick="S.showProfileViewers=false;goProfile('${v.username}')"><img src="${v.avatar}" class="avatar-sm"><div style="flex:1"><strong style="font-size:13px">${v.fullName}</strong><div style="font-size:11px;color:#65676b">@${v.username}</div></div><span style="font-size:11px;color:#65676b">${v.viewTime}</span></div>`).join('')}</div>
+  </div></div>`;
+}
+
+// ===== CHALLENGE MODAL =====
+function renderChallengeModal(){
+  return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showChallenge=false;render()}"><div class="leaderboard-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5"><h3>🏆 Active Challenges</h3></div>
+    <div style="padding:12px">${[{name:'Show Your Workspace',entries:1247,days:3,prize:500},{name:'Sunset Photography',entries:892,days:5,prize:300},{name:'30-Day Fitness',entries:3421,days:12,prize:1000}].map(c=>`<div class="challenge-card" style="margin-bottom:12px"><h3>${c.name}</h3><div class="challenge-stats"><span><i class="fas fa-users"></i> ${c.entries} entries</span><span><i class="fas fa-clock"></i> ${c.days} days left</span><span><i class="fas fa-coins"></i> ${c.prize} coins</span></div></div>`).join('')}</div>
+  </div></div>`;
+}
+
+// ===== VOICE MESSAGES =====
+function toggleVoiceRecord(){S.isRecordingVoice=!S.isRecordingVoice;render();}
+function sendVoiceMsg(){
+  if(!S.activeConv)return;
+  if(!msgs[S.activeConv])msgs[S.activeConv]=[];
+  const now=new Date();
+  msgs[S.activeConv].push({id:'m'+(++msgIdCounter),sid:S.user.id,text:'',time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),isVoice:true,voiceDur:'0:'+String(Math.floor(Math.random()*55)+3).padStart(2,'0')});
+  const c=convos.find(x=>x.id===S.activeConv);
+  if(c){c.last='🎤 Voice message';c.lastT='now';}
+  S.isRecordingVoice=false;
+  gainXP(3);
+  toast('Voice message sent!','fa-microphone');
+  render(); simulateReply();
+}
+
+// ===== MESSAGE REACTIONS =====
+function reactToMsg(convId,msgIdx){
+  const emojis=['❤️','😂','😮','😢','👍','🔥'];
+  const key=convId+'_'+msgIdx;
+  const current=S.msgReactions[key];
+  const nextIdx=current?emojis.indexOf(current)+1:0;
+  S.msgReactions[key]=emojis[nextIdx%emojis.length];
+  render();
+}
+
+// ===== PIN POSTS =====
+function togglePin(pid){
+  const i=S.pinnedPosts.indexOf(pid);
+  if(i===-1){S.pinnedPosts.push(pid);toast('Post pinned to profile!','fa-thumbtack');}
+  else{S.pinnedPosts.splice(i,1);toast('Post unpinned','fa-thumbtack');}
+  S.openMenus={};render();
+}
+
+// ===== HASHTAG FOLLOW =====
+function followHashtag(tag){S.followedHashtags.push(tag);toast(`Following #${tag}`,'fa-hashtag');gainXP(3);render();}
+function unfollowHashtag(tag){S.followedHashtags=S.followedHashtags.filter(t=>t!==tag);toast(`Unfollowed #${tag}`);render();}
+
+// ===== SCHEDULE POST =====
+function schedulePost(){
+  const time=document.getElementById('scheduleTime')?.value;
+  if(!time)return toast('Pick a date/time!','fa-exclamation');
+  const text=document.getElementById('postText')?.value||'';
+  S.scheduledPosts.push({text,time});
+  toast('Post scheduled for '+new Date(time).toLocaleString()+'!','fa-clock');
+  S.postAttachMode=null;S._postDraft='';render();
+}
+
+// ===== CONFETTI =====
+function showConfetti(){
+  const container=document.createElement('div');container.className='confetti-container';
+  const colors=['#667eea','#764ba2','#f39c12','#e74c3c','#27ae60','#3498db','#f1c40f'];
+  for(let i=0;i<50;i++){const piece=document.createElement('div');piece.className='confetti-piece';piece.style.left=Math.random()*100+'%';piece.style.animationDelay=Math.random()*2+'s';piece.style.background=colors[Math.floor(Math.random()*colors.length)];piece.style.borderRadius=Math.random()>0.5?'50%':'0';piece.style.width=(Math.random()*8+6)+'px';piece.style.height=(Math.random()*8+6)+'px';container.appendChild(piece);}
+  document.body.appendChild(container);setTimeout(()=>container.remove(),3500);
+}
+
+// ===== OFFLINE DETECTION =====
+window.addEventListener('offline',()=>{S.isOffline=true;render();});
+window.addEventListener('online',()=>{S.isOffline=false;toast('Back online!','fa-wifi');render();});
+
+// ===== NOTIFICATION SOUND =====
+function playNotifSound(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=800;gain.gain.value=0.1;osc.start();osc.stop(ctx.currentTime+0.15);}catch(e){}}
+
+function sendMediaMsg(files) {
+  if(!files.length||!S.activeConv) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    if(!msgs[S.activeConv])msgs[S.activeConv]=[];
+    const now=new Date();
+    msgs[S.activeConv].push({id:'m'+(++msgIdCounter),sid:S.user.id,text:`<img src="${e.target.result}" style="max-width:200px;border-radius:8px">`,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),isMedia:true});
+    const c=convos.find(x=>x.id===S.activeConv);
+    if(c){c.last='📷 Photo';c.lastT='now';}
+    render(); simulateReply();
+  };
+  reader.readAsDataURL(files[0]);
+}
+
+// ===== VIDEO/VOICE CALLING =====
+function startCall(uid, type) {
+  S.showCall = uid; S.callType = type; S.groupCall = false; render();
+  playNotifSound();
+}
+function startGroupCall() {
+  S.showCall = 'group'; S.callType = 'video'; S.groupCall = true; render();
+}
+function renderCallModal() {
+  if (S.groupCall) {
+    const participants = users.filter(u=>u.id!==S.user.id).slice(0,4);
+    return `<div class="call-modal" onclick="if(event.target===this){S.showCall=null;render()}"><div class="call-content">
+      <h2 style="margin-bottom:16px">Group ${S.callType==='video'?'Video':'Voice'} Call</h2>
+      <div class="group-call-grid">${participants.map(u=>`<div class="call-participant"><img src="${u.avatar}"><p style="margin-top:6px;font-size:13px">${u.fullName.split(' ')[0]}</p></div>`).join('')}</div>
+      <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹':'🎤'} ${Math.floor(Math.random()*5)+2}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</p>
+      <div class="call-controls">
+        <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+        ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+        <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
+        <button style="background:#3a3b3c;color:white" onclick="toast('Screen shared!')"><i class="fas fa-desktop"></i></button>
+      </div>
+    </div></div>`;
+  }
+  const u = U(S.showCall);
+  if(!u) return '';
+  return `<div class="call-modal" onclick="if(event.target===this){S.showCall=null;render()}"><div class="call-content">
+    <img src="${u.avatar}">
+    <h2>${u.fullName}</h2>
+    <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹 Video Call':'🎤 Voice Call'} — Ringing...</p>
+    <div class="call-controls">
+      <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+      ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+      <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
+      <button style="background:#27ae60;color:white" onclick="toast('Connected! 📞');setTimeout(()=>{S.showCall=null;render()},2000)"><i class="fas fa-phone"></i></button>
+    </div>
+    <button style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 16px;border-radius:20px;margin-top:16px;font-size:12px;cursor:pointer" onclick="startGroupCall()"><i class="fas fa-user-plus"></i> Add Participants</button>
+  </div></div>`;
+}
+
+// ===== EDIT POST =====
+function openEditPost(pid) {
+  const p = posts.find(x=>x.id===pid);
+  if(!p) return;
+  S.showEditPost = pid;
+  S.editPostText = p.text;
+  S.openMenus = {};
+  render();
+}
+function renderEditPostModal() {
+  return `<div class="edit-post-modal" onclick="if(event.target===this){S.showEditPost=null;render()}"><div class="edit-post-content">
+    <h3><i class="fas fa-edit" style="color:#667eea;margin-right:8px"></i> Edit Post</h3>
+    <textarea id="editPostText" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;min-height:120px;font-size:15px;resize:none;margin:16px 0">${S.editPostText}</textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="S.showEditPost=null;render()">Cancel</button>
+      <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="saveEditPost()">Save Changes</button>
+    </div>
+  </div></div>`;
+}
+function saveEditPost() {
+  const p = posts.find(x=>x.id===S.showEditPost);
+  const el = document.getElementById('editPostText');
+  if(p && el) { p.text = el.value; p._edited = true; toast('Post updated! ✏️'); }
+  S.showEditPost = null; render();
+}
+
+// ===== BLOCK / REPORT =====
+function renderBlockModal() {
+  const u = U(S.showBlockModal);
+  if(!u) return '';
+  const isBlocked = S.blockedUsers.includes(u.id);
+  return `<div class="block-modal" onclick="if(event.target===this){S.showBlockModal=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-ban" style="color:#e74c3c;margin-right:8px"></i> ${isBlocked?'Unblock':'Block'} ${u.fullName}?</h3>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">${isBlocked?'They will be able to find your profile and posts again.':'They won\\'t be able to find your profile, posts, or message you. They won\\'t be notified.'}</p>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="S.showBlockModal=null;render()">Cancel</button>
+      <button class="btn-danger" style="flex:1;padding:10px" onclick="${isBlocked?'unblockUser':'blockUser'}('${u.id}')">${isBlocked?'Unblock':'Block'}</button>
+    </div>
+  </div></div>`;
+}
+function blockUser(uid) {
+  if(!S.blockedUsers.includes(uid)) S.blockedUsers.push(uid);
+  S.user.following = S.user.following.filter(f=>f!==uid);
+  const u = U(uid);
+  if(u) u.followers = u.followers.filter(f=>f!==S.user.id);
+  toast('User blocked','fa-ban');
+  S.showBlockModal = null; render();
+}
+function unblockUser(uid) {
+  S.blockedUsers = S.blockedUsers.filter(x=>x!==uid);
+  toast('User unblocked','fa-check');
+  S.showBlockModal = null; render();
+}
+function renderReportModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showReportModal=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-flag" style="color:#e74c3c;margin-right:8px"></i> Report Content</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Why are you reporting this?</p>
+    <div class="report-options">
+      ${['Spam or misleading','Harassment or bullying','Hate speech','Violence or threats','Nudity or sexual content','False information','Intellectual property violation','Other'].map(r=>`<label onclick="submitReport('${r}')"><input type="radio" name="report"> ${r}</label>`).join('')}
+    </div>
+  </div></div>`;
+}
+function submitReport(reason) {
+  toast('Report submitted. We\\'ll review it within 24 hours.','fa-flag');
+  S.showReportModal = null; render();
+}
+
+// ===== 2FA =====
+function renderTwoFAModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showTwoFA=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-shield-alt" style="color:#667eea;margin-right:8px"></i> Two-Factor Authentication</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Add an extra layer of security to your account.</p>
+    <div class="twofa-steps">
+      <div class="twofa-step"><div class="twofa-step-num">1</div><div><strong style="font-size:14px">Download Authenticator App</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Get Google Authenticator or Authy on your phone.</p></div></div>
+      <div class="twofa-step"><div class="twofa-step-num">2</div><div><strong style="font-size:14px">Scan QR Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Scan the code below with your authenticator app.</p>
+        <div style="width:120px;height:120px;background:#f0f2f5;border-radius:8px;margin:8px 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-qrcode" style="font-size:64px;color:#1a1a2e"></i></div></div></div>
+      <div class="twofa-step"><div class="twofa-step-num">3</div><div><strong style="font-size:14px">Enter Verification Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Enter the 6-digit code from your authenticator.</p>
+        <div style="display:flex;gap:6px;margin-top:8px">${Array(6).fill(0).map(()=>`<input style="width:38px;height:44px;text-align:center;border:2px solid #e4e6eb;border-radius:8px;font-size:18px;font-weight:700" maxlength="1" oninput="this.nextElementSibling?.focus()">`).join('')}</div></div></div>
+    </div>
+    <button class="btn-primary" style="margin-top:16px" onclick="S.twoFAEnabled=true;toast('2FA enabled! Your account is now more secure 🔒');S.showTwoFA=false;render()">Enable 2FA</button>
+  </div></div>`;
+}
+
+// ===== QUOTE REPOST =====
+function renderQuoteRepostModal() {
+  const op = posts.find(x=>x.id===S.showQuoteRepost);
+  if(!op) return '';
+  const oa = U(op.aid);
+  return `<div class="edit-post-modal" onclick="if(event.target===this){S.showQuoteRepost=null;render()}"><div class="edit-post-content">
+    <h3><i class="fas fa-quote-left" style="color:#9b59b6;margin-right:8px"></i> Quote Repost</h3>
+    <textarea id="quoteText" placeholder="Add your thoughts..." style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;min-height:80px;font-size:15px;resize:none;margin:12px 0"></textarea>
+    <div class="quote-repost">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><img src="${oa.avatar}" class="avatar-xs"><strong style="font-size:13px">${oa.fullName}</strong><span style="font-size:11px;color:#65676b">${op.time}</span></div>
+      <p style="font-size:13px;color:#65676b">${op.text.slice(0,100)}${op.text.length>100?'...':''}</p>
+    </div>
+    <button class="btn-primary" style="margin-top:8px" onclick="publishQuoteRepost()">Repost</button>
+  </div></div>`;
+}
+function publishQuoteRepost() {
+  const op = posts.find(x=>x.id===S.showQuoteRepost);
+  const qt = document.getElementById('quoteText')?.value || '';
+  if(!op) return;
+  const oa = U(op.aid);
+  posts.unshift({id:'p'+(++postIdCounter), aid:S.user.id, text:qt+'\n\n📎 Quoting @'+oa.username+': "'+op.text.slice(0,80)+'..."', media:[], likes:[], comments:[], shares:[], saves:[], time:'just now', _quote:op.id});
+  toast('Quote reposted! 💬');
+  gainXP(10);
+  S.showQuoteRepost = null; render();
+}
+
+// ===== BOOKMARK COLLECTIONS =====
+function renderNewCollectionModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showNewCollection=false;render()}"><div class="block-content">
+    <h3><i class="fas fa-folder-plus" style="color:#667eea;margin-right:8px"></i> New Collection</h3>
+    <div class="form-group" style="margin-top:16px"><label>Collection Name</label><input id="newColName" placeholder="e.g., Travel ideas, Recipes..." style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <button class="btn-primary" style="margin-top:8px" onclick="createCollection()">Create Collection</button>
+  </div></div>`;
+}
+function createCollection() {
+  const name = document.getElementById('newColName')?.value?.trim();
+  if(!name) return toast('Enter a collection name!','fa-exclamation');
+  S.bookmarkCollections.push({name, posts:[]});
+  toast('Collection "'+name+'" created!','fa-folder-plus');
+  S.showNewCollection = false; render();
+}
+
+// ===== POST TEMPLATES =====
+function renderTemplatesModal() {
+  const templates = [
+    {icon:'📸',name:'Photo Share',text:'Check out this amazing shot! 📸\n\n#photography #art'},
+    {icon:'💡',name:'Tip / Advice',text:'💡 Quick tip:\n\n[Your tip here]\n\nHope this helps! #tips'},
+    {icon:'📢',name:'Announcement',text:'📢 Big announcement!\n\n[Your news here]\n\nStay tuned for more updates!'},
+    {icon:'❓',name:'Question',text:'I have a question for you all:\n\n[Your question here]\n\nDrop your thoughts below! 👇'},
+    {icon:'📊',name:'Poll / Opinion',text:'What do you think about [topic]?\n\nA) Option 1\nB) Option 2\n\nVote in the comments! 📊'},
+    {icon:'🎉',name:'Celebration',text:'🎉 Exciting news!\n\n[What you are celebrating]\n\nThank you all for your support! ❤️'},
+  ];
+  return `<div class="block-modal" onclick="if(event.target===this){S.showTemplates=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-file-alt" style="color:#e67e22;margin-right:8px"></i> Post Templates</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Choose a template to get started quickly.</p>
+    <div class="template-grid">${templates.map(t=>`<div class="template-item" onclick="useTemplate('${t.text.replace(/'/g,"\\'")}')"><span style="font-size:24px;display:block;margin-bottom:4px">${t.icon}</span><strong>${t.name}</strong></div>`).join('')}</div>
+  </div></div>`;
+}
+function useTemplate(text) {
+  S._postDraft = text;
+  S.showTemplates = false;
+  toast('Template applied!','fa-file-alt');
+  render();
+  const el = document.getElementById('postText');
+  if(el) el.value = text;
+}
+
+// ===== FAN CLUB =====
+function renderFanClubModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFanClub=false;render()}"><div class="block-content" style="width:420px">
+    <div class="fanclub-card" style="margin-bottom:16px">
+      <h3><i class="fas fa-heart"></i> Fan Club</h3>
+      <p style="font-size:14px;margin-top:8px;opacity:0.9">${S.fanClubMembers} members</p>
+      <p style="font-size:12px;margin-top:4px;opacity:0.8">Exclusive content for your biggest supporters</p>
+    </div>
+    <h4 style="margin-bottom:8px">Fan Club Benefits</h4>
+    <ul style="font-size:13px;line-height:2;margin-left:16px;color:#65676b">
+      <li>Exclusive posts and stories</li><li>Early access to content</li><li>Fan badge next to name</li><li>Monthly Q&A sessions</li><li>Behind-the-scenes content</li>
+    </ul>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-primary" style="flex:1" onclick="toast('Fan Club pricing set!');S.showFanClub=false;render()">Set Price ($4.99/mo)</button>
+      <button class="btn-secondary" style="flex:1" onclick="S.showFanClub=false;render()">Close</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== PAID DMs =====
+function renderPaidDMModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showPaidDM=null;render()}"><div class="block-content">
+    <h3><i class="fas fa-coins" style="color:#f39c12;margin-right:8px"></i> Paid DMs</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Charge non-followers to send you direct messages.</p>
+    <div class="form-group" style="margin-top:16px"><label>Price per message (coins)</label>
+      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#667eea':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(102,126,234,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">${p}</button>`).join('')}</div>
+    </div>
+    <div class="toggle-group" style="margin-top:8px"><span>Enable Paid DMs</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+    <button class="btn-primary" style="margin-top:16px" onclick="toast('Paid DM settings saved! 💰');S.showPaidDM=null;render()">Save Settings</button>
+  </div></div>`;
+}
+
+// ===== BROADCAST CHANNELS =====
+function renderBroadcastModal() {
+  return `<div class="block-modal" onclick="if(event.target===this){S.showBroadcast=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-bullhorn" style="color:#3498db;margin-right:8px"></i> Broadcast Channels</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Send one-way messages to your subscribers.</p>
+    ${S.broadcastChannels.map((ch,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px;cursor:pointer" onclick="toast('Composing broadcast for ${ch.name}...')">
+      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white"><i class="fas fa-bullhorn"></i></div>
+      <div style="flex:1"><strong style="font-size:14px">${ch.name}</strong><p style="font-size:12px;color:#65676b">${formatNum(ch.subs)} subscribers</p></div>
+      <span class="broadcast-badge">BROADCAST</span>
+    </div>`).join('')}
+    <div style="margin-top:12px">
+      <input id="newBroadcastName" placeholder="New channel name..." style="width:100%;padding:10px 14px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;margin-bottom:8px">
+      <button class="btn-primary" onclick="createBroadcast()">Create Channel</button>
+    </div>
+  </div></div>`;
+}
+function createBroadcast() {
+  const name = document.getElementById('newBroadcastName')?.value?.trim();
+  if(!name) return toast('Enter a channel name!','fa-exclamation');
+  S.broadcastChannels.push({name, subs:0});
+  toast('Broadcast channel "'+name+'" created!','fa-bullhorn');
+  render();
+}
+
+// ===== FUNDRAISER =====
+function renderFundraiserModal() {
+  const pct = Math.round((S.fundraiserRaised/S.fundraiserGoal)*100);
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFundraiser=false;render()}"><div class="block-content" style="width:420px">
+    <h3><i class="fas fa-hand-holding-heart" style="color:#27ae60;margin-right:8px"></i> Create Fundraiser</h3>
+    <div class="fundraiser-card" style="margin:16px 0">
+      <h4>Community Garden Project 🌱</h4>
+      <div class="fundraiser-bar"><div class="fundraiser-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span>$${S.fundraiserRaised.toLocaleString()} raised</span><span>$${S.fundraiserGoal.toLocaleString()} goal</span></div>
+      <p style="font-size:12px;margin-top:6px;opacity:0.8">${pct}% funded · 142 donors</p>
+    </div>
+    <div class="form-group"><label>Fundraiser Title</label><input placeholder="What are you raising funds for?" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <div class="form-group"><label>Goal Amount ($)</label><input type="number" placeholder="5000" value="5000" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" style="flex:1" onclick="toast('Fundraiser created! 🌱');S.showFundraiser=false;render()">Create Fundraiser</button>
+      <button style="flex:0;padding:10px 16px;background:#27ae60;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="S.fundraiserRaised=Math.min(S.fundraiserRaised+50,S.fundraiserGoal);toast('$50 donated! 💚');render()">Donate $50</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== AFFILIATE LINKS =====
+function renderAffiliateModal() {
+  const links = [{name:'Photography Course',url:'course.drukpa.app/photo',clicks:234,earnings:45.60},{name:'Art Supplies',url:'shop.drukpa.app/art',clicks:567,earnings:89.30},{name:'Tech Gadgets',url:'tech.drukpa.app/gear',clicks:123,earnings:23.10}];
+  return `<div class="block-modal" onclick="if(event.target===this){S.showAffiliate=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-link" style="color:#27ae60;margin-right:8px"></i> Affiliate Links</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Earn commission when followers buy through your links.</p>
+    ${links.map(l=>`<div style="padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:14px">${l.name}</strong><span style="color:#27ae60;font-weight:700;font-size:14px">$${l.earnings.toFixed(2)}</span></div>
+      <p style="font-size:11px;color:#65676b;margin-top:4px">${l.url} · ${l.clicks} clicks</p>
+    </div>`).join('')}
+    <div style="border-top:1px solid #e4e6eb;padding-top:12px;margin-top:8px">
+      <strong style="font-size:13px">Total Earnings: <span style="color:#27ae60">$${links.reduce((s,l)=>s+l.earnings,0).toFixed(2)}</span></strong>
+    </div>
+    <input placeholder="Paste product URL to create affiliate link..." style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;margin-top:12px;font-size:13px">
+    <button class="btn-primary" style="margin-top:8px" onclick="toast('Affiliate link created!','fa-link');S.showAffiliate=false;render()">Create Affiliate Link</button>
+  </div></div>`;
+}
+
+// ===== FRIEND SUGGESTIONS =====
+function renderFriendSuggestionsModal() {
+  const suggestions = users.filter(u=>u.id!==S.user.id&&!S.user.following.includes(u.id)&&!S.blockedUsers.includes(u.id));
+  const mutuals = users.filter(u=>u.id!==S.user.id&&S.user.following.includes(u.id));
+  return `<div class="block-modal" onclick="if(event.target===this){S.showFriendSuggestions=false;render()}"><div class="block-content" style="width:440px">
+    <h3><i class="fas fa-user-plus" style="color:#667eea;margin-right:8px"></i> Friend Suggestions</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">People you might know based on mutual connections.</p>
+    ${suggestions.length?suggestions.map(u=>{const mutual=mutuals.filter(m=>m.following.includes(u.id)).length;return`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f2f5">
+      <img src="${u.avatar}" class="avatar-md" style="cursor:pointer" onclick="S.showFriendSuggestions=false;goProfile('${u.username}')">
+      <div style="flex:1"><strong style="font-size:14px;cursor:pointer" onclick="S.showFriendSuggestions=false;goProfile('${u.username}')">${u.fullName}</strong><p style="font-size:12px;color:#65676b">${mutual} mutual friend${mutual!==1?'s':''}</p></div>
+      <button class="btn-follow not-following" onclick="toggleFollow('${u.id}')">Follow</button>
+    </div>`;}).join(''):'<p style="text-align:center;color:#65676b;padding:20px">No suggestions right now. Follow more people to get recommendations!</p>'}
+  </div></div>`;
+}
+
+// ===== CAROUSEL NAVIGATION =====
+function carouselPrev(pid) { S.carouselIdx[pid] = Math.max(0, (S.carouselIdx[pid]||0) - 1); render(); }
+function carouselNext(pid, max) { S.carouselIdx[pid] = Math.min(max-1, (S.carouselIdx[pid]||0) + 1); render(); }
+
+// ===== MUTE CONVERSATIONS =====
+function toggleMuteConvo(cid) {
+  const i = S.mutedConvos.indexOf(cid);
+  if(i===-1) { S.mutedConvos.push(cid); toast('Conversation muted','fa-bell-slash'); }
+  else { S.mutedConvos.splice(i,1); toast('Conversation unmuted','fa-bell'); }
+  render();
+}
+
+// ===== MESSAGE FORWARDING =====
+function forwardPost(pid) {
+  const p = posts.find(x=>x.id===pid);
+  if(!p) return;
+  const a = U(p.aid);
+  toast('Select a conversation to forward to...','fa-paper-plane');
+  S.showShareModal = null;
+  if(convos.length>0) {
+    const c = convos[0];
+    const oid = c.parts.find(x=>x!==S.user.id);
+    if(!msgs[c.id]) msgs[c.id]=[];
+    msgs[c.id].push({id:'m'+(++msgIdCounter), sid:S.user.id, text:'📎 Forwarded: "'+p.text.slice(0,60)+'..." — @'+a.username, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+    c.last = '📎 Forwarded message'; c.lastT = 'now';
+    toast('Message forwarded to '+U(oid).fullName+'!','fa-paper-plane');
+  }
+  render();
+}
+
+// ===== DATA EXPORT =====
+function renderExportModal() {
+  const exports = [
+    {icon:'fa-file-alt',name:'Posts & Comments',desc:'All your posts, comments, and interactions',size:'~2.4 MB'},
+    {icon:'fa-comment-dots',name:'Messages',desc:'All direct messages and group chats',size:'~1.8 MB'},
+    {icon:'fa-user',name:'Profile Info',desc:'Name, bio, settings, and preferences',size:'~12 KB'},
+    {icon:'fa-image',name:'Photos & Videos',desc:'All uploaded media content',size:'~156 MB'},
+    {icon:'fa-heart',name:'Likes & Saves',desc:'Posts you liked and saved',size:'~48 KB'},
+    {icon:'fa-users',name:'Connections',desc:'Followers, following, and blocked list',size:'~8 KB'},
+  ];
+  return `<div class="export-modal" onclick="if(event.target===this){S.showExport=false;render()}"><div class="export-content">
+    <h3><i class="fas fa-download" style="color:#667eea;margin-right:8px"></i> Export Your Data</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Download a copy of your Drukpa data. Select what to include:</p>
+    ${exports.map(ex=>`<div class="export-item" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
+      <i class="fas ${ex.icon}"></i>
+      <div style="flex:1"><strong style="font-size:14px">${ex.name}</strong><p style="font-size:12px;color:#65676b">${ex.desc}</p></div>
+      <div style="text-align:right"><span style="font-size:11px;color:#65676b">${ex.size}</span><br><input type="checkbox" checked style="margin-top:4px"></div>
+    </div>`).join('')}
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-primary" style="flex:1" onclick="startExport()"><i class="fas fa-download"></i> Download All</button>
+      <button class="btn-secondary" style="flex:1" onclick="S.showExport=false;render()">Cancel</button>
+    </div>
+  </div></div>`;
+}
+function startExport() {
+  toast('Preparing your data export...','fa-spinner');
+  setTimeout(()=>{
+    const data = {
+      profile: {name:S.user.fullName, username:S.user.username, email:S.user.email, bio:S.user.bio, location:S.user.location},
+      posts: posts.filter(p=>p.aid===S.user.id).map(p=>({text:p.text,time:p.time,likes:p.likes.length,comments:p.comments.length})),
+      followers: S.user.followers.length,
+      following: S.user.following.length,
+      exportDate: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'drukpa_data_export.json'; a.click();
+    URL.revokeObjectURL(url);
+    toast('Data exported successfully! 📁','fa-check-circle');
+    S.showExport = false; render();
+  }, 1500);
+}
+
+// ===== ACCOUNT DEACTIVATION =====
+function renderDeactivateModal() {
+  return `<div class="deactivate-modal" onclick="if(event.target===this){S.showDeactivate=false;render()}"><div class="deactivate-content">
+    <h3><i class="fas fa-user-slash" style="color:#e74c3c;margin-right:8px"></i> Deactivate Account</h3>
+    <div class="deactivate-warning">
+      <strong><i class="fas fa-exclamation-triangle"></i> Warning:</strong> Deactivating your account will:
+      <ul style="margin:8px 0 0 16px;line-height:1.8">
+        <li>Hide your profile from other users</li>
+        <li>Remove your posts from feeds</li>
+        <li>Disable all notifications</li>
+        <li>Pause all subscriptions</li>
+      </ul>
+    </div>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">You can reactivate within 30 days by logging back in. After 30 days, your account will be permanently deleted.</p>
+    <div class="form-group"><label>Why are you leaving? (optional)</label>
+      <select style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px">
+        <option>Select a reason...</option><option>Taking a break</option><option>Privacy concerns</option><option>Too much time spent</option><option>Not finding value</option><option>Created a new account</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Type "DEACTIVATE" to confirm</label>
+      <input id="deactivateConfirm" placeholder="DEACTIVATE" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px" oninput="S.deactivateConfirm=this.value">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="S.showDeactivate=false;S.deactivateConfirm='';render()">Cancel</button>
+      <button class="btn-danger" style="flex:1;padding:10px;opacity:${S.deactivateConfirm==='DEACTIVATE'?'1':'0.5'}" onclick="deactivateAccount()">Deactivate</button>
+    </div>
+  </div></div>`;
+}
+function deactivateAccount() {
+  if(S.deactivateConfirm!=='DEACTIVATE') return toast('Please type DEACTIVATE to confirm','fa-exclamation-triangle');
+  toast('Account deactivated. You can reactivate within 30 days.','fa-user-slash');
+  S.showDeactivate=false; S.deactivateConfirm='';
+  S.user=null; S.page='login'; render();
+}
+
+// ===== ACTIVITY LOG =====
+function renderActivityLogModal() {
+  const activities = [
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Chrome on macOS',time:'Just now',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-shield-alt',text:'Password changed',time:'2 days ago',location:'San Francisco, CA'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Safari on iPhone',time:'3 days ago',location:'San Francisco, CA'},
+    {type:'change',icon:'fa-edit',text:'Profile bio updated',time:'5 days ago',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-key',text:'Two-factor authentication '+(S.twoFAEnabled?'enabled':'disabled'),time:'1 week ago',location:'San Francisco, CA'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Firefox on Windows',time:'1 week ago',location:'New York, NY'},
+    {type:'change',icon:'fa-camera',text:'Profile photo changed',time:'2 weeks ago',location:'San Francisco, CA'},
+    {type:'danger',icon:'fa-exclamation-triangle',text:'Failed login attempt',time:'2 weeks ago',location:'Unknown location'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Chrome on Android',time:'3 weeks ago',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-envelope',text:'Email address verified',time:'1 month ago',location:'San Francisco, CA'},
+  ];
+  return `<div class="activity-log-modal" onclick="if(event.target===this){S.showActivityLog=false;render()}"><div class="activity-log-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center">
+      <h3><i class="fas fa-history" style="color:#f39c12;margin-right:8px"></i> Activity Log</h3>
+      <button onclick="S.showActivityLog=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:60vh">
+      ${activities.map(a=>`<div class="activity-item">
+        <div class="activity-icon ${a.type}"><i class="fas ${a.icon}"></i></div>
+        <div style="flex:1">
+          <p style="font-size:14px;font-weight:500">${a.text}</p>
+          <div style="display:flex;gap:12px;margin-top:4px">
+            <span style="font-size:12px;color:#65676b"><i class="fas fa-clock" style="margin-right:4px"></i>${a.time}</span>
+            <span style="font-size:12px;color:#65676b"><i class="fas fa-map-marker-alt" style="margin-right:4px"></i>${a.location}</span>
+          </div>
+        </div>
+        ${a.type==='danger'?'<button class="btn-danger" style="font-size:11px;padding:4px 10px" onclick="toast(\'Session revoked\',\'fa-check\')">Revoke</button>':''}
+      </div>`).join('')}
+    </div>
+    <div style="padding:12px 16px;border-top:1px solid #f0f2f5;text-align:center">
+      <button class="btn-secondary" onclick="toast('All sessions terminated except current','fa-check');S.showActivityLog=false;render()"><i class="fas fa-sign-out-alt"></i> Log Out All Other Sessions</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== FONT SIZE =====
+function changeFontSize(val) {
+  S.fontSize = parseInt(val);
+  document.body.style.fontSize = val + 'px';
+  toast('Font size: ' + val + 'px');
+}
+
+// ===== ANONYMOUS POST =====
+const origNewPost = newPost;
+newPost = function() {
+  const el = document.getElementById('postText');
+  let text = el ? el.value.trim() : '';
+  if (S.postFeeling) text += (text ? ' ' : '') + '— feeling ' + (FEELINGS[S.postFeeling]||S.postFeeling);
+  if (S.postPoll && S.postPoll.question && S.postPoll.options.filter(o=>o).length>=2) {
+    const opts = S.postPoll.options.filter(o=>o);
+    text += (text ? '\n\n' : '') + '📊 ' + S.postPoll.question;
+    var pollHtml = opts;
+  }
+  if (!text && !S.postPhotos.length && !(S.postVideos||[]).length) return;
+  const allMedia = [...S.postPhotos, ...(S.postVideos||[])];
+  const p = { id:'p'+(++postIdCounter), aid:S.anonMode?'anon':S.user.id, text:text, media:allMedia.filter(m=>!m.startsWith('data:video')), videos:(S.postVideos||[]), likes:[], comments:[], shares:[], saves:[], time:'just now', _anon:S.anonMode };
+  if (pollHtml && Array.isArray(pollHtml)) p.poll = { question: S.postPoll.question, options: pollHtml.map(o=>({text:o,votes:[]})) };
+  posts.unshift(p);
+  S.postPhotos=[]; S.postVideos=[]; S.postFeeling=''; S.postPoll=null; S.postAttachMode=null; S._postDraft='';
+  toast(S.anonMode?'Posted anonymously! 🎭':'Post published! 🎉','fa-check-circle');
+  gainXP(25);
+  render();
+};
+
+render();
