@@ -1,3 +1,5 @@
+
+<script>
 const S = {
   user: null, page: 'login', viewProfile: null, viewStory: null, storyIdx: 0,
   activeConv: null, profileTab: 'posts', exploreTab: 'trending', notifTab: 'all',
@@ -79,7 +81,7 @@ const posts = [
 const stories = [
   { id:'s1', uid:'2', media:'https://picsum.photos/400/700?random=10', text:'', bg:'', time:'2h ago' },
   { id:'s2', uid:'2', media:'https://picsum.photos/400/700?random=11', text:'', bg:'', time:'1h ago' },
-  { id:'s3', uid:'4', media:'', text:'New collection dropping soon! 🔥', bg:'linear-gradient(135deg, #667eea, #764ba2)', time:'4h ago' },
+  { id:'s3', uid:'4', media:'', text:'New collection dropping soon! 🔥', bg:'linear-gradient(135deg, #C41E3A, #E8751A)', time:'4h ago' },
   { id:'s4', uid:'3', media:'https://picsum.photos/400/700?random=12', text:'', bg:'', time:'6h ago' },
   { id:'s5', uid:'5', media:'', text:'Never stop learning. Never stop growing. 📚', bg:'linear-gradient(135deg, #f093fb, #f5576c)', time:'8h ago' },
 ];
@@ -274,7 +276,7 @@ function renderFeed() {
       ${storyUsers.map(uid => { const u=U(uid); return `<div class="story-card" onclick="openStory('${uid}')"><img class="story-bg" src="https://picsum.photos/200/350?random=${uid}"><div class="story-overlay"></div><img src="${u.avatar}" class="story-user"><span class="story-name">${u.fullName.split(' ')[0]}</span></div>`; }).join('')}
     </div>
     ${renderCreatePost()}
-    <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#667eea;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
+    <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
     ${posts.map(p => renderPost(p)).join('')}
   </div><div class="sidebar-right">${renderRight()}</div></div>${S.viewStory ? renderStoryViewer() : ''}${S.showStoryCreate ? renderStoryCreate() : ''}${S.showShareModal ? renderShareModal() : ''}`;
 }
@@ -373,8 +375,8 @@ function renderPost(p) {
     </div>
     ${showComments?`<div class="comments-section">
       ${p.comments.map((c,ci)=>{const cu=U(c.uid);return`<div class="comment"><img src="${cu.avatar}" class="avatar-xs"><div><div class="comment-bubble"><span class="comment-author" onclick="goProfile('${cu.username}')">${cu.fullName}</span><div class="comment-text">${c.text}</div></div><div class="comment-actions"><span onclick="likeComment('${p.id}',${ci})">${(c.cLikes||0)?'❤️ '+c.cLikes:'Like'}</span><span onclick="document.getElementById('ci-${p.id}').value='@${cu.username} ';document.getElementById('ci-${p.id}').focus()">Reply</span><span>${c.t}</span></div>${(c.replies||[]).map(r=>{const ru=U(r.uid);return`<div class="comment" style="margin-left:24px;margin-top:6px"><img src="${ru.avatar}" class="avatar-xs"><div><div class="comment-bubble"><span class="comment-author" onclick="goProfile('${ru.username}')">${ru.fullName}</span><div class="comment-text">${r.text}</div></div><div class="comment-actions"><span>${r.t}</span></div></div></div>`;}).join('')}</div></div>`;}).join('')}
-      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">${getSmartReplies().map(r=>`<button style="background:#f0f2f5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="document.getElementById('ci-${p.id}').value='${r}';addComment('${p.id}')">${r}</button>`).join('')}</div>
-      <div class="comment-form" style="position:relative"><img src="${S.user.avatar}" class="avatar-xs"><input placeholder="Write a comment..." id="ci-${p.id}" onkeydown="if(event.key==='Enter'){addComment('${p.id}');event.preventDefault()}"><button onclick="toggleEmojiPicker('ci-${p.id}')" style="font-size:16px">😊</button><button onclick="S.showGifSearch=true;render()" style="font-size:14px;background:none;color:#667eea;padding:4px">GIF</button><button onclick="addComment('${p.id}')">Post</button>${S.showEmojiPicker==='ci-'+p.id?renderEmojiPicker('ci-'+p.id):''}</div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">${getSmartReplies().map(r=>`<button style="background:#FAF8F5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="document.getElementById('ci-${p.id}').value='${r}';addComment('${p.id}')">${r}</button>`).join('')}</div>
+      <div class="comment-form" style="position:relative"><img src="${S.user.avatar}" class="avatar-xs"><input placeholder="Write a comment..." id="ci-${p.id}" onkeydown="if(event.key==='Enter'){addComment('${p.id}');event.preventDefault()}"><button onclick="toggleEmojiPicker('ci-${p.id}')" style="font-size:16px">😊</button><button onclick="S.showGifSearch=true;render()" style="font-size:14px;background:none;color:#C41E3A;padding:4px">GIF</button><button onclick="addComment('${p.id}')">Post</button>${S.showEmojiPicker==='ci-'+p.id?renderEmojiPicker('ci-'+p.id):''}</div>
     </div>`:''}
     ${p.aid===S.user.id?`<div class="post-analytics"><span><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)+200} views</span><span><i class="fas fa-chart-line"></i> ${Math.floor(Math.random()*500)+50} reach</span><span><i class="fas fa-percentage"></i> ${(Math.random()*15+2).toFixed(1)}% engagement</span></div>`:''}
   </div>`;
@@ -385,12 +387,12 @@ function renderExplore() {
   if (S.exploreTab === 'trending' || S.exploreTab === 'photos') {
     content = `<div class="explore-grid">${[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`<div class="explore-grid-item"><img src="https://picsum.photos/400/400?random=${i+20}"><div class="overlay"><span><i class="fas fa-heart"></i> ${Math.floor(Math.random()*1000+100)}</span><span><i class="fas fa-comment"></i> ${Math.floor(Math.random()*100+10)}</span></div></div>`).join('')}</div>`;
   } else if (S.exploreTab === 'people') {
-    content = `<div class="people-results">${users.filter(u=>u.id!==S.user.id).map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')}</div>`;
+    content = `<div class="people-results">${users.filter(u=>u.id!==S.user.id).map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')}</div>`;
   } else if (S.exploreTab === 'videos') {
     content = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">${[30,31,32,33,34,35].map(i=>`<div style="aspect-ratio:9/16;position:relative;border-radius:8px;overflow:hidden;cursor:pointer" onclick="go('reels')"><img src="https://picsum.photos/300/500?random=${i}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:8px;left:8px;color:white;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,0.5)"><i class="fas fa-play"></i> ${formatNum(Math.floor(Math.random()*10000)+500)}</div></div>`).join('')}</div>`;
   } else if (S.exploreTab === 'hashtags') {
     const tags = [['#AI','12.5K'],['#digitalart','8.2K'],['#coding','15.1K'],['#travel','22K'],['#fashion','18K'],['#foodie','9.4K'],['#fitness','11K'],['#startup','6.7K']];
-    content = `<div style="display:flex;flex-direction:column;gap:8px">${tags.map(([tag,count])=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:white;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer" onclick="toast('Viewing ${tag}')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:18px">#</div><div style="flex:1"><strong style="font-size:14px">${tag}</strong><p style="font-size:12px;color:#65676b">${count} posts</p></div>${S.followedHashtags.includes(tag.slice(1))?`<button class="hashtag-follow-btn" style="background:#e4e6eb;color:#1a1a2e" onclick="event.stopPropagation();unfollowHashtag('${tag.slice(1)}')">Following</button>`:`<button class="hashtag-follow-btn" onclick="event.stopPropagation();followHashtag('${tag.slice(1)}')">Follow</button>`}</div>`).join('')}</div>`;
+    content = `<div style="display:flex;flex-direction:column;gap:8px">${tags.map(([tag,count])=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:white;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer" onclick="toast('Viewing ${tag}')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#C41E3A,#E8751A);display:flex;align-items:center;justify-content:center;color:white;font-size:18px">#</div><div style="flex:1"><strong style="font-size:14px">${tag}</strong><p style="font-size:12px;color:#65676b">${count} posts</p></div>${S.followedHashtags.includes(tag.slice(1))?`<button class="hashtag-follow-btn" style="background:#e4e6eb;color:#1C1C1E" onclick="event.stopPropagation();unfollowHashtag('${tag.slice(1)}')">Following</button>`:`<button class="hashtag-follow-btn" onclick="event.stopPropagation();followHashtag('${tag.slice(1)}')">Follow</button>`}</div>`).join('')}</div>`;
   }
   return `<div class="app-layout"><div class="main-feed explore-page fade-in" style="max-width:900px">
     <div class="explore-search"><i class="fas fa-search"></i><input placeholder="Search people, hashtags, topics..." id="exploreSearch" oninput="exploreSearchHandler(this.value)"></div>
@@ -404,7 +406,7 @@ function renderExplore() {
 function renderMessages() {
   return `<div class="app-layout"><div class="main-feed messages-page fade-in" style="max-width:900px">
     <div class="msg-sidebar">
-      <div class="msg-sidebar-header"><h3>Chats</h3><div style="display:flex;gap:8px"><button style="background:none;font-size:18px;color:#667eea" onclick="S.showAudioRoom=true;render()" title="Audio Room"><i class="fas fa-headphones"></i></button><button style="background:none;font-size:18px;color:#667eea" title="New Chat"><i class="fas fa-edit"></i></button></div></div>
+      <div class="msg-sidebar-header"><h3>Chats</h3><div style="display:flex;gap:8px"><button style="background:none;font-size:18px;color:#C41E3A" onclick="S.showAudioRoom=true;render()" title="Audio Room"><i class="fas fa-headphones"></i></button><button style="background:none;font-size:18px;color:#C41E3A" title="New Chat"><i class="fas fa-edit"></i></button></div></div>
       <div class="msg-search"><input placeholder="Search messages..."></div>
       <div class="msg-list">${convos.map(c=>{const oid=c.parts.find(p=>p!==S.user.id),o=U(oid);return`<div class="msg-item ${S.activeConv===c.id?'active':''}" onclick="openConv('${c.id}')"><img src="${o.avatar}" class="avatar-md">${o.online?'<div class="online-dot"></div>':''}<div class="msg-item-info"><div class="msg-item-name">${o.fullName}</div><div class="msg-item-last">${c.last}</div></div><div><div class="msg-item-time">${c.lastT}</div>${c.unread?`<div class="msg-unread-badge">${c.unread}</div>`:''}</div></div>`;}).join('')}</div>
     </div>
@@ -416,10 +418,10 @@ function renderChat() {
   const c = convos.find(x=>x.id===S.activeConv);
   const oid = c.parts.find(p=>p!==S.user.id), o = U(oid);
   const m = msgs[S.activeConv] || [];
-  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#667eea'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-info-circle"></i></button></div></div>
+  return `<div class="msg-chat-header"><img src="${o.avatar}" class="avatar-md"><div class="chat-user-info"><strong>${o.fullName}</strong><span>${o.online?'Active now':'Last seen recently'}</span></div><div style="margin-left:auto;display:flex;gap:8px"><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','voice')"><i class="fas fa-phone"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A" onclick="startCall('${oid}','video')"><i class="fas fa-video"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:${S.mutedConvos.includes(S.activeConv)?'#e74c3c':'#C41E3A'}" onclick="toggleMuteConvo('${S.activeConv}')"><i class="fas fa-${S.mutedConvos.includes(S.activeConv)?'bell-slash':'bell'}"></i></button><button class="icon-btn" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-info-circle"></i></button></div></div>
     <div class="msg-chat-body">${m.map((x,xi)=>`<div class="chat-bubble ${x.sid===S.user.id?'sent':'received'}" style="position:relative" ondblclick="reactToMsg('${S.activeConv}',${xi})">${x.isVoice?`<div class="voice-msg"><button onclick="toast('Playing voice...')"><i class="fas fa-play"></i></button><div class="voice-wave">${Array(12).fill(0).map(()=>`<span style="height:${Math.floor(Math.random()*18)+4}px"></span>`).join('')}</div><span style="font-size:11px;opacity:0.7">${x.voiceDur||'0:03'}</span></div>`:x.isMedia?x.text:x.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}${x.disappear?`<span class="disappear-timer"><i class="fas fa-clock"></i> ${x.disappear}</span>`:''}
 <span class="bubble-time">${x.time}${x.sid===S.user.id?' <span class="read-receipt"><i class="fas fa-check-double"></i></span>':''}</span>${S.msgReactions[S.activeConv+'_'+xi]?`<span class="msg-reaction">${S.msgReactions[S.activeConv+'_'+xi]}</span>`:''}</div>`).join('')}<div class="typing-indicator" id="typingInd"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>
-    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#667eea'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#667eea" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#667eea">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#667eea"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
+    <div class="msg-chat-input" style="position:relative"><button class="icon-btn" onclick="document.getElementById('msgImgFile').click()" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-image"></i><input type="file" id="msgImgFile" accept="image/*" style="display:none" onchange="sendMediaMsg(this.files)"></button><button class="icon-btn" onclick="toggleVoiceRecord()" style="background:none;font-size:18px;color:${S.isRecordingVoice?'#e74c3c':'#C41E3A'}"><i class="fas fa-microphone"></i></button><button class="icon-btn" onclick="S.showBroadcast=true;render()" style="background:none;font-size:14px;color:#C41E3A" title="Broadcast"><i class="fas fa-bullhorn"></i></button>${S.isRecordingVoice?`<div class="voice-recording"><span class="rec-dot"></span> Recording... <button style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:600" onclick="sendVoiceMsg()">Send</button></div>`:`<input placeholder="${S.vanishMode?'Vanish mode — message will disappear':'Type a message...'}" id="msgIn" onkeydown="if(event.key==='Enter'){sendMsg();event.preventDefault()}">`}<button class="icon-btn" onclick="S.showGifSearch=true;render()" style="background:none;font-size:16px;color:#C41E3A">GIF</button><button class="icon-btn" onclick="toggleEmojiPicker('msgIn')" style="background:none;font-size:18px;color:#C41E3A"><i class="fas fa-smile"></i></button><button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>${S.showEmojiPicker==='msgIn'?renderEmojiPicker('msgIn'):''}</div>`;
 }
 
 function renderNotifications() {
@@ -456,7 +458,7 @@ function renderProfile() {
     <div class="profile-main">
       <div class="profile-avatar-wrap"><img src="${p.avatar}"></div>
       <div class="profile-details">
-        <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</div>
+        <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''}</div>
         <div class="profile-username">@${p.username}</div>
         <div class="profile-bio">${p.bio}</div>
         <div class="profile-meta-info">
@@ -478,7 +480,7 @@ function renderProfile() {
       <div class="highlight-item"><div class="highlight-add" onclick="toast('Add highlight from stories')">+</div><p>New</p></div>
       ${S.storyHighlights.map(h=>`<div class="highlight-item" onclick="toast('Viewing ${h.name} highlights')"><img src="${h.img}"><p>${h.name}</p></div>`).join('')}
     </div>`:''}
-    ${own?`<div style="padding:0 24px"><button style="background:none;border:none;color:#667eea;font-size:13px;font-weight:600;cursor:pointer" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
+    ${own?`<div style="padding:0 24px"><button style="background:none;border:none;color:#C41E3A;font-size:13px;font-weight:600;cursor:pointer" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
     <div class="profile-tabs">
       ${['posts','media','likes'].map(t => `<span class="profile-tab ${S.profileTab===t?'active':''}" onclick="S.profileTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
     </div>
@@ -491,7 +493,7 @@ function renderFollowersModal(uid, type) {
   const list = type==='Followers' ? u.followers.map(id=>U(id)) : u.following.map(id=>U(id));
   return `<div class="followers-modal" onclick="if(event.target===this){S.showFollowers=null;S.showFollowing=null;render()}"><div class="followers-modal-content">
     <div class="followers-modal-header"><span>${type}</span><button onclick="S.showFollowers=null;S.showFollowing=null;render()" style="background:none;font-size:20px">✕</button></div>
-    <div class="followers-modal-list">${list.length?list.map(f=>`<div class="follower-item" onclick="S.showFollowers=null;S.showFollowing=null;goProfile('${f.username}')"><span class="${f.online?'online-indicator':''}"><img src="${f.avatar}" class="avatar-sm"></span><div class="follower-item-info"><strong>${f.fullName} ${f.verified?'<i class="fas fa-check-circle" style="color:#667eea;font-size:12px"></i>':''}</strong><span>@${f.username}</span></div>${f.id!==S.user.id?`<button class="btn-follow ${S.user.following.includes(f.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${f.id}')">${S.user.following.includes(f.id)?'Following':'Follow'}</button>`:''}</div>`).join(''):'<div style="padding:20px;text-align:center;color:#65676b">No ${type.toLowerCase()} yet</div>'}</div>
+    <div class="followers-modal-list">${list.length?list.map(f=>`<div class="follower-item" onclick="S.showFollowers=null;S.showFollowing=null;goProfile('${f.username}')"><span class="${f.online?'online-indicator':''}"><img src="${f.avatar}" class="avatar-sm"></span><div class="follower-item-info"><strong>${f.fullName} ${f.verified?'<i class="fas fa-check-circle" style="color:#C41E3A;font-size:12px"></i>':''}</strong><span>@${f.username}</span></div>${f.id!==S.user.id?`<button class="btn-follow ${S.user.following.includes(f.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${f.id}')">${S.user.following.includes(f.id)?'Following':'Follow'}</button>`:''}</div>`).join(''):'<div style="padding:20px;text-align:center;color:#65676b">No ${type.toLowerCase()} yet</div>'}</div>
   </div></div>`;
 }
 
@@ -506,8 +508,8 @@ function renderSaved() {
     </div></div>`;
   }
   return `<div class="app-layout"><div class="main-feed saved-page fade-in">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2><i class="fas fa-bookmark" style="color:#667eea;margin-right:8px"></i> Saved Posts</h2><button class="btn-primary" style="width:auto;padding:8px 16px" onclick="S.showNewCollection=true;render()"><i class="fas fa-plus"></i> New Collection</button></div>
-    <div class="collection-grid">${S.bookmarkCollections.map((col,i)=>{const colPosts=posts.filter(p=>col.posts.includes(p.id));return`<div class="collection-card" onclick="S.activeCollection=${i};render()"><div class="collection-cover">${colPosts.slice(0,4).map(p=>p.media.length?`<img src="${p.media[0]}">`:`<div style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>`).join('')}${Array(Math.max(0,4-colPosts.length)).fill('<div style="background:#f0f2f5"></div>').join('')}</div><div class="collection-info"><strong style="font-size:14px">${col.name}</strong><p style="font-size:12px;color:#65676b">${colPosts.length} posts</p></div></div>`;}).join('')}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2><i class="fas fa-bookmark" style="color:#C41E3A;margin-right:8px"></i> Saved Posts</h2><button class="btn-primary" style="width:auto;padding:8px 16px" onclick="S.showNewCollection=true;render()"><i class="fas fa-plus"></i> New Collection</button></div>
+    <div class="collection-grid">${S.bookmarkCollections.map((col,i)=>{const colPosts=posts.filter(p=>col.posts.includes(p.id));return`<div class="collection-card" onclick="S.activeCollection=${i};render()"><div class="collection-cover">${colPosts.slice(0,4).map(p=>p.media.length?`<img src="${p.media[0]}">`:`<div style="background:linear-gradient(135deg,#C41E3A,#E8751A)"></div>`).join('')}${Array(Math.max(0,4-colPosts.length)).fill('<div style="background:#FAF8F5"></div>').join('')}</div><div class="collection-info"><strong style="font-size:14px">${col.name}</strong><p style="font-size:12px;color:#65676b">${colPosts.length} posts</p></div></div>`;}).join('')}</div>
     <h3 style="margin:16px 0 12px">All Saved</h3>
     ${savedPosts.length ? savedPosts.map(p => renderPost(p)).join('') : '<div class="empty-state"><i class="fas fa-bookmark"></i><h3>No Saved Posts</h3><p>Save posts to find them easily later.</p></div>'}
   </div></div>`;
@@ -517,7 +519,7 @@ function renderSettings() {
   const u = S.user;
   return `<div class="app-layout"><div class="main-feed settings-page fade-in">
     <div class="settings-card">
-      <h2><i class="fas fa-cog" style="color:#667eea;margin-right:8px"></i> Settings</h2>
+      <h2><i class="fas fa-cog" style="color:#C41E3A;margin-right:8px"></i> Settings</h2>
       <div class="settings-section"><h4>Profile Photo</h4>
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
           <img src="${u.avatar}" class="avatar-md" style="width:70px;height:70px">
@@ -581,7 +583,7 @@ function renderSettings() {
       <button class="btn-primary" onclick="saveSett()">Save Changes</button>
       <div class="settings-section" style="margin-top:24px"><h4>Account Management</h4>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-secondary" onclick="S.showExport=true;render()"><i class="fas fa-download" style="color:#667eea;margin-right:4px"></i> Export Data</button>
+          <button class="btn-secondary" onclick="S.showExport=true;render()"><i class="fas fa-download" style="color:#C41E3A;margin-right:4px"></i> Export Data</button>
           <button class="btn-secondary" onclick="S.showActivityLog=true;render()"><i class="fas fa-history" style="color:#f39c12;margin-right:4px"></i> Activity Log</button>
           <button class="btn-danger" onclick="S.showDeactivate=true;render()"><i class="fas fa-user-slash" style="margin-right:4px"></i> Deactivate Account</button>
         </div>
@@ -797,7 +799,7 @@ function exploreSearchHandler(q) {
   const el = document.getElementById('exploreContent');
   if (q.length > 0) {
     const r = users.filter(u => u.fullName.toLowerCase().includes(q.toLowerCase()) || u.username.includes(q.toLowerCase()));
-    el.innerHTML = `<div class="people-results">${r.map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#667eea"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')||'<div class="empty-state"><i class="fas fa-search"></i><h3>No results</h3></div>'}</div>`;
+    el.innerHTML = `<div class="people-results">${r.map(u=>`<div class="person-card" onclick="goProfile('${u.username}')"><img src="${u.avatar}" class="avatar-md"><div class="person-info"><strong>${u.fullName} ${u.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''}</strong><span>@${u.username}</span><span style="font-size:12px">${u.bio}</span></div><button class="btn-follow ${S.user.following.includes(u.id)?'following':'not-following'}" onclick="event.stopPropagation();toggleFollow('${u.id}')">${S.user.following.includes(u.id)?'Following':'Follow'}</button></div>`).join('')||'<div class="empty-state"><i class="fas fa-search"></i><h3>No results</h3></div>'}</div>`;
   } else render();
 }
 
@@ -870,7 +872,7 @@ function attachEvents() {
   ['photoDropZone','videoDropZone'].forEach(id => {
     const zone = document.getElementById(id);
     if (!zone) return;
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='#667eea'; zone.style.background='#f0f0ff'; });
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='#C41E3A'; zone.style.background='#f0f0ff'; });
     zone.addEventListener('dragleave', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white'; });
     zone.addEventListener('drop', e => { e.preventDefault(); zone.style.borderColor='#dadce0'; zone.style.background='white';
       if (id==='photoDropZone') handlePhotoFiles(e.dataTransfer.files);
@@ -1009,7 +1011,7 @@ function renderShareModal() {
       <div class="share-opt" onclick="sharePost('${S.showShareModal}');S.showShareModal=null;render()"><i class="fas fa-retweet" style="color:#27ae60"></i><span>Repost</span></div>
       <div class="share-opt" onclick="S.showQuoteRepost=S.showShareModal;S.showShareModal=null;render()"><i class="fas fa-quote-left" style="color:#9b59b6"></i><span>Quote</span></div>
       <div class="share-opt" onclick="forwardPost('${S.showShareModal}')"><i class="fas fa-paper-plane" style="color:#3498db"></i><span>Forward</span></div>
-      <div class="share-opt" onclick="copyLink()"><i class="fas fa-link" style="color:#667eea"></i><span>Copy Link</span></div>
+      <div class="share-opt" onclick="copyLink()"><i class="fas fa-link" style="color:#C41E3A"></i><span>Copy Link</span></div>
       <div class="share-opt" onclick="toast('Opening WhatsApp...','fa-share');S.showShareModal=null;render()"><i class="fab fa-whatsapp" style="color:#25d366"></i><span>WhatsApp</span></div>
       <div class="share-opt" onclick="toast('Opening Twitter...','fa-share');S.showShareModal=null;render()"><i class="fab fa-twitter" style="color:#1da1f2"></i><span>Twitter</span></div>
     </div>
@@ -1037,9 +1039,9 @@ function insertEmoji(targetId, emoji) {
   S.showEmojiPicker = null; render();
 }
 
-function createStoryPrompt() { S.showStoryCreate = true; S._storyType = 'text'; S._storyBg = 'linear-gradient(135deg, #667eea, #764ba2)'; render(); }
+function createStoryPrompt() { S.showStoryCreate = true; S._storyType = 'text'; S._storyBg = 'linear-gradient(135deg, #C41E3A, #E8751A)'; render(); }
 function renderStoryCreate() {
-  const bgs = ['linear-gradient(135deg, #667eea, #764ba2)','linear-gradient(135deg, #f093fb, #f5576c)','linear-gradient(135deg, #4facfe, #00f2fe)','linear-gradient(135deg, #43e97b, #38f9d7)','linear-gradient(135deg, #fa709a, #fee140)','linear-gradient(135deg, #a18cd1, #fbc2eb)','linear-gradient(135deg, #ff9a9e, #fecfef)','linear-gradient(135deg, #667eea, #f093fb)'];
+  const bgs = ['linear-gradient(135deg, #C41E3A, #E8751A)','linear-gradient(135deg, #f093fb, #f5576c)','linear-gradient(135deg, #4facfe, #00f2fe)','linear-gradient(135deg, #43e97b, #38f9d7)','linear-gradient(135deg, #fa709a, #fee140)','linear-gradient(135deg, #a18cd1, #fbc2eb)','linear-gradient(135deg, #ff9a9e, #fecfef)','linear-gradient(135deg, #C41E3A, #f093fb)'];
   return `<div class="story-create-modal" onclick="if(event.target===this){S.showStoryCreate=false;render()}"><div class="story-create-content">
     <h3>Create Story</h3>
     <div class="story-type-btns">
@@ -1069,7 +1071,7 @@ function publishStory() {
   if (S._storyType === 'text') {
     const txt = document.getElementById('storyText')?.value;
     if (!txt) return toast('Write something!','fa-exclamation');
-    stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:'',text:txt,bg:S._storyBg||'linear-gradient(135deg,#667eea,#764ba2)',time:'just now'});
+    stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:'',text:txt,bg:S._storyBg||'linear-gradient(135deg,#C41E3A,#E8751A)',time:'just now'});
   } else {
     if (!S._storyPhoto) return toast('Upload a photo!','fa-exclamation');
     stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:S._storyPhoto,text:'',bg:'',time:'just now'});
@@ -1164,7 +1166,7 @@ function renderCommunities() {
   if (S.activeCommunity) return renderCommunityDetail();
   return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h2><i class="fas fa-users" style="color:#667eea;margin-right:8px"></i> Communities</h2>
+      <h2><i class="fas fa-users" style="color:#C41E3A;margin-right:8px"></i> Communities</h2>
       <button class="btn-primary" style="width:auto;padding:8px 20px" onclick="toast('Create community coming soon!')"><i class="fas fa-plus"></i> Create</button>
     </div>
     <div class="explore-tabs" style="margin-bottom:16px">
@@ -1189,9 +1191,9 @@ function renderCommunityDetail() {
       <div style="padding:20px">
         <h2>${c.name}</h2><p style="color:#65676b;margin-top:4px">${c.desc}</p>
         <div style="display:flex;gap:20px;margin-top:12px;font-size:14px;color:#65676b">
-          <span><strong style="color:#1a1a2e">${formatNum(c.members)}</strong> members</span>
-          <span><strong style="color:#1a1a2e">${c.posts}</strong> posts</span>
-          <span>Admin: <strong style="color:#1a1a2e">${U(c.admin).fullName}</strong></span>
+          <span><strong style="color:#1C1C1E">${formatNum(c.members)}</strong> members</span>
+          <span><strong style="color:#1C1C1E">${c.posts}</strong> posts</span>
+          <span>Admin: <strong style="color:#1C1C1E">${U(c.admin).fullName}</strong></span>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button class="btn-primary" style="width:auto;padding:8px 24px" onclick="toast('Joined community! 🎉')">Join Community</button>
@@ -1244,7 +1246,7 @@ function renderDashboard() {
   const maxVal=Math.max(...vals);
   return `<div class="app-layout"><div class="main-feed dashboard-page fade-in" style="max-width:900px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h2><i class="fas fa-chart-line" style="color:#667eea;margin-right:8px"></i> Creator Dashboard</h2>
+      <h2><i class="fas fa-chart-line" style="color:#C41E3A;margin-right:8px"></i> Creator Dashboard</h2>
       <button class="btn-secondary" onclick="S.showVerifyModal=true;render()"><i class="fas fa-check-circle"></i> Request Verification</button>
     </div>
     <div class="dashboard-stats">
@@ -1261,8 +1263,8 @@ function renderDashboard() {
     <div class="dash-chart">
       <h4 style="margin-bottom:12px">Top Performing Posts</h4>
       ${up.slice(0,3).map((p,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i<2?'border-bottom:1px solid #f0f2f5':''}">
-        <span style="font-weight:700;color:#667eea;font-size:18px">#${i+1}</span>
-        ${p.media.length?`<img src="${p.media[0]}" style="width:48px;height:48px;border-radius:8px;object-fit:cover">`:'<div style="width:48px;height:48px;border-radius:8px;background:#f0f2f5;display:flex;align-items:center;justify-content:center"><i class="fas fa-file-alt" style="color:#65676b"></i></div>'}
+        <span style="font-weight:700;color:#C41E3A;font-size:18px">#${i+1}</span>
+        ${p.media.length?`<img src="${p.media[0]}" style="width:48px;height:48px;border-radius:8px;object-fit:cover">`:'<div style="width:48px;height:48px;border-radius:8px;background:#FAF8F5;display:flex;align-items:center;justify-content:center"><i class="fas fa-file-alt" style="color:#65676b"></i></div>'}
         <div style="flex:1"><p style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px">${p.text.slice(0,60)}...</p><span style="font-size:11px;color:#65676b">${p.time}</span></div>
         <div style="text-align:right"><strong style="font-size:14px">${p.likes.length*47}</strong><span style="font-size:11px;color:#65676b;display:block">engagements</span></div>
       </div>`).join('')}
@@ -1270,7 +1272,7 @@ function renderDashboard() {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div class="dash-chart"><h4 style="margin-bottom:8px">Your Badges</h4>
         <div>${S.badges.map(b=>ALL_BADGES[b]?`<span class="badge-item">${ALL_BADGES[b].icon} ${ALL_BADGES[b].name}</span>`:'').join('')}</div>
-        <button style="background:none;color:#667eea;font-weight:600;font-size:13px;margin-top:8px;border:none;cursor:pointer" onclick="S.showBadges=true;render()">View all badges →</button>
+        <button style="background:none;color:#C41E3A;font-weight:600;font-size:13px;margin-top:8px;border:none;cursor:pointer" onclick="S.showBadges=true;render()">View all badges →</button>
       </div>
       <div class="dash-chart"><h4 style="margin-bottom:8px">Earnings</h4>
         <div class="coin-balance" style="margin:8px 0"><i class="fas fa-coins"></i> ${S.coins}</div>
@@ -1292,8 +1294,8 @@ function renderAIChatWindow() {
       <div class="ai-msg bot">Hi! I'm your AI assistant. I can help with posting tips, account settings, navigation, and more. What can I help you with? 🤖</div>
       ${S.aiMessages.map(m=>`<div class="ai-msg ${m.from}">${m.text}</div>`).join('')}
     </div>
-    <div style="padding:4px 12px;display:flex;gap:4px;flex-wrap:wrap">${['How to grow followers?','Post tips','Keyboard shortcuts'].map(q=>`<button style="background:#f0f2f5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="sendAIMsg('${q}')">${q}</button>`).join('')}</div>
-    <div class="ai-chat-input"><input placeholder="Ask me anything..." id="aiMsgIn" onkeydown="if(event.key==='Enter'){sendAIMsg();event.preventDefault()}"><button onclick="sendAIMsg()" style="background:none;color:#667eea;font-size:18px;border:none;cursor:pointer"><i class="fas fa-paper-plane"></i></button></div>
+    <div style="padding:4px 12px;display:flex;gap:4px;flex-wrap:wrap">${['How to grow followers?','Post tips','Keyboard shortcuts'].map(q=>`<button style="background:#FAF8F5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="sendAIMsg('${q}')">${q}</button>`).join('')}</div>
+    <div class="ai-chat-input"><input placeholder="Ask me anything..." id="aiMsgIn" onkeydown="if(event.key==='Enter'){sendAIMsg();event.preventDefault()}"><button onclick="sendAIMsg()" style="background:none;color:#C41E3A;font-size:18px;border:none;cursor:pointer"><i class="fas fa-paper-plane"></i></button></div>
   </div>`;
 }
 function sendAIMsg(preset) {
@@ -1321,7 +1323,7 @@ function sendGift(cost,emoji,name){if(S.coins<cost)return toast('Not enough coin
 // ===== VERIFICATION =====
 function renderVerifyModal(){
   return `<div class="verify-modal" onclick="if(event.target===this){S.showVerifyModal=false;render()}"><div class="verify-content">
-    <h3><i class="fas fa-check-circle" style="color:#667eea"></i> Request Verification</h3>
+    <h3><i class="fas fa-check-circle" style="color:#C41E3A"></i> Request Verification</h3>
     <p style="font-size:13px;color:#65676b;margin:12px 0">Submit your request for a verified badge. Requirements:</p>
     <ul style="font-size:13px;color:#65676b;margin:8px 0 16px 20px;line-height:2">
       <li>Account must be at least 30 days old</li><li>Must have a complete profile (bio, photo)</li><li>Must have at least 100 followers</li><li>Must be an active content creator</li>
@@ -1343,9 +1345,9 @@ function renderAudioRoom(){
     </div>
     <p style="font-size:12px;color:#65676b;text-align:center">${Math.floor(Math.random()*200)+50} listening</p>
     <div class="audio-controls">
-      <button style="background:#e4e6eb;color:#1a1a2e;border:none" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i> Mute</button>
+      <button style="background:#e4e6eb;color:#1C1C1E;border:none" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i> Mute</button>
       <button style="background:#e74c3c;color:white;border:none" onclick="S.showAudioRoom=false;render()"><i class="fas fa-phone-slash"></i> Leave</button>
-      <button style="background:#667eea;color:white;border:none" onclick="toast('Hand raised! ✋')"><i class="fas fa-hand-paper"></i> Raise</button>
+      <button style="background:#C41E3A;color:white;border:none" onclick="toast('Hand raised! ✋')"><i class="fas fa-hand-paper"></i> Raise</button>
     </div>
   </div></div>`;
 }
@@ -1384,7 +1386,7 @@ function renderLevelUp(){
 function renderGifSearch(){
   const gifs=[71,72,73,74,75,76,77,78].map(i=>`https://picsum.photos/200/200?random=${i}`);
   return `<div class="gif-modal" onclick="if(event.target===this){S.showGifSearch=false;render()}"><div class="gif-content">
-    <div style="padding:12px 12px 0"><input placeholder="Search GIFs..." style="width:100%;padding:10px 14px;border:none;background:#f0f2f5;border-radius:24px;font-size:14px" oninput="S.gifQuery=this.value"></div>
+    <div style="padding:12px 12px 0"><input placeholder="Search GIFs..." style="width:100%;padding:10px 14px;border:none;background:#FAF8F5;border-radius:24px;font-size:14px" oninput="S.gifQuery=this.value"></div>
     <div class="gif-grid">${gifs.map(g=>`<img src="${g}" onclick="toast('GIF added! 🎉');S.showGifSearch=false;render()">`).join('')}</div>
   </div></div>`;
 }
@@ -1403,7 +1405,7 @@ function renderInstallPrompt(){
   return `<div class="install-banner">
     <i class="fas fa-download" style="font-size:24px"></i>
     <div style="flex:1"><strong>Install Drukpa</strong><p style="font-size:12px;opacity:0.9">Add to home screen for the best experience</p></div>
-    <button style="background:white;color:#667eea;border:none" onclick="toast('App installed! 📱');S.showInstallPrompt=false;render()">Install</button>
+    <button style="background:white;color:#C41E3A;border:none" onclick="toast('App installed! 📱');S.showInstallPrompt=false;render()">Install</button>
     <button style="background:rgba(255,255,255,0.2);color:white;border:none" onclick="S.showInstallPrompt=false;render()">Later</button>
   </div>`;
 }
@@ -1423,7 +1425,7 @@ const shopItems = [
 function renderShop(){
   return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h2><i class="fas fa-store" style="color:#667eea;margin-right:8px"></i> Marketplace</h2>
+      <h2><i class="fas fa-store" style="color:#C41E3A;margin-right:8px"></i> Marketplace</h2>
       <button class="btn-primary" style="width:auto;padding:8px 20px" onclick="toast('Create listing coming soon!')"><i class="fas fa-plus"></i> Sell</button>
     </div>
     <div class="explore-search" style="margin-bottom:16px"><i class="fas fa-search"></i><input placeholder="Search products..."></div>
@@ -1437,11 +1439,11 @@ function renderShop(){
 function renderMapExplore(){
   const pins = users.map((u,i)=>({user:u,x:15+Math.random()*70,y:10+Math.random()*75}));
   return `<div class="app-layout"><div class="main-feed fade-in" style="max-width:900px">
-    <h2 style="margin-bottom:16px"><i class="fas fa-map-marked-alt" style="color:#667eea;margin-right:8px"></i> Map Explore</h2>
+    <h2 style="margin-bottom:16px"><i class="fas fa-map-marked-alt" style="color:#C41E3A;margin-right:8px"></i> Map Explore</h2>
     <div class="map-container">
       <div style="position:absolute;inset:0;background:url('https://picsum.photos/900/400?random=96');background-size:cover;opacity:0.3"></div>
       ${pins.map(p=>`<div class="map-pin" style="left:${p.x}%;top:${p.y}%" onclick="goProfile('${p.user.username}')"><img src="${p.user.avatar}" title="${p.user.fullName} — ${p.user.location}"></div>`).join('')}
-      <div style="position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.9);padding:8px 14px;border-radius:8px;font-size:12px"><i class="fas fa-info-circle" style="color:#667eea"></i> Tap a pin to view profile</div>
+      <div style="position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.9);padding:8px 14px;border-radius:8px;font-size:12px"><i class="fas fa-info-circle" style="color:#C41E3A"></i> Tap a pin to view profile</div>
     </div>
     <div style="margin-top:16px"><h3 style="margin-bottom:12px">Nearby Posts</h3>
       ${posts.slice(0,2).map(p=>renderPost(p)).join('')}
@@ -1478,7 +1480,7 @@ function renderSubscriptions(){
 function renderProfileViewers(){
   const viewers=users.filter(u=>u.id!==S.user.id).map(u=>({...u,viewTime:Math.floor(Math.random()*24)+1+'h ago'}));
   return `<div class="leaderboard-modal" onclick="if(event.target===this){S.showProfileViewers=false;render()}"><div class="leaderboard-content">
-    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3><i class="fas fa-eye" style="color:#667eea"></i> Profile Viewers</h3><button onclick="S.showProfileViewers=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center"><h3><i class="fas fa-eye" style="color:#C41E3A"></i> Profile Viewers</h3><button onclick="S.showProfileViewers=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button></div>
     <div style="overflow-y:auto;max-height:60vh">${viewers.map(v=>`<div class="lb-item" style="cursor:pointer" onclick="S.showProfileViewers=false;goProfile('${v.username}')"><img src="${v.avatar}" class="avatar-sm"><div style="flex:1"><strong style="font-size:13px">${v.fullName}</strong><div style="font-size:11px;color:#65676b">@${v.username}</div></div><span style="font-size:11px;color:#65676b">${v.viewTime}</span></div>`).join('')}</div>
   </div></div>`;
 }
@@ -1541,7 +1543,7 @@ function schedulePost(){
 // ===== CONFETTI =====
 function showConfetti(){
   const container=document.createElement('div');container.className='confetti-container';
-  const colors=['#667eea','#764ba2','#f39c12','#e74c3c','#27ae60','#3498db','#f1c40f'];
+  const colors=['#C41E3A','#E8751A','#f39c12','#e74c3c','#27ae60','#3498db','#f1c40f'];
   for(let i=0;i<50;i++){const piece=document.createElement('div');piece.className='confetti-piece';piece.style.left=Math.random()*100+'%';piece.style.animationDelay=Math.random()*2+'s';piece.style.background=colors[Math.floor(Math.random()*colors.length)];piece.style.borderRadius=Math.random()>0.5?'50%':'0';piece.style.width=(Math.random()*8+6)+'px';piece.style.height=(Math.random()*8+6)+'px';container.appendChild(piece);}
   document.body.appendChild(container);setTimeout(()=>container.remove(),3500);
 }
@@ -1583,10 +1585,10 @@ function renderCallModal() {
       <div class="group-call-grid">${participants.map(u=>`<div class="call-participant"><img src="${u.avatar}"><p style="margin-top:6px;font-size:13px">${u.fullName.split(' ')[0]}</p></div>`).join('')}</div>
       <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹':'🎤'} ${Math.floor(Math.random()*5)+2}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}</p>
       <div class="call-controls">
-        <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
-        ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+        <button style="background:#21262D;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+        ${S.callType==='video'?`<button style="background:#21262D;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
         <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
-        <button style="background:#3a3b3c;color:white" onclick="toast('Screen shared!')"><i class="fas fa-desktop"></i></button>
+        <button style="background:#21262D;color:white" onclick="toast('Screen shared!')"><i class="fas fa-desktop"></i></button>
       </div>
     </div></div>`;
   }
@@ -1597,8 +1599,8 @@ function renderCallModal() {
     <h2>${u.fullName}</h2>
     <p style="font-size:14px;opacity:0.8;margin-top:8px">${S.callType==='video'?'📹 Video Call':'🎤 Voice Call'} — Ringing...</p>
     <div class="call-controls">
-      <button style="background:#3a3b3c;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
-      ${S.callType==='video'?`<button style="background:#3a3b3c;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
+      <button style="background:#21262D;color:white" onclick="toast('Mic toggled')"><i class="fas fa-microphone-slash"></i></button>
+      ${S.callType==='video'?`<button style="background:#21262D;color:white" onclick="toast('Camera toggled')"><i class="fas fa-video-slash"></i></button>`:''}
       <button style="background:#e74c3c;color:white" onclick="S.showCall=null;toast('Call ended');render()"><i class="fas fa-phone-slash"></i></button>
       <button style="background:#27ae60;color:white" onclick="toast('Connected! 📞');setTimeout(()=>{S.showCall=null;render()},2000)"><i class="fas fa-phone"></i></button>
     </div>
@@ -1617,7 +1619,7 @@ function openEditPost(pid) {
 }
 function renderEditPostModal() {
   return `<div class="edit-post-modal" onclick="if(event.target===this){S.showEditPost=null;render()}"><div class="edit-post-content">
-    <h3><i class="fas fa-edit" style="color:#667eea;margin-right:8px"></i> Edit Post</h3>
+    <h3><i class="fas fa-edit" style="color:#C41E3A;margin-right:8px"></i> Edit Post</h3>
     <textarea id="editPostText" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;min-height:120px;font-size:15px;resize:none;margin:16px 0">${S.editPostText}</textarea>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn-secondary" onclick="S.showEditPost=null;render()">Cancel</button>
@@ -1676,12 +1678,12 @@ function submitReport(reason) {
 // ===== 2FA =====
 function renderTwoFAModal() {
   return `<div class="block-modal" onclick="if(event.target===this){S.showTwoFA=false;render()}"><div class="block-content" style="width:420px">
-    <h3><i class="fas fa-shield-alt" style="color:#667eea;margin-right:8px"></i> Two-Factor Authentication</h3>
+    <h3><i class="fas fa-shield-alt" style="color:#C41E3A;margin-right:8px"></i> Two-Factor Authentication</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Add an extra layer of security to your account.</p>
     <div class="twofa-steps">
       <div class="twofa-step"><div class="twofa-step-num">1</div><div><strong style="font-size:14px">Download Authenticator App</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Get Google Authenticator or Authy on your phone.</p></div></div>
       <div class="twofa-step"><div class="twofa-step-num">2</div><div><strong style="font-size:14px">Scan QR Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Scan the code below with your authenticator app.</p>
-        <div style="width:120px;height:120px;background:#f0f2f5;border-radius:8px;margin:8px 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-qrcode" style="font-size:64px;color:#1a1a2e"></i></div></div></div>
+        <div style="width:120px;height:120px;background:#FAF8F5;border-radius:8px;margin:8px 0;display:flex;align-items:center;justify-content:center"><i class="fas fa-qrcode" style="font-size:64px;color:#1C1C1E"></i></div></div></div>
       <div class="twofa-step"><div class="twofa-step-num">3</div><div><strong style="font-size:14px">Enter Verification Code</strong><p style="font-size:12px;color:#65676b;margin-top:4px">Enter the 6-digit code from your authenticator.</p>
         <div style="display:flex;gap:6px;margin-top:8px">${Array(6).fill(0).map(()=>`<input style="width:38px;height:44px;text-align:center;border:2px solid #e4e6eb;border-radius:8px;font-size:18px;font-weight:700" maxlength="1" oninput="this.nextElementSibling?.focus()">`).join('')}</div></div></div>
     </div>
@@ -1718,7 +1720,7 @@ function publishQuoteRepost() {
 // ===== BOOKMARK COLLECTIONS =====
 function renderNewCollectionModal() {
   return `<div class="block-modal" onclick="if(event.target===this){S.showNewCollection=false;render()}"><div class="block-content">
-    <h3><i class="fas fa-folder-plus" style="color:#667eea;margin-right:8px"></i> New Collection</h3>
+    <h3><i class="fas fa-folder-plus" style="color:#C41E3A;margin-right:8px"></i> New Collection</h3>
     <div class="form-group" style="margin-top:16px"><label>Collection Name</label><input id="newColName" placeholder="e.g., Travel ideas, Recipes..." style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px"></div>
     <button class="btn-primary" style="margin-top:8px" onclick="createCollection()">Create Collection</button>
   </div></div>`;
@@ -1781,7 +1783,7 @@ function renderPaidDMModal() {
     <h3><i class="fas fa-coins" style="color:#f39c12;margin-right:8px"></i> Paid DMs</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0">Charge non-followers to send you direct messages.</p>
     <div class="form-group" style="margin-top:16px"><label>Price per message (coins)</label>
-      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#667eea':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(102,126,234,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">${p}</button>`).join('')}</div>
+      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#C41E3A':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(196,30,58,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">${p}</button>`).join('')}</div>
     </div>
     <div class="toggle-group" style="margin-top:8px"><span>Enable Paid DMs</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
     <button class="btn-primary" style="margin-top:16px" onclick="toast('Paid DM settings saved! 💰');S.showPaidDM=null;render()">Save Settings</button>
@@ -1794,7 +1796,7 @@ function renderBroadcastModal() {
     <h3><i class="fas fa-bullhorn" style="color:#3498db;margin-right:8px"></i> Broadcast Channels</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Send one-way messages to your subscribers.</p>
     ${S.broadcastChannels.map((ch,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px;cursor:pointer" onclick="toast('Composing broadcast for ${ch.name}...')">
-      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white"><i class="fas fa-bullhorn"></i></div>
+      <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#C41E3A,#E8751A);display:flex;align-items:center;justify-content:center;color:white"><i class="fas fa-bullhorn"></i></div>
       <div style="flex:1"><strong style="font-size:14px">${ch.name}</strong><p style="font-size:12px;color:#65676b">${formatNum(ch.subs)} subscribers</p></div>
       <span class="broadcast-badge">BROADCAST</span>
     </div>`).join('')}
@@ -1855,7 +1857,7 @@ function renderFriendSuggestionsModal() {
   const suggestions = users.filter(u=>u.id!==S.user.id&&!S.user.following.includes(u.id)&&!S.blockedUsers.includes(u.id));
   const mutuals = users.filter(u=>u.id!==S.user.id&&S.user.following.includes(u.id));
   return `<div class="block-modal" onclick="if(event.target===this){S.showFriendSuggestions=false;render()}"><div class="block-content" style="width:440px">
-    <h3><i class="fas fa-user-plus" style="color:#667eea;margin-right:8px"></i> Friend Suggestions</h3>
+    <h3><i class="fas fa-user-plus" style="color:#C41E3A;margin-right:8px"></i> Friend Suggestions</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">People you might know based on mutual connections.</p>
     ${suggestions.length?suggestions.map(u=>{const mutual=mutuals.filter(m=>m.following.includes(u.id)).length;return`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f2f5">
       <img src="${u.avatar}" class="avatar-md" style="cursor:pointer" onclick="S.showFriendSuggestions=false;goProfile('${u.username}')">
@@ -1906,7 +1908,7 @@ function renderExportModal() {
     {icon:'fa-users',name:'Connections',desc:'Followers, following, and blocked list',size:'~8 KB'},
   ];
   return `<div class="export-modal" onclick="if(event.target===this){S.showExport=false;render()}"><div class="export-content">
-    <h3><i class="fas fa-download" style="color:#667eea;margin-right:8px"></i> Export Your Data</h3>
+    <h3><i class="fas fa-download" style="color:#C41E3A;margin-right:8px"></i> Export Your Data</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Download a copy of your Drukpa data. Select what to include:</p>
     ${exports.map(ex=>`<div class="export-item" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
       <i class="fas ${ex.icon}"></i>
@@ -2042,3 +2044,4 @@ newPost = function() {
 };
 
 render();
+</script>
