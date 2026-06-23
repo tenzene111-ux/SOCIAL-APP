@@ -97,9 +97,13 @@
     .create-post-top { display: flex; gap: 12px; align-items: flex-start; }
     .create-post-top textarea { flex: 1; border: none; resize: none; font-size: 15px; padding: 10px 14px; min-height: 60px; border-radius: 12px; background: #FAF8F5; transition: all 0.2s; }
     .create-post-top textarea:focus { background: #e8eaed; }
-    .create-post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f5; }
-    .post-tools { display: flex; gap: 4px; }
-    .tool-btn { padding: 8px 12px; border-radius: 8px; background: none; font-size: 13px; color: #65676b; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .post-tools { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+    .post-tools-primary { display: flex; gap: 4px; flex-wrap: wrap; }
+    .post-tools-more { display: none; gap: 4px; flex-wrap: wrap; width: 100%; padding-top: 8px; border-top: 1px solid #f0f2f5; margin-top: 8px; }
+    .post-tools-more.show { display: flex; }
+    .post-tools-toggle { padding: 6px 10px; border-radius: 8px; background: none; font-size: 13px; color: #C41E3A; cursor: pointer; font-weight: 600; white-space: nowrap; }
+    .post-tools-toggle:hover { background: #FDE8EC; }
+    .tool-btn { padding: 8px 12px; border-radius: 8px; background: none; font-size: 13px; color: #65676b; display: flex; align-items: center; gap: 6px; transition: all 0.2s; white-space: nowrap; }
     .tool-btn:hover { background: #FAF8F5; }
     .tool-btn.photo i { color: #27ae60; }
     .tool-btn.video i { color: #e74c3c; }
@@ -109,6 +113,10 @@
     .post-btn:hover { box-shadow: 0 4px 12px rgba(196,30,58,0.4); }
     .post-btn:disabled { opacity: 0.5; }
     .tool-btn.active { background: #FDE8EC; color: #1a73e8; }
+    .profile-extras { padding: 0 24px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .profile-extras-section { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px; border: 1px solid rgba(0,0,0,0.06); }
+    .profile-extras-section h4 { margin: 0 0 10px; font-size: 13px; color: #65676b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .create-post-actions { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f5; gap: 12px; flex-wrap: wrap; }
     .attach-area { margin-top: 12px; padding: 14px; background: #f8f9fa; border-radius: 12px; border: 1px dashed #dadce0; }
     .attach-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: #333; }
     .close-attach { background: none; border: none; font-size: 18px; cursor: pointer; color: #999; }
@@ -404,6 +412,9 @@
     .dark .comment-bubble { background: #21262D; color: #e4e6eb; }
     .dark .chat-bubble.received { background: #21262D; color: #e4e6eb; }
     .dark .sidebar-item:hover, .dark .nav-link:hover, .dark .action-btn:hover,
+    .dark .post-tools-more { border-top-color: #30363D; }
+    .dark .profile-extras-section { background: rgba(22,27,34,0.7); border-color: #30363D; }
+    .dark .profile-extras-section h4 { color: #8b949e; }
     .dark .tool-btn:hover, .dark .msg-item:hover, .dark .msg-item.active,
     .dark .nav-dropdown a:hover, .dark .nav-dropdown button:hover,
     .dark .post-menu-dropdown a:hover { background: #21262D; }
@@ -1294,13 +1305,13 @@ function renderNav() {
       <a class="nav-link ${S.page==='messages'?'active':''}" onclick="go('messages')" title="Messages"><i class="fas fa-comment-dots"></i></a>
       <a class="nav-link ${S.page==='reels'?'active':''}" onclick="go('reels')" title="Reels"><i class="fas fa-film"></i></a>
       <a class="nav-link ${S.page==='notifications'?'active':''}" onclick="go('notifications')" title="Notifications">${un?`<span class="nav-badge">${un}</span>`:''}<i class="fas fa-bell"></i></a>
-      <a class="nav-link" onclick="S.showMoodPicker=!S.showMoodPicker;render()" title="Mood"${S.mood?' style="color:#C41E3A"':''}><i class="fas fa-${S.mood?'heart':'smile-beam'}"></i></a>
-      <a class="nav-link" onclick="S.showMiniGame=true;S.miniGameType=null;render()" title="Games"><i class="fas fa-gamepad"></i></a>
       <div style="position:relative">
         <img src="${u.avatar}" class="nav-avatar" onclick="document.getElementById('navDrop').classList.toggle('show')">
         <div class="nav-dropdown" id="navDrop">
           <a onclick="goProfile('${u.username}')"><i class="fas fa-user"></i> My Profile</a>
           <a onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</a>
+          <a onclick="S.showMoodPicker=!S.showMoodPicker;render()"><i class="fas fa-${S.mood?'heart':'smile-beam'}"${S.mood?' style="color:#C41E3A"':''}></i> ${S.mood?'Change Mood':'Set Mood'}</a>
+          <a onclick="S.showMiniGame=true;S.miniGameType=null;render()"><i class="fas fa-gamepad"></i> Mini Games</a>
           <a onclick="go('settings')"><i class="fas fa-cog"></i> Settings</a>
           <a onclick="toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
           <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
@@ -1408,7 +1419,7 @@ function renderCreatePost() {
     ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
   }
   const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
-  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i></button><button class="tool-btn" onclick="S.showVoicePost=true;render()"><i class="fas fa-microphone-alt" style="color:#C41E3A"></i> Voice</button><button class="tool-btn" onclick="S.showCollabPost=true;render()"><i class="fas fa-users" style="color:#27ae60"></i> Collab</button><button class="tool-btn" onclick="S.showAIArt=true;render()"><i class="fas fa-magic" style="color:#D4A017"></i> AI Art</button><button class="tool-btn" onclick="S.showTimeCapsule=true;render()"><i class="fas fa-hourglass-half" style="color:#D4A017"></i> Capsule</button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><div class="post-tools-primary"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="post-tools-toggle" onclick="document.querySelector('.post-tools-more').classList.toggle('show')"><i class="fas fa-ellipsis-h"></i> More</button></div><div class="post-tools-more"><button class="tool-btn" onclick="S.showVoicePost=true;render()"><i class="fas fa-microphone-alt" style="color:#C41E3A"></i> Voice</button><button class="tool-btn" onclick="S.showCollabPost=true;render()"><i class="fas fa-users" style="color:#27ae60"></i> Collab</button><button class="tool-btn" onclick="S.showAIArt=true;render()"><i class="fas fa-magic" style="color:#D4A017"></i> AI Art</button><button class="tool-btn" onclick="S.showTimeCapsule=true;render()"><i class="fas fa-hourglass-half" style="color:#D4A017"></i> Capsule</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i> Anon</button></div></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
 }
 
 function renderPost(p) {
@@ -1537,14 +1548,18 @@ function renderProfile() {
         </div>
       </div>
       <div class="profile-actions">
-        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" style="margin-left:4px" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" style="margin-left:4px" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" style="margin-left:4px" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
+        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button><button class="btn-secondary" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
       </div>
     </div>
     ${own?`<div class="highlights-row" style="padding:12px 24px">
       <div class="highlight-item"><div class="highlight-add" onclick="toast('Add highlight from stories')">+</div><p>New</p></div>
       ${S.storyHighlights.map(h=>`<div class="highlight-item" onclick="toast('Viewing ${h.name} highlights')"><img src="${h.img}"><p>${h.name}</p></div>`).join('')}
     </div>`:''}
-    ${own?`<div style="padding:0 24px">${renderProfileMusic()}${renderProfileThemePicker()}<button style="background:none;border:none;color:#C41E3A;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;display:block" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
+    ${own?`<div class="profile-extras">
+      <div class="profile-extras-section"><h4><i class="fas fa-music"></i> Profile Music</h4>${renderProfileMusic()}</div>
+      <div class="profile-extras-section"><h4><i class="fas fa-palette"></i> Theme</h4>${renderProfileThemePicker()}</div>
+      <div class="profile-extras-section" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="S.showProfileViewers=true;render()"><span style="font-size:13px;font-weight:600;color:#65676b"><i class="fas fa-eye" style="color:#C41E3A"></i> Profile Views</span><span style="font-size:14px;font-weight:700;color:#C41E3A">${Math.floor(Math.random()*50)+12} this week <i class="fas fa-chevron-right" style="font-size:10px"></i></span></div>
+    </div>`:''}
     <div class="profile-tabs">
       ${['posts','media','likes'].map(t => `<span class="profile-tab ${S.profileTab===t?'active':''}" onclick="S.profileTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
     </div>
