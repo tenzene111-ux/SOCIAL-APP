@@ -850,6 +850,42 @@
     /* Paid DM */
     .paid-dm-badge { background: linear-gradient(135deg, #f39c12, #e74c3c); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
 
+    /* Data Export */
+    .export-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .export-content { background: white; border-radius: 16px; padding: 24px; width: 420px; max-width: 90vw; }
+    .dark .export-content { background: #242526; color: #e4e6eb; }
+    .export-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #e4e6eb; border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+    .export-item:hover { border-color: #667eea; background: rgba(102,126,234,0.05); }
+    .dark .export-item { border-color: #3a3b3c; }
+    .export-item i { font-size: 24px; color: #667eea; width: 40px; height: 40px; border-radius: 10px; background: rgba(102,126,234,0.1); display: flex; align-items: center; justify-content: center; }
+
+    /* Account Deactivation */
+    .deactivate-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .deactivate-content { background: white; border-radius: 16px; padding: 24px; width: 420px; max-width: 90vw; }
+    .dark .deactivate-content { background: #242526; color: #e4e6eb; }
+    .deactivate-warning { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 14px; margin: 16px 0; font-size: 13px; color: #856404; }
+    .dark .deactivate-warning { background: #3a3520; border-color: #665a1e; color: #ffc107; }
+
+    /* Activity Log */
+    .activity-log-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .activity-log-content { background: white; border-radius: 16px; width: 460px; max-width: 90vw; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+    .dark .activity-log-content { background: #242526; color: #e4e6eb; }
+    .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f0f2f5; }
+    .dark .activity-item { border-color: #3a3b3c; }
+    .activity-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .activity-icon.login { background: #e0f2e0; color: #27ae60; }
+    .activity-icon.security { background: #e0e8ff; color: #667eea; }
+    .activity-icon.change { background: #fff3e0; color: #f39c12; }
+    .activity-icon.danger { background: #ffe0e0; color: #e74c3c; }
+
+    /* Font Size Slider */
+    .font-slider { width: 100%; margin: 8px 0; -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e4e6eb; outline: none; }
+    .dark .font-slider { background: #3a3b3c; }
+    .font-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #667eea; cursor: pointer; box-shadow: 0 2px 6px rgba(102,126,234,0.4); }
+    .font-preview { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+    .font-preview span:first-child { font-size: 12px; color: #65676b; }
+    .font-preview span:last-child { font-size: 18px; color: #65676b; }
+
     @media (max-width: 1024px) { .sidebar-left, .sidebar-right { display: none; } }
     @media (max-width: 768px) {
       .nav-search { display: none; }
@@ -924,7 +960,10 @@ const S = {
   showAffiliate: false,
   carouselIdx: {},
   msgForward: null,
-  showFriendSuggestions: false
+  showFriendSuggestions: false,
+  // Utility features
+  showExport: false, showDeactivate: false, showActivityLog: false,
+  fontSize: 15, deactivateConfirm: ''
 };
 
 const users = [
@@ -1042,6 +1081,9 @@ function render() {
     if (S.showFundraiser) modals += renderFundraiserModal();
     if (S.showAffiliate) modals += renderAffiliateModal();
     if (S.showFriendSuggestions) modals += renderFriendSuggestionsModal();
+    if (S.showExport) modals += renderExportModal();
+    if (S.showDeactivate) modals += renderDeactivateModal();
+    if (S.showActivityLog) modals += renderActivityLogModal();
     if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
     app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
   }
@@ -1403,6 +1445,13 @@ function renderSettings() {
       </div>
       <div class="settings-section"><h4>Accessibility</h4>
         <div class="toggle-group"><span><i class="fas fa-adjust" style="margin-right:8px"></i> High Contrast Mode</span><div class="toggle ${S.highContrast?'active':''}" onclick="toggleHighContrast()"></div></div>
+        <div style="padding:12px 0;border-bottom:1px solid #f0f2f5">
+          <span style="font-size:14px;font-weight:500"><i class="fas fa-text-height" style="margin-right:8px"></i> Font Size</span>
+          <input type="range" class="font-slider" min="12" max="22" value="${S.fontSize}" oninput="changeFontSize(this.value)">
+          <div class="font-preview"><span>A</span><span style="font-size:${S.fontSize}px">Aa</span><span>A</span></div>
+        </div>
+        <div class="toggle-group"><span><i class="fas fa-universal-access" style="margin-right:8px"></i> Screen Reader Labels</span><div class="toggle active" onclick="this.classList.toggle('active');toast(this.classList.contains('active')?'ARIA labels enabled':'ARIA labels disabled')"></div></div>
+        <div class="toggle-group"><span><i class="fas fa-hand-pointer" style="margin-right:8px"></i> Reduce Animations</span><div class="toggle" onclick="this.classList.toggle('active');document.body.style.setProperty('--anim-speed',this.classList.contains('active')?'0s':'0.3s');toast(this.classList.contains('active')?'Animations reduced':'Animations restored')"></div></div>
       </div>
       <div class="settings-section"><h4>Privacy & Security</h4>
         <div class="toggle-group"><span><i class="fas fa-lock" style="margin-right:8px"></i> Private Account</span><div class="toggle ${u.private?'active':''}" onclick="u.private=!u.private;toast(u.private?'Account is now private':'Account is now public');render()"></div></div>
@@ -1437,6 +1486,13 @@ function renderSettings() {
         <div class="toggle-group"><span>Sound</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
       </div>
       <button class="btn-primary" onclick="saveSett()">Save Changes</button>
+      <div class="settings-section" style="margin-top:24px"><h4>Account Management</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="S.showExport=true;render()"><i class="fas fa-download" style="color:#667eea;margin-right:4px"></i> Export Data</button>
+          <button class="btn-secondary" onclick="S.showActivityLog=true;render()"><i class="fas fa-history" style="color:#f39c12;margin-right:4px"></i> Activity Log</button>
+          <button class="btn-danger" onclick="S.showDeactivate=true;render()"><i class="fas fa-user-slash" style="margin-right:4px"></i> Deactivate Account</button>
+        </div>
+      </div>
     </div>
   </div></div>`;
 }
@@ -1772,6 +1828,9 @@ document.addEventListener('keydown', e => {
     if(S.showFundraiser){S.showFundraiser=false;render();}
     if(S.showAffiliate){S.showAffiliate=false;render();}
     if(S.showFriendSuggestions){S.showFriendSuggestions=false;render();}
+    if(S.showExport){S.showExport=false;render();}
+    if(S.showDeactivate){S.showDeactivate=false;render();}
+    if(S.showActivityLog){S.showActivityLog=false;render();}
     document.querySelector('.modal-overlay')?.remove();
   }
   if(!S.user)return;
@@ -2741,6 +2800,130 @@ function forwardPost(pid) {
     toast('Message forwarded to '+U(oid).fullName+'!','fa-paper-plane');
   }
   render();
+}
+
+// ===== DATA EXPORT =====
+function renderExportModal() {
+  const exports = [
+    {icon:'fa-file-alt',name:'Posts & Comments',desc:'All your posts, comments, and interactions',size:'~2.4 MB'},
+    {icon:'fa-comment-dots',name:'Messages',desc:'All direct messages and group chats',size:'~1.8 MB'},
+    {icon:'fa-user',name:'Profile Info',desc:'Name, bio, settings, and preferences',size:'~12 KB'},
+    {icon:'fa-image',name:'Photos & Videos',desc:'All uploaded media content',size:'~156 MB'},
+    {icon:'fa-heart',name:'Likes & Saves',desc:'Posts you liked and saved',size:'~48 KB'},
+    {icon:'fa-users',name:'Connections',desc:'Followers, following, and blocked list',size:'~8 KB'},
+  ];
+  return `<div class="export-modal" onclick="if(event.target===this){S.showExport=false;render()}"><div class="export-content">
+    <h3><i class="fas fa-download" style="color:#667eea;margin-right:8px"></i> Export Your Data</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Download a copy of your Drukpa data. Select what to include:</p>
+    ${exports.map(ex=>`<div class="export-item" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
+      <i class="fas ${ex.icon}"></i>
+      <div style="flex:1"><strong style="font-size:14px">${ex.name}</strong><p style="font-size:12px;color:#65676b">${ex.desc}</p></div>
+      <div style="text-align:right"><span style="font-size:11px;color:#65676b">${ex.size}</span><br><input type="checkbox" checked style="margin-top:4px"></div>
+    </div>`).join('')}
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-primary" style="flex:1" onclick="startExport()"><i class="fas fa-download"></i> Download All</button>
+      <button class="btn-secondary" style="flex:1" onclick="S.showExport=false;render()">Cancel</button>
+    </div>
+  </div></div>`;
+}
+function startExport() {
+  toast('Preparing your data export...','fa-spinner');
+  setTimeout(()=>{
+    const data = {
+      profile: {name:S.user.fullName, username:S.user.username, email:S.user.email, bio:S.user.bio, location:S.user.location},
+      posts: posts.filter(p=>p.aid===S.user.id).map(p=>({text:p.text,time:p.time,likes:p.likes.length,comments:p.comments.length})),
+      followers: S.user.followers.length,
+      following: S.user.following.length,
+      exportDate: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'drukpa_data_export.json'; a.click();
+    URL.revokeObjectURL(url);
+    toast('Data exported successfully! 📁','fa-check-circle');
+    S.showExport = false; render();
+  }, 1500);
+}
+
+// ===== ACCOUNT DEACTIVATION =====
+function renderDeactivateModal() {
+  return `<div class="deactivate-modal" onclick="if(event.target===this){S.showDeactivate=false;render()}"><div class="deactivate-content">
+    <h3><i class="fas fa-user-slash" style="color:#e74c3c;margin-right:8px"></i> Deactivate Account</h3>
+    <div class="deactivate-warning">
+      <strong><i class="fas fa-exclamation-triangle"></i> Warning:</strong> Deactivating your account will:
+      <ul style="margin:8px 0 0 16px;line-height:1.8">
+        <li>Hide your profile from other users</li>
+        <li>Remove your posts from feeds</li>
+        <li>Disable all notifications</li>
+        <li>Pause all subscriptions</li>
+      </ul>
+    </div>
+    <p style="font-size:13px;color:#65676b;margin:12px 0">You can reactivate within 30 days by logging back in. After 30 days, your account will be permanently deleted.</p>
+    <div class="form-group"><label>Why are you leaving? (optional)</label>
+      <select style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px">
+        <option>Select a reason...</option><option>Taking a break</option><option>Privacy concerns</option><option>Too much time spent</option><option>Not finding value</option><option>Created a new account</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Type "DEACTIVATE" to confirm</label>
+      <input id="deactivateConfirm" placeholder="DEACTIVATE" style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px" oninput="S.deactivateConfirm=this.value">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="S.showDeactivate=false;S.deactivateConfirm='';render()">Cancel</button>
+      <button class="btn-danger" style="flex:1;padding:10px;opacity:${S.deactivateConfirm==='DEACTIVATE'?'1':'0.5'}" onclick="deactivateAccount()">Deactivate</button>
+    </div>
+  </div></div>`;
+}
+function deactivateAccount() {
+  if(S.deactivateConfirm!=='DEACTIVATE') return toast('Please type DEACTIVATE to confirm','fa-exclamation-triangle');
+  toast('Account deactivated. You can reactivate within 30 days.','fa-user-slash');
+  S.showDeactivate=false; S.deactivateConfirm='';
+  S.user=null; S.page='login'; render();
+}
+
+// ===== ACTIVITY LOG =====
+function renderActivityLogModal() {
+  const activities = [
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Chrome on macOS',time:'Just now',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-shield-alt',text:'Password changed',time:'2 days ago',location:'San Francisco, CA'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Safari on iPhone',time:'3 days ago',location:'San Francisco, CA'},
+    {type:'change',icon:'fa-edit',text:'Profile bio updated',time:'5 days ago',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-key',text:'Two-factor authentication '+(S.twoFAEnabled?'enabled':'disabled'),time:'1 week ago',location:'San Francisco, CA'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Firefox on Windows',time:'1 week ago',location:'New York, NY'},
+    {type:'change',icon:'fa-camera',text:'Profile photo changed',time:'2 weeks ago',location:'San Francisco, CA'},
+    {type:'danger',icon:'fa-exclamation-triangle',text:'Failed login attempt',time:'2 weeks ago',location:'Unknown location'},
+    {type:'login',icon:'fa-sign-in-alt',text:'Logged in from Chrome on Android',time:'3 weeks ago',location:'San Francisco, CA'},
+    {type:'security',icon:'fa-envelope',text:'Email address verified',time:'1 month ago',location:'San Francisco, CA'},
+  ];
+  return `<div class="activity-log-modal" onclick="if(event.target===this){S.showActivityLog=false;render()}"><div class="activity-log-content">
+    <div style="padding:16px;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center">
+      <h3><i class="fas fa-history" style="color:#f39c12;margin-right:8px"></i> Activity Log</h3>
+      <button onclick="S.showActivityLog=false;render()" style="background:none;border:none;font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:60vh">
+      ${activities.map(a=>`<div class="activity-item">
+        <div class="activity-icon ${a.type}"><i class="fas ${a.icon}"></i></div>
+        <div style="flex:1">
+          <p style="font-size:14px;font-weight:500">${a.text}</p>
+          <div style="display:flex;gap:12px;margin-top:4px">
+            <span style="font-size:12px;color:#65676b"><i class="fas fa-clock" style="margin-right:4px"></i>${a.time}</span>
+            <span style="font-size:12px;color:#65676b"><i class="fas fa-map-marker-alt" style="margin-right:4px"></i>${a.location}</span>
+          </div>
+        </div>
+        ${a.type==='danger'?'<button class="btn-danger" style="font-size:11px;padding:4px 10px" onclick="toast(\'Session revoked\',\'fa-check\')">Revoke</button>':''}
+      </div>`).join('')}
+    </div>
+    <div style="padding:12px 16px;border-top:1px solid #f0f2f5;text-align:center">
+      <button class="btn-secondary" onclick="toast('All sessions terminated except current','fa-check');S.showActivityLog=false;render()"><i class="fas fa-sign-out-alt"></i> Log Out All Other Sessions</button>
+    </div>
+  </div></div>`;
+}
+
+// ===== FONT SIZE =====
+function changeFontSize(val) {
+  S.fontSize = parseInt(val);
+  document.body.style.fontSize = val + 'px';
+  toast('Font size: ' + val + 'px');
 }
 
 // ===== ANONYMOUS POST =====
