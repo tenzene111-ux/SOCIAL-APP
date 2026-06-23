@@ -56,7 +56,21 @@ const S = {
   showFriendSuggestions: false,
   // Utility features
   showExport: false, showDeactivate: false, showActivityLog: false,
-  fontSize: 15, deactivateConfirm: ''
+  fontSize: 15, deactivateConfirm: '',
+  // Creative features
+  mood: null, showMoodPicker: false,
+  showVoicePost: false, voicePostDuration: 0, voicePostRecording: false,
+  showCollabPost: false, collabInvites: [],
+  reactionSounds: true,
+  profileMusic: null, musicPlaying: false,
+  showAIArt: false, aiArtPrompt: '', aiArtGenerating: false, aiArtResult: null,
+  showTimeCapsule: false, timeCapsuleDate: '', timeCapsulePosts: [],
+  karma: 850, karmaHistory: [],
+  showMiniGame: false, miniGameType: null, tttBoard: Array(9).fill(''), tttTurn: 'X', tttWinner: null,
+  profileTheme: 'default',
+  spotlightPost: null,
+  easterEggFound: [], konamiIdx: 0,
+  showEasterEgg: false
 };
 
 const users = [
@@ -177,8 +191,16 @@ function render() {
     if (S.showExport) modals += renderExportModal();
     if (S.showDeactivate) modals += renderDeactivateModal();
     if (S.showActivityLog) modals += renderActivityLogModal();
+    if (S.showVoicePost) modals += renderVoicePostModal();
+    if (S.showCollabPost) modals += renderCollabModal();
+    if (S.showAIArt) modals += renderAIArtModal();
+    if (S.showTimeCapsule) modals += renderTimeCapsuleModal();
+    if (S.showMiniGame) modals += renderMiniGameModal();
+    if (S.showEasterEgg) modals += renderEasterEggOverlay();
     if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
-    app.innerHTML = renderNav() + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
+    const moodBar = S.showMoodPicker ? renderMoodPicker() : '';
+    const karmaLvl = getKarmaLevel(S.karma);
+    app.innerHTML = renderNav() + moodBar + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
   }
   const ptEl2 = document.getElementById('postText');
   if (ptEl2 && S._postDraft) ptEl2.value = S._postDraft;
@@ -222,7 +244,7 @@ function renderRegister() {
 function renderNav() {
   const u = S.user, un = unreadN();
   return `<nav class="navbar"><div class="nav-content">
-    <a class="nav-logo" onclick="go('feed')">Drukpa</a>
+    <a class="nav-logo" onclick="go('feed')" ondblclick="triggerEasterEgg('confetti')" id="navLogo">Drukpa</a>
     <div class="nav-search">
       <i class="fas fa-search"></i>
       <input placeholder="Search Drukpa..." id="navSearch" oninput="navSearchHandler(this.value)" onfocus="navSearchHandler(this.value)">
@@ -234,6 +256,8 @@ function renderNav() {
       <a class="nav-link ${S.page==='messages'?'active':''}" onclick="go('messages')" title="Messages"><i class="fas fa-comment-dots"></i></a>
       <a class="nav-link ${S.page==='reels'?'active':''}" onclick="go('reels')" title="Reels"><i class="fas fa-film"></i></a>
       <a class="nav-link ${S.page==='notifications'?'active':''}" onclick="go('notifications')" title="Notifications">${un?`<span class="nav-badge">${un}</span>`:''}<i class="fas fa-bell"></i></a>
+      <a class="nav-link" onclick="S.showMoodPicker=!S.showMoodPicker;render()" title="Mood"${S.mood?' style="color:#C41E3A"':''}><i class="fas fa-${S.mood?'heart':'smile-beam'}"></i></a>
+      <a class="nav-link" onclick="S.showMiniGame=true;S.miniGameType=null;render()" title="Games"><i class="fas fa-gamepad"></i></a>
       <div style="position:relative">
         <img src="${u.avatar}" class="nav-avatar" onclick="document.getElementById('navDrop').classList.toggle('show')">
         <div class="nav-dropdown" id="navDrop">
@@ -346,7 +370,7 @@ function renderCreatePost() {
     ${S.postPoll.options.length<4?`<button class="btn-add-option" onclick="S.postPoll.options.push('');render()">+ Add option</button>`:''}</div>`;
   }
   const feelingTag = S.postFeeling ? `<span class="feeling-tag">${FEELINGS[S.postFeeling]||S.postFeeling} <button onclick="S.postFeeling='';render()">✕</button></span>` : '';
-  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i></button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
+  return `<div class="create-post"><div class="create-post-top"><img src="${S.user.avatar}" class="avatar-sm"><div style="flex:1"><textarea id="postText" placeholder="What's on your mind, ${S.user.fullName.split(' ')[0]}?" rows="2"></textarea>${feelingTag}</div></div>${attachArea}<div class="create-post-actions"><div class="post-tools"><button class="tool-btn photo ${S.postAttachMode==='photo'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='photo'?null:'photo';render()"><i class="fas fa-image"></i> Photo</button><button class="tool-btn video ${S.postAttachMode==='video'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='video'?null:'video';render()"><i class="fas fa-video"></i> Video</button><button class="tool-btn feeling ${S.postAttachMode==='feeling'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='feeling'?null:'feeling';render()"><i class="fas fa-smile"></i> Feeling</button><button class="tool-btn poll ${S.postAttachMode==='poll'?'active':''}" onclick="S.postAttachMode=S.postAttachMode==='poll'?null:'poll';render()"><i class="fas fa-poll"></i> Poll</button><button class="tool-btn" onclick="S.showGifSearch=true;render()"><i class="fas fa-icons" style="color:#9b59b6"></i> GIF</button><button class="tool-btn" onclick="S.postAttachMode=S.postAttachMode==='schedule'?null:'schedule';render()"><i class="fas fa-clock" style="color:#3498db"></i> Schedule</button><button class="tool-btn" onclick="S.showTemplates=true;render()"><i class="fas fa-file-alt" style="color:#e67e22"></i> Template</button><button class="tool-btn" onclick="S.showFundraiser=true;render()"><i class="fas fa-hand-holding-heart" style="color:#e74c3c"></i> Fundraiser</button><button class="tool-btn ${S.anonMode?'active':''}" onclick="S.anonMode=!S.anonMode;toast(S.anonMode?'Anonymous mode on 🎭':'Anonymous mode off');render()"><i class="fas fa-mask" style="color:#9b59b6"></i></button><button class="tool-btn" onclick="S.showVoicePost=true;render()"><i class="fas fa-microphone-alt" style="color:#C41E3A"></i> Voice</button><button class="tool-btn" onclick="S.showCollabPost=true;render()"><i class="fas fa-users" style="color:#27ae60"></i> Collab</button><button class="tool-btn" onclick="S.showAIArt=true;render()"><i class="fas fa-magic" style="color:#D4A017"></i> AI Art</button><button class="tool-btn" onclick="S.showTimeCapsule=true;render()"><i class="fas fa-hourglass-half" style="color:#D4A017"></i> Capsule</button></div><button class="post-btn" onclick="newPost()">Post</button></div>${S.postAttachMode==='schedule'?`<div class="schedule-row"><i class="fas fa-calendar-alt" style="color:#3498db"></i><input type="datetime-local" id="scheduleTime"><button class="btn-secondary" style="padding:6px 12px;font-size:12px" onclick="schedulePost()">Schedule</button></div>`:''}</div>`;
 }
 
 function renderPost(p) {
@@ -354,11 +378,15 @@ function renderPost(p) {
   const txt = p.text.replace(/#(\w+)/g,'<span class="hashtag">#$1</span>').replace(/@(\w+)/g,'<span class="mention">@$1</span>');
   const showComments = S.openComments[p.id];
   const isPinned = S.pinnedPosts.includes(p.id);
-  return `<div class="post-card fade-in">
+  const isSpotlight = getSpotlightPost()?.id === p.id && (p.likes||[]).length > 0;
+  return `<div class="post-card fade-in ${isSpotlight?'spotlight-post':''}">
     ${isPinned?'<div class="pinned-label"><i class="fas fa-thumbtack"></i> Pinned Post</div>':''}
     <div class="post-header"><div class="post-author" onclick="goProfile('${a.username}')"><span class="${a.online?'online-indicator':''}"><img src="${a.avatar}" class="avatar-sm"></span><div><div class="post-author-name">${a.fullName} ${a.verified?'<i class="fas fa-check-circle verified"></i>':''} ${p._collab?`<span style="font-size:11px;color:#65676b;font-weight:400">with ${U(p._collab).fullName}</span>`:''}</div><div class="post-meta">${p.time}${p._edited?' · <i class="fas fa-pencil-alt" style="font-size:10px"></i> edited':''} · ${p._anon?'<i class="fas fa-mask"></i>':'<i class="fas fa-globe-americas"></i>'}</div></div></div>
     <div class="post-menu-wrap"><button class="post-menu" onclick="togglePostMenu('${p.id}')"><i class="fas fa-ellipsis-h"></i></button><div class="post-menu-dropdown ${S.openMenus[p.id]?'show':''}" id="pmenu-${p.id}"><a onclick="toggleSave('${p.id}');togglePostMenu('${p.id}')"><i class="fas fa-bookmark"></i> ${saved?'Unsave':'Save'}</a>${p.aid===S.user.id?`<a onclick="openEditPost('${p.id}')"><i class="fas fa-edit"></i> Edit Post</a><a onclick="togglePin('${p.id}')"><i class="fas fa-thumbtack"></i> ${isPinned?'Unpin':'Pin to Profile'}</a><a onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</a>`:`<a onclick="S.showBlockModal='${p.aid}';S.openMenus={};render()"><i class="fas fa-ban"></i> Block User</a>`}<a onclick="S.showReportModal='${p.id}';S.openMenus={};render()"><i class="fas fa-flag"></i> Report</a></div></div></div>
     <div class="post-content">${txt}</div>
+    ${p.voicePost?`<div class="voice-post-card" style="margin:0 16px 12px"><div class="voice-post-controls"><button class="voice-play-btn" onclick="toast('Playing voice post...')"><i class="fas fa-play"></i></button><div class="voice-waveform" style="flex:1">${p.voicePost.bars.map(h=>`<span style="height:${h}px"></span>`).join('')}</div><span style="font-size:12px;opacity:0.7">0:${String(p.voicePost.duration).padStart(2,'0')}</span></div></div>`:''}
+    ${p.collab?`<div style="padding:0 16px 8px;display:flex;align-items:center;gap:6px"><div class="collab-post-badge">${p.collab.map(id=>`<img src="${U(id).avatar}" style="width:24px;height:24px;border-radius:50%;border:2px solid white;margin-left:-6px">`).join('')}</div><span class="collab-label"><i class="fas fa-users"></i> Collaborative Post</span></div>`:''}
+    ${p.aiArt?`<div style="padding:0 16px 4px"><span style="font-size:11px;color:#D4A017;font-weight:600"><i class="fas fa-magic"></i> AI Generated Art</span></div>`:''}
     ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">drukpa.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
     ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div></div>`:''}
     ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)">${p.media.length>2?`<div class="carousel-container"><div class="carousel-track" style="transform:translateX(-${(S.carouselIdx[p.id]||0)*100}%)">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>${(S.carouselIdx[p.id]||0)>0?`<button class="carousel-btn prev" onclick="event.stopPropagation();carouselPrev('${p.id}')"><i class="fas fa-chevron-left"></i></button>`:''}${(S.carouselIdx[p.id]||0)<p.media.length-1?`<button class="carousel-btn next" onclick="event.stopPropagation();carouselNext('${p.id}',${p.media.length})"><i class="fas fa-chevron-right"></i></button>`:''}<div class="carousel-dots">${p.media.map((_,i)=>`<span class="${i===(S.carouselIdx[p.id]||0)?'active':''}" onclick="event.stopPropagation();S.carouselIdx['${p.id}']=${i};render()"></span>`).join('')}</div></div>`:`<div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>`}${S.watermarkEnabled&&p.aid===S.user.id?'<div class="watermark-overlay">@'+S.user.username+'</div>':''}</div>`:''}
@@ -451,12 +479,12 @@ function renderProfile() {
     tabContent = likedP.length ? likedP.map(x => renderPost(x)).join('') : '<div class="empty-state"><i class="fas fa-heart"></i><h3>No Liked Posts</h3></div>';
   }
 
-  return `<div class="app-layout"><div class="main-feed profile-page fade-in" style="max-width:900px">
+  return `<div class="app-layout"><div class="main-feed profile-page profile-theme-${own?S.profileTheme:'default'} fade-in" style="max-width:900px">
     <div class="profile-cover"><img src="https://picsum.photos/1200/400?random=${p.id}"></div>
     <div class="profile-main">
       <div class="profile-avatar-wrap"><img src="${p.avatar}"></div>
       <div class="profile-details">
-        <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''}</div>
+        <div class="profile-name">${p.fullName} ${p.verified?'<i class="fas fa-check-circle" style="color:#C41E3A"></i>':''} ${p.id===S.user.id?`<span class="karma-badge ${getKarmaLevel(S.karma)}"><i class="fas fa-${getKarmaLevel(S.karma)==='diamond'?'gem':getKarmaLevel(S.karma)==='gold'?'crown':'star'}"></i> ${getKarmaLabel(S.karma)} · ${S.karma}</span>`:''}</div>
         <div class="profile-username">@${p.username}</div>
         <div class="profile-bio">${p.bio}</div>
         <div class="profile-meta-info">
@@ -478,7 +506,7 @@ function renderProfile() {
       <div class="highlight-item"><div class="highlight-add" onclick="toast('Add highlight from stories')">+</div><p>New</p></div>
       ${S.storyHighlights.map(h=>`<div class="highlight-item" onclick="toast('Viewing ${h.name} highlights')"><img src="${h.img}"><p>${h.name}</p></div>`).join('')}
     </div>`:''}
-    ${own?`<div style="padding:0 24px"><button style="background:none;border:none;color:#C41E3A;font-size:13px;font-weight:600;cursor:pointer" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
+    ${own?`<div style="padding:0 24px">${renderProfileMusic()}${renderProfileThemePicker()}<button style="background:none;border:none;color:#C41E3A;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;display:block" onclick="S.showProfileViewers=true;render()"><i class="fas fa-eye"></i> ${Math.floor(Math.random()*50)+12} profile views this week</button></div>`:''}
     <div class="profile-tabs">
       ${['posts','media','likes'].map(t => `<span class="profile-tab ${S.profileTab===t?'active':''}" onclick="S.profileTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
     </div>
@@ -654,7 +682,7 @@ function addComment(id) {
   }
   p.comments.push({uid:S.user.id, text:text, t:'just now', replies:[]});
   toast('Comment added!','fa-comment');
-  gainXP(5);
+  gainXP(5); addKarma(5,'Commented on a post');
   render();
   S.openComments[id] = true;
   render();
@@ -785,6 +813,7 @@ function saveSett() {
 }
 
 function navSearchHandler(q) {
+  if (q.toLowerCase() === 'drukpa') { triggerEasterEgg('gold_theme'); return; }
   const res = document.getElementById('navSearchResults');
   if (q.length > 0) {
     const r = users.filter(u => u.fullName.toLowerCase().includes(q.toLowerCase()) || u.username.includes(q.toLowerCase()));
@@ -924,6 +953,13 @@ document.addEventListener('keydown', e => {
     if(S.showExport){S.showExport=false;render();}
     if(S.showDeactivate){S.showDeactivate=false;render();}
     if(S.showActivityLog){S.showActivityLog=false;render();}
+    if(S.showVoicePost){S.showVoicePost=false;S.voicePostRecording=false;render();}
+    if(S.showCollabPost){S.showCollabPost=false;render();}
+    if(S.showAIArt){S.showAIArt=false;S.aiArtResult=null;render();}
+    if(S.showTimeCapsule){S.showTimeCapsule=false;render();}
+    if(S.showMiniGame){S.showMiniGame=false;S.miniGameType=null;render();}
+    if(S.showMoodPicker){S.showMoodPicker=false;render();}
+    if(S.showEasterEgg){S.showEasterEgg=false;render();}
     document.querySelector('.modal-overlay')?.remove();
   }
   if(!S.user)return;
@@ -968,6 +1004,7 @@ function react(pid, type) {
   else {
     if (!p.likes.includes(S.user.id)) p.likes.push(S.user.id);
     p.reaction[S.user.id] = type;
+    playReactionSound(type);
     toast({love:'Loved!',haha:'Haha!',wow:'Wow!',sad:'Sad react',angry:'Angry react'}[type]||'Reacted!', 'fa-heart');
   }
   S.showReactions = null;
@@ -2040,5 +2077,339 @@ newPost = function() {
   gainXP(25);
   render();
 };
+
+// === FEATURE: Mood-Based Feed ===
+function setMood(mood) {
+  document.body.classList.remove('mood-happy','mood-chill','mood-energetic','mood-sad','mood-creative');
+  if (S.mood === mood) { S.mood = null; } else { S.mood = mood; document.body.classList.add('mood-' + mood); }
+  S.showMoodPicker = false;
+  toast(S.mood ? 'Mood set to ' + mood + '!' : 'Mood cleared', 'fa-' + (mood==='happy'?'smile':mood==='sad'?'cloud-rain':mood==='chill'?'snowflake':mood==='energetic'?'bolt':'palette'));
+  render();
+}
+function renderMoodPicker() {
+  const moods = [{id:'happy',icon:'😊',label:'Happy'},{id:'chill',icon:'😌',label:'Chill'},{id:'energetic',icon:'⚡',label:'Energetic'},{id:'sad',icon:'🌧️',label:'Sad'},{id:'creative',icon:'🎨',label:'Creative'}];
+  return `<div class="mood-picker fade-in">
+    <span style="font-size:13px;font-weight:600;margin-right:8px">How are you feeling?</span>
+    ${moods.map(m=>`<button class="mood-btn ${S.mood===m.id?'active':''}" onclick="setMood('${m.id}')">${m.icon} ${m.label}</button>`).join('')}
+    <button onclick="S.showMoodPicker=false;render()" style="background:none;font-size:18px;color:#65676b;margin-left:8px">&times;</button>
+  </div>`;
+}
+
+// === FEATURE: Voice Posts ===
+function renderVoicePostModal() {
+  return `<div class="ai-art-modal" onclick="if(event.target===this){S.showVoicePost=false;render()}"><div class="ai-art-content">
+    <h3><i class="fas fa-microphone-alt" style="color:#C41E3A;margin-right:8px"></i> Voice Post</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Record a voice message to share on your feed</p>
+    <div style="text-align:center;padding:24px 0">
+      <div class="voice-waveform" style="justify-content:center;height:60px">${Array(20).fill(0).map((_,i)=>`<span style="height:${Math.random()*40+8}px"></span>`).join('')}</div>
+      <p style="font-size:28px;font-weight:700;margin:12px 0;color:#C41E3A">${S.voicePostRecording?'0:'+String(S.voicePostDuration).padStart(2,'0'):'Ready'}</p>
+      <button class="voice-play-btn" style="width:64px;height:64px;font-size:24px;margin:0 auto" onclick="toggleVoicePost()">
+        <i class="fas ${S.voicePostRecording?'fa-stop':'fa-microphone'}"></i>
+      </button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-secondary" style="flex:1" onclick="S.showVoicePost=false;render()">Cancel</button>
+      <button class="btn-primary" style="flex:1" onclick="publishVoicePost()"><i class="fas fa-paper-plane"></i> Share</button>
+    </div>
+  </div></div>`;
+}
+function toggleVoicePost() {
+  S.voicePostRecording = !S.voicePostRecording;
+  if (S.voicePostRecording) { S.voicePostDuration = 0; S._voiceInt = setInterval(()=>{ S.voicePostDuration++; if(S.voicePostDuration>=30){S.voicePostRecording=false;clearInterval(S._voiceInt);} render(); },1000); }
+  else { clearInterval(S._voiceInt); }
+  render();
+}
+function publishVoicePost() {
+  S.voicePostRecording = false; clearInterval(S._voiceInt);
+  const dur = S.voicePostDuration || 5;
+  const bars = Array(30).fill(0).map(()=>Math.random()*28+4);
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:'', media:[], videos:[], likes:[], comments:[], shares:[], saves:[], time:'just now', voicePost:{duration:dur,bars:bars} };
+  posts.unshift(p);
+  S.showVoicePost = false; S.voicePostDuration = 0;
+  toast('Voice post shared! 🎙️','fa-microphone'); gainXP(30); render();
+}
+
+// === FEATURE: Collab Posts ===
+function renderCollabModal() {
+  const others = users.filter(u=>u.id!==S.user.id);
+  return `<div class="ai-art-modal" onclick="if(event.target===this){S.showCollabPost=false;render()}"><div class="ai-art-content">
+    <h3><i class="fas fa-users" style="color:#C41E3A;margin-right:8px"></i> Collaborative Post</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Invite friends to co-create a post together</p>
+    ${others.map(u=>`<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;${S.collabInvites.includes(u.id)?'background:rgba(196,30,58,0.1);border:1px solid #C41E3A':'background:#f0f2f5;border:1px solid transparent'}" onclick="toggleCollab('${u.id}')">
+      <img src="${u.avatar}" class="avatar-sm">
+      <div style="flex:1"><strong style="font-size:14px">${u.fullName}</strong><br><span style="font-size:12px;color:#65676b">@${u.username}</span></div>
+      <i class="fas ${S.collabInvites.includes(u.id)?'fa-check-circle':'fa-plus-circle'}" style="font-size:20px;color:${S.collabInvites.includes(u.id)?'#C41E3A':'#65676b'}"></i>
+    </div>`).join('')}
+    <button class="btn-primary" style="margin-top:16px" onclick="startCollabPost()"><i class="fas fa-paper-plane"></i> Create Together (${S.collabInvites.length} invited)</button>
+  </div></div>`;
+}
+function toggleCollab(uid) { const i = S.collabInvites.indexOf(uid); if(i>-1) S.collabInvites.splice(i,1); else S.collabInvites.push(uid); render(); }
+function startCollabPost() {
+  if (!S.collabInvites.length) { toast('Invite at least one friend!','fa-exclamation'); return; }
+  S.showCollabPost = false;
+  const names = S.collabInvites.map(id=>U(id).fullName).join(', ');
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:'Collaborative post with ' + names + '! 🤝', media:[], videos:[], likes:[], comments:[], shares:[], saves:[], time:'just now', collab:S.collabInvites.slice() };
+  posts.unshift(p);
+  S.collabInvites = [];
+  toast('Collab post created! 🎉','fa-users'); gainXP(40); render();
+}
+
+// === FEATURE: Reaction Sounds ===
+function playReactionSound(type) {
+  if (!S.reactionSounds) return;
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    if (type==='like') { osc.frequency.setValueAtTime(523, ctx.currentTime); osc.frequency.setValueAtTime(659, ctx.currentTime+0.1); }
+    else if (type==='love') { osc.frequency.setValueAtTime(440, ctx.currentTime); osc.frequency.setValueAtTime(554, ctx.currentTime+0.08); osc.frequency.setValueAtTime(659, ctx.currentTime+0.16); }
+    else if (type==='haha') { osc.frequency.setValueAtTime(600, ctx.currentTime); osc.frequency.setValueAtTime(400, ctx.currentTime+0.1); osc.frequency.setValueAtTime(600, ctx.currentTime+0.2); }
+    else if (type==='fire') { osc.type='sawtooth'; osc.frequency.setValueAtTime(200, ctx.currentTime); osc.frequency.setValueAtTime(400, ctx.currentTime+0.15); }
+    else { osc.frequency.setValueAtTime(330, ctx.currentTime); }
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.3);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.3);
+  } catch(e){}
+}
+
+// === FEATURE: Profile Music ===
+function renderProfileMusic() {
+  const tracks = [{name:'Lo-fi Beats',genre:'Chill'},{name:'Bhutanese Melody',genre:'Traditional'},{name:'Ambient Dreams',genre:'Electronic'},{name:'Mountain Rain',genre:'Nature'}];
+  const current = S.profileMusic || tracks[0];
+  return `<div class="profile-music-bar">
+    <button onclick="toggleProfileMusic()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer"><i class="fas ${S.musicPlaying?'fa-pause':'fa-play'}"></i></button>
+    <div class="music-visualizer ${S.musicPlaying?'playing':''}"><span></span><span></span><span></span><span></span><span></span></div>
+    <div style="flex:1"><strong style="font-size:13px">${current.name}</strong><br><span style="font-size:11px;opacity:0.7">${current.genre}</span></div>
+    <select onchange="setProfileMusic(this.value)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:8px;padding:4px 8px;font-size:11px">
+      ${tracks.map((t,i)=>`<option value="${i}" ${S.profileMusic===t?'selected':''}>${t.name}</option>`).join('')}
+    </select>
+  </div>`;
+}
+function toggleProfileMusic() { S.musicPlaying = !S.musicPlaying; render(); }
+function setProfileMusic(idx) { const tracks = [{name:'Lo-fi Beats',genre:'Chill'},{name:'Bhutanese Melody',genre:'Traditional'},{name:'Ambient Dreams',genre:'Electronic'},{name:'Mountain Rain',genre:'Nature'}]; S.profileMusic = tracks[idx]; S.musicPlaying = true; render(); }
+
+// === FEATURE: AI Art Generator ===
+function renderAIArtModal() {
+  const styles = ['Watercolor','Pixel Art','Sketch','Oil Paint','Neon','Bhutanese'];
+  return `<div class="ai-art-modal" onclick="if(event.target===this){S.showAIArt=false;S.aiArtResult=null;render()}"><div class="ai-art-content">
+    <h3><i class="fas fa-magic" style="color:#C41E3A;margin-right:8px"></i> AI Art Generator</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Describe what you want and we will create it</p>
+    <input style="width:100%;padding:12px 16px;border:2px solid #e4e6eb;border-radius:12px;font-size:14px;margin:8px 0" placeholder="Sunset over Bhutanese mountains..." value="${S.aiArtPrompt}" oninput="S.aiArtPrompt=this.value">
+    <div class="art-style-pills">${styles.map(s=>`<span class="art-style-pill" onclick="this.classList.toggle('active')">${s}</span>`).join('')}</div>
+    <div class="ai-art-preview ${S.aiArtGenerating?'ai-art-generating':''}">
+      ${S.aiArtResult?`<img src="${S.aiArtResult}" class="ai-art-result">`
+       :S.aiArtGenerating?'<i class="fas fa-palette fa-spin" style="font-size:48px;color:white"></i>'
+       :'<div style="text-align:center;color:#65676b"><i class="fas fa-image" style="font-size:48px;margin-bottom:8px"></i><p>Your art will appear here</p></div>'}
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-primary" style="flex:1" onclick="generateAIArt()"><i class="fas fa-wand-magic-sparkles"></i> Generate</button>
+      ${S.aiArtResult?`<button class="btn-primary" style="flex:1;background:linear-gradient(135deg,#27ae60,#2ecc71)" onclick="useAIArt()"><i class="fas fa-paper-plane"></i> Post It</button>`:''}
+    </div>
+  </div></div>`;
+}
+function generateAIArt() {
+  if (!S.aiArtPrompt.trim()) { toast('Enter a description first!','fa-exclamation'); return; }
+  S.aiArtGenerating = true; S.aiArtResult = null; render();
+  setTimeout(()=>{ S.aiArtGenerating = false; S.aiArtResult = 'https://picsum.photos/400/250?random='+Math.floor(Math.random()*1000); render(); toast('Art generated! ✨','fa-palette'); },2500);
+}
+function useAIArt() {
+  const p = { id:'p'+(++postIdCounter), aid:S.user.id, text:'🎨 AI Art: "'+S.aiArtPrompt+'"', media:[S.aiArtResult], videos:[], likes:[], comments:[], shares:[], saves:[], time:'just now', aiArt:true };
+  posts.unshift(p);
+  S.showAIArt = false; S.aiArtPrompt = ''; S.aiArtResult = null;
+  toast('AI artwork posted! 🖼️','fa-palette'); gainXP(35); render();
+}
+
+// === FEATURE: Time Capsule ===
+function renderTimeCapsuleModal() {
+  return `<div class="ai-art-modal" onclick="if(event.target===this){S.showTimeCapsule=false;render()}"><div class="ai-art-content">
+    <h3><i class="fas fa-hourglass-half" style="color:#D4A017;margin-right:8px"></i> Time Capsule Post</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Write a post that will unlock on a future date</p>
+    <textarea style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:12px;min-height:80px;font-size:14px;resize:none" placeholder="Dear future me..." id="capsuleText"></textarea>
+    <div style="margin:12px 0">
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Unlock Date</label>
+      <input type="date" id="capsuleDate" style="width:100%;padding:10px 14px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px" min="${new Date().toISOString().split('T')[0]}">
+    </div>
+    <div class="time-capsule-card" style="margin:12px 0">
+      <p style="font-size:12px;opacity:0.8">Your capsule will appear as locked in your profile until the unlock date, then auto-publish with a celebration!</p>
+    </div>
+    <button class="btn-primary" onclick="createTimeCapsule()"><i class="fas fa-lock"></i> Seal Time Capsule</button>
+    ${S.timeCapsulePosts.length?`<h4 style="margin-top:16px;font-size:14px">Your Capsules (${S.timeCapsulePosts.length})</h4>
+    ${S.timeCapsulePosts.map((tc,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:#f0f2f5;margin-top:8px">
+      <i class="fas fa-lock" style="color:#D4A017;font-size:18px"></i>
+      <div style="flex:1"><strong style="font-size:13px">Unlocks: ${new Date(tc.date).toLocaleDateString()}</strong><br><span style="font-size:12px;color:#65676b">${tc.text.substring(0,40)}...</span></div>
+    </div>`).join('')}`:''}
+  </div></div>`;
+}
+function createTimeCapsule() {
+  const text = document.getElementById('capsuleText')?.value;
+  const date = document.getElementById('capsuleDate')?.value;
+  if (!text||!date) { toast('Fill in all fields!','fa-exclamation'); return; }
+  S.timeCapsulePosts.push({text:text,date:date,created:new Date().toISOString()});
+  toast('Time capsule sealed! 🔒','fa-hourglass-half'); gainXP(50);
+  S.showTimeCapsule = false; render();
+}
+
+// === FEATURE: Karma System ===
+function getKarmaLevel(k) { if(k>=1000) return 'diamond'; if(k>=500) return 'gold'; if(k>=100) return 'silver'; return 'bronze'; }
+function getKarmaLabel(k) { if(k>=1000) return 'Diamond'; if(k>=500) return 'Gold'; if(k>=100) return 'Silver'; return 'Bronze'; }
+function addKarma(amount, reason) {
+  S.karma += amount;
+  S.karmaHistory.unshift({amount:amount, reason:reason, time:new Date().toLocaleString()});
+  if (S.karma >= 1000 && !S.easterEggFound.includes('diamond_karma')) { S.easterEggFound.push('diamond_karma'); toast('💎 Diamond Karma unlocked!','fa-gem'); }
+}
+
+// === FEATURE: Mini Games ===
+function renderMiniGameModal() {
+  if (!S.miniGameType) {
+    return `<div class="mini-game-modal" onclick="if(event.target===this){S.showMiniGame=false;render()}"><div class="mini-game-content">
+      <h3><i class="fas fa-gamepad" style="color:#C41E3A;margin-right:8px"></i> Mini Games</h3>
+      <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Play games with friends in chat!</p>
+      <div class="game-picker">
+        <div class="game-pick" onclick="S.miniGameType='ttt';S.tttBoard=Array(9).fill('');S.tttTurn='X';S.tttWinner=null;render()"><i class="fas fa-hashtag"></i><strong>Tic-Tac-Toe</strong></div>
+        <div class="game-pick" onclick="S.miniGameType='trivia';render()"><i class="fas fa-brain"></i><strong>Emoji Trivia</strong></div>
+        <div class="game-pick" onclick="S.miniGameType='truth';render()"><i class="fas fa-fire"></i><strong>Truth or Dare</strong></div>
+        <div class="game-pick" onclick="S.miniGameType='word';render()"><i class="fas fa-font"></i><strong>Word Chain</strong></div>
+      </div>
+    </div></div>`;
+  }
+  if (S.miniGameType === 'ttt') return renderTicTacToe();
+  if (S.miniGameType === 'trivia') return renderTrivia();
+  if (S.miniGameType === 'truth') return renderTruthDare();
+  if (S.miniGameType === 'word') return renderWordChain();
+  return '';
+}
+function renderTicTacToe() {
+  return `<div class="mini-game-modal" onclick="if(event.target===this){S.showMiniGame=false;S.miniGameType=null;render()}"><div class="mini-game-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <button onclick="S.miniGameType=null;render()" style="background:none;font-size:16px;color:#65676b"><i class="fas fa-arrow-left"></i></button>
+      <h3>Tic-Tac-Toe</h3>
+      <button onclick="S.tttBoard=Array(9).fill('');S.tttTurn='X';S.tttWinner=null;render()" style="background:none;font-size:13px;color:#C41E3A;font-weight:600">Reset</button>
+    </div>
+    <p style="font-size:14px;font-weight:600;margin-bottom:8px;color:${S.tttTurn==='X'?'#C41E3A':'#E8751A'}">${S.tttWinner ? (S.tttWinner==='draw'?'Draw!':S.tttWinner+' Wins! 🎉') : S.tttTurn+"'s Turn"}</p>
+    <div class="ttt-board">
+      ${S.tttBoard.map((cell,i)=>`<button class="ttt-cell ${cell==='X'?'x':cell==='O'?'o':''}" onclick="playTTT(${i})">${cell}</button>`).join('')}
+    </div>
+  </div></div>`;
+}
+function playTTT(i) {
+  if (S.tttBoard[i] || S.tttWinner) return;
+  S.tttBoard[i] = S.tttTurn;
+  const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  for (const [a,b,c] of wins) { if (S.tttBoard[a]&&S.tttBoard[a]===S.tttBoard[b]&&S.tttBoard[a]===S.tttBoard[c]) { S.tttWinner=S.tttBoard[a]; playReactionSound('love'); render(); return; } }
+  if (!S.tttBoard.includes('')) { S.tttWinner='draw'; render(); return; }
+  S.tttTurn = S.tttTurn==='X'?'O':'X';
+  playReactionSound('like');
+  if (S.tttTurn==='O') { setTimeout(()=>{ const empty=S.tttBoard.map((c,i)=>c===''?i:-1).filter(i=>i!==-1); if(empty.length){playTTT(empty[Math.floor(Math.random()*empty.length)]);} },500); }
+  render();
+}
+function renderTrivia() {
+  const trivias = [
+    {q:'🎬🧊🚢', opts:['Frozen','Titanic','Ice Age','Waterworld'], ans:'Titanic'},
+    {q:'🦁👑', opts:['Lion King','Narnia','Brave','Madagascar'], ans:'Lion King'},
+    {q:'🕷️🧑', opts:['Spider-Man','Ant-Man','The Fly','Bug'], ans:'Spider-Man'},
+    {q:'⭐⚔️', opts:['Star Wars','Star Trek','Guardians','Dune'], ans:'Star Wars'},
+  ];
+  const t = trivias[Math.floor(Math.random()*trivias.length)];
+  return `<div class="mini-game-modal" onclick="if(event.target===this){S.showMiniGame=false;S.miniGameType=null;render()}"><div class="mini-game-content">
+    <button onclick="S.miniGameType=null;render()" style="background:none;font-size:16px;color:#65676b;float:left"><i class="fas fa-arrow-left"></i></button>
+    <h3 style="margin-bottom:12px">Emoji Trivia</h3>
+    <div class="trivia-card"><p style="font-size:48px;margin-bottom:8px">${t.q}</p><p style="font-size:14px;opacity:0.9">Guess the movie!</p>
+      <div class="trivia-options">${t.opts.map(o=>`<button class="trivia-opt" onclick="checkTrivia(this,'${o}','${t.ans}')">${o}</button>`).join('')}</div>
+    </div>
+    <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="render()"><i class="fas fa-redo"></i> New Question</button>
+  </div></div>`;
+}
+function checkTrivia(el,chosen,ans) { if(chosen===ans){el.style.background='rgba(39,174,89,0.6)';toast('Correct! 🎉','fa-check');addKarma(10,'Trivia win');gainXP(15);}else{el.style.background='rgba(231,76,60,0.6)';toast('Wrong! It was '+ans,'fa-times');} }
+function renderTruthDare() {
+  const truths = ['What is your most embarrassing moment?','Who was your first crush?','What is your biggest fear?','What is the last lie you told?','What is your guilty pleasure?'];
+  const dares = ['Post a selfie with a funny face','Send a voice message singing','Change your profile pic for 1 hour','Comment a compliment on 3 posts','Share your screen time stats'];
+  return `<div class="mini-game-modal" onclick="if(event.target===this){S.showMiniGame=false;S.miniGameType=null;render()}"><div class="mini-game-content">
+    <button onclick="S.miniGameType=null;render()" style="background:none;font-size:16px;color:#65676b;float:left"><i class="fas fa-arrow-left"></i></button>
+    <h3>Truth or Dare 🔥</h3>
+    <div style="display:flex;gap:12px;margin:20px 0">
+      <button class="btn-primary" style="flex:1" onclick="document.getElementById('tdResult').innerHTML='<strong>Truth:</strong> '+['${truths.join("','")}''][0].split(',')[Math.floor(Math.random()*${truths.length})]">Truth</button>
+      <button class="btn-primary" style="flex:1;background:linear-gradient(135deg,#E8751A,#D4A017)" onclick="document.getElementById('tdResult').innerHTML='<strong>Dare:</strong> '+['${dares.join("','")}''][0].split(',')[Math.floor(Math.random()*${dares.length})]">Dare</button>
+    </div>
+    <div id="tdResult" style="padding:20px;background:#f0f2f5;border-radius:12px;font-size:15px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center">Tap Truth or Dare!</div>
+  </div></div>`;
+}
+function renderWordChain() {
+  return `<div class="mini-game-modal" onclick="if(event.target===this){S.showMiniGame=false;S.miniGameType=null;render()}"><div class="mini-game-content">
+    <button onclick="S.miniGameType=null;render()" style="background:none;font-size:16px;color:#65676b;float:left"><i class="fas fa-arrow-left"></i></button>
+    <h3>Word Chain 🔗</h3>
+    <p style="font-size:13px;color:#65676b;margin:8px 0">Type a word starting with the last letter!</p>
+    <div id="wordChainList" style="padding:12px;background:#f0f2f5;border-radius:12px;min-height:100px;max-height:200px;overflow-y:auto;margin:12px 0;font-size:14px"><span style="background:#C41E3A;color:white;padding:4px 12px;border-radius:12px;margin:3px;display:inline-block">Dragon</span></div>
+    <div style="display:flex;gap:8px">
+      <input id="wordChainInput" style="flex:1;padding:10px 14px;border:2px solid #e4e6eb;border-radius:12px;font-size:14px" placeholder="Type a word starting with N..." onkeydown="if(event.key==='Enter')addWordChain()">
+      <button class="btn-primary" style="width:auto;padding:10px 16px" onclick="addWordChain()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div></div>`;
+}
+function addWordChain() {
+  const input = document.getElementById('wordChainInput');
+  const list = document.getElementById('wordChainList');
+  if (!input||!list||!input.value.trim()) return;
+  const word = input.value.trim();
+  const lastWord = list.lastElementChild?.textContent || 'Dragon';
+  const lastChar = lastWord.slice(-1).toLowerCase();
+  if (word[0].toLowerCase() !== lastChar) { toast('Word must start with "'+lastChar.toUpperCase()+'"!','fa-times'); return; }
+  const colors = ['#C41E3A','#E8751A','#D4A017','#27ae60','#3498db'];
+  const bg = colors[list.children.length % colors.length];
+  list.innerHTML += `<span style="background:${bg};color:white;padding:4px 12px;border-radius:12px;margin:3px;display:inline-block">${word}</span>`;
+  input.value = '';
+  input.placeholder = 'Type a word starting with '+word.slice(-1).toUpperCase()+'...';
+  addKarma(5,'Word chain'); gainXP(5);
+}
+
+// === FEATURE: Animated Profile Themes ===
+function renderProfileThemePicker() {
+  const themes = [{id:'default',name:'Default',icon:'fa-circle',color:'#C41E3A'},{id:'aurora',name:'Aurora',icon:'fa-water',color:'#00C9FF'},{id:'galaxy',name:'Galaxy',icon:'fa-star',color:'#302B63'},{id:'fire',name:'Fire',icon:'fa-fire',color:'#E8751A'},{id:'rain',name:'Rain',icon:'fa-cloud-rain',color:'#3498DB'},{id:'flags',name:'Prayer Flags',icon:'fa-flag',color:'#D4A017'}];
+  return `<div style="margin-top:12px"><h4 style="font-size:13px;color:#65676b;margin-bottom:8px">Profile Theme</h4>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${themes.map(t=>`<button onclick="S.profileTheme='${t.id}';render()" style="padding:8px 14px;border-radius:10px;border:2px solid ${S.profileTheme===t.id?t.color:'#e4e6eb'};background:${S.profileTheme===t.id?'rgba(196,30,58,0.05)':'#f0f2f5'};font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer"><i class="fas ${t.icon}" style="color:${t.color}"></i> ${t.name}</button>`).join('')}
+    </div></div>`;
+}
+
+// === FEATURE: Post Spotlight ===
+function getSpotlightPost() {
+  if (posts.length === 0) return null;
+  return posts.reduce((best, p) => (p.likes||[]).length > (best.likes||[]).length ? p : best, posts[0]);
+}
+
+// === FEATURE: Easter Eggs ===
+const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+document.addEventListener('keydown', function(e) {
+  if (!S.user) return;
+  if (e.keyCode === konamiCode[S.konamiIdx]) {
+    S.konamiIdx++;
+    if (S.konamiIdx === konamiCode.length) {
+      S.konamiIdx = 0;
+      triggerEasterEgg('dragon');
+    }
+  } else { S.konamiIdx = 0; }
+});
+function triggerEasterEgg(type) {
+  if (type==='dragon') {
+    S.showEasterEgg = true;
+    if (!S.easterEggFound.includes('dragon')) { S.easterEggFound.push('dragon'); addKarma(100,'Found the Dragon!'); }
+    render();
+    setTimeout(()=>{ S.showEasterEgg=false; render(); },4000);
+  } else if (type==='gold_theme') {
+    document.body.classList.toggle('secret-theme');
+    if (!S.easterEggFound.includes('gold_theme')) { S.easterEggFound.push('gold_theme'); addKarma(50,'Discovered Gold Theme'); toast('🏆 Secret Gold Theme unlocked!','fa-crown'); }
+  } else if (type==='confetti') {
+    showConfetti();
+    if (!S.easterEggFound.includes('confetti')) { S.easterEggFound.push('confetti'); addKarma(25,'Confetti discovery'); }
+  }
+}
+function renderEasterEggOverlay() {
+  return `<div class="easter-egg-overlay" onclick="S.showEasterEgg=false;render()">
+    <div style="text-align:center">
+      <div class="dragon-animation">🐉</div>
+      <p class="easter-msg">You Found the Thunder Dragon!</p>
+      <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:8px">+100 Karma</p>
+    </div>
+  </div>`;
+}
 
 render();
