@@ -1348,6 +1348,53 @@
     .dark .calendar-day:hover { background: rgba(196,30,58,0.15); }
     .dark .bookshelf { background: linear-gradient(180deg, #2d1a0e, #1a0e05); }
 
+    /* OAuth Buttons */
+    .oauth-buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .oauth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid #dadce0; background: white; font-size: 14px; font-weight: 600; color: #1C1C1E; cursor: pointer; transition: all 0.2s; }
+    .oauth-btn:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
+    .dark .oauth-btn { background: #21262d; border-color: #30363D; color: #e6edf3; }
+    .dark .oauth-btn:hover { background: #30363d; }
+
+    /* Story Polls */
+    .story-poll { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px; margin: 16px; position: absolute; bottom: 60px; left: 10px; right: 10px; }
+    .story-poll h4 { color: white; font-size: 15px; margin-bottom: 10px; text-align: center; }
+    .story-poll-option { background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; color: white; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; position: relative; overflow: hidden; }
+    .story-poll-option:hover { background: rgba(255,255,255,0.25); }
+    .story-poll-option.voted { border-color: #D4A017; }
+    .story-poll-option .poll-fill { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(196,30,58,0.4); border-radius: 8px; transition: width 0.6s ease; }
+    .story-poll-option .poll-pct { font-size: 13px; opacity: 0.8; z-index: 1; }
+    .story-poll-option span:first-child { z-index: 1; }
+
+    /* Infinite Scroll Loader */
+    .infinite-loader { text-align: center; padding: 20px; }
+    .infinite-loader .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid rgba(196,30,58,0.2); border-top-color: #C41E3A; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .load-more-btn { display: block; margin: 16px auto; padding: 10px 28px; background: linear-gradient(135deg, #C41E3A, #E8751A); color: white; border: none; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; }
+
+    /* Content Moderation */
+    .mod-warning { background: linear-gradient(135deg, #fff3cd, #ffeaa7); border: 1px solid #f0c36d; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #856404; }
+    .mod-warning i { font-size: 18px; color: #e17055; }
+    .mod-hidden-post { filter: blur(8px); pointer-events: none; user-select: none; }
+    .mod-reveal-btn { display: block; text-align: center; padding: 8px; font-size: 13px; color: #C41E3A; cursor: pointer; font-weight: 600; }
+    .dark .mod-warning { background: linear-gradient(135deg, #3d2e0a, #2d2106); border-color: #5a4a1e; color: #f0c36d; }
+
+    /* Group Chat */
+    .group-chat-panel { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .group-chat-header { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #f0f2f5; margin-bottom: 12px; }
+    .group-chat-header .group-avatar { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #C41E3A, #E8751A); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+    .group-chat-msgs { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .group-msg { display: flex; gap: 8px; align-items: flex-start; }
+    .group-msg img { width: 28px; height: 28px; border-radius: 50%; }
+    .group-msg-bubble { background: #f0f2f5; border-radius: 12px; padding: 8px 12px; max-width: 75%; }
+    .group-msg-bubble .msg-author { font-size: 11px; font-weight: 700; color: #C41E3A; }
+    .group-msg-bubble .msg-text { font-size: 13px; }
+    .group-chat-input { display: flex; gap: 8px; }
+    .group-chat-input input { flex: 1; padding: 10px 14px; border: 1.5px solid #dadce0; border-radius: 20px; font-size: 13px; }
+    .group-chat-input button { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #C41E3A, #E8751A); color: white; border: none; cursor: pointer; }
+    .dark .group-chat-panel { background: #161B22; }
+    .dark .group-msg-bubble { background: #21262d; }
+    .dark .group-chat-input input { background: #0d1117; border-color: #30363D; color: #e6edf3; }
+
     /* ============================================================
        PREMIUM DESIGN UPGRADE — World-Class Enhancements
        ============================================================ */
@@ -1917,6 +1964,11 @@ function renderLogin() {
       <button type="submit" class="btn-primary">Log In</button>
     </form>
     <div class="auth-divider"><span>OR</span></div>
+    <div class="oauth-buttons">
+      <button class="oauth-btn google" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>
+      <button class="oauth-btn facebook" onclick="oauthLogin('facebook')"><i class="fab fa-facebook-f" style="color:#1877F2;font-size:18px"></i> Continue with Facebook</button>
+      <button class="oauth-btn apple" onclick="oauthLogin('apple')"><i class="fab fa-apple" style="color:#000;font-size:20px"></i> Continue with Apple</button>
+    </div>
     <div class="auth-footer"><p>Don't have an account? <a onclick="S.page='register';render()">Sign Up</a></p></div>
   </div></div>`;
 }
@@ -1932,6 +1984,11 @@ function renderRegister() {
       <button type="submit" class="btn-primary">Sign Up</button>
     </form>
     <div class="auth-divider"><span>OR</span></div>
+    <div class="oauth-buttons">
+      <button class="oauth-btn google" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>
+      <button class="oauth-btn facebook" onclick="oauthLogin('facebook')"><i class="fab fa-facebook-f" style="color:#1877F2;font-size:18px"></i> Continue with Facebook</button>
+      <button class="oauth-btn apple" onclick="oauthLogin('apple')"><i class="fab fa-apple" style="color:#000;font-size:20px"></i> Continue with Apple</button>
+    </div>
     <div class="auth-footer"><p>Have an account? <a onclick="S.page='login';render()">Log In</a></p></div>
   </div></div>`;
 }
@@ -2016,6 +2073,7 @@ function renderFeed() {
     <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
     <div class="prayer-flags"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="magazine-feed">${posts.map(p => renderPost(p)).join('')}</div>
+    <div class="infinite-loader"><div class="spinner"></div><p style="margin-top:8px;font-size:13px;color:#65676b">Loading more posts...</p></div>
   </div><div class="sidebar-right">${renderRight()}</div></div>${S.viewStory ? renderStoryViewer() : ''}${S.showStoryCreate ? renderStoryCreate() : ''}${S.showShareModal ? renderShareModal() : ''}`;
 }
 
@@ -2369,6 +2427,7 @@ function renderStoryViewer() {
         <span class="ar-reaction" onclick="storyARReact('💯')">💯</span>
       </div>
       <div class="ar-overlay" id="arOverlay"></div>
+      ${st.poll ? renderStoryPoll(st.poll) : ''}
       <div class="story-reply"><input placeholder="Reply to story..." onkeydown="if(event.key==='Enter'){toast('Reply sent!');this.value='';event.preventDefault()}"></div>
     </div>
   </div>`;
@@ -2842,6 +2901,7 @@ function renderStoryCreate() {
     <div class="story-type-btns">
       <div class="story-type-btn ${S._storyType==='text'?'active':''}" onclick="S._storyType='text';render()"><i class="fas fa-font"></i>Text</div>
       <div class="story-type-btn ${S._storyType==='photo'?'active':''}" onclick="S._storyType='photo';render()"><i class="fas fa-image"></i>Photo</div>
+      <div class="story-type-btn ${S._storyType==='poll'?'active':''}" onclick="S._storyType='poll';render()"><i class="fas fa-poll"></i>Poll</div>
     </div>
     ${S._storyType==='text'?`
       <textarea id="storyText" placeholder="Type your story..." style="width:100%;padding:12px;border:1px solid #dadce0;border-radius:8px;min-height:80px;font-size:15px;resize:none"></textarea>
@@ -2853,6 +2913,15 @@ function renderStoryCreate() {
         <input type="file" id="storyPhotoFile" accept="image/*" capture="environment" onchange="handleStoryPhoto(this.files)" style="display:none">
       </div>
       ${S._storyPhoto?`<img src="${S._storyPhoto}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px">`:''}`}
+    ${S._storyType==='poll'?`
+      <input id="storyPollQ" placeholder="Ask a question..." style="width:100%;padding:12px;border:1px solid #dadce0;border-radius:8px;font-size:15px;margin-bottom:8px">
+      <input id="storyPollA" placeholder="Option 1" style="width:100%;padding:10px;border:1px solid #dadce0;border-radius:8px;font-size:14px;margin-bottom:6px">
+      <input id="storyPollB" placeholder="Option 2" style="width:100%;padding:10px;border:1px solid #dadce0;border-radius:8px;font-size:14px;margin-bottom:6px">
+      <input id="storyPollC" placeholder="Option 3 (optional)" style="width:100%;padding:10px;border:1px solid #dadce0;border-radius:8px;font-size:14px;margin-bottom:6px">
+      <input id="storyPollD" placeholder="Option 4 (optional)" style="width:100%;padding:10px;border:1px solid #dadce0;border-radius:8px;font-size:14px">
+      <div style="font-size:13px;font-weight:600;margin-top:8px;color:#65676b">Background</div>
+      <div class="story-bg-picker">${bgs.map(bg=>`<div class="story-bg-opt ${S._storyBg===bg?'active':''}" style="background:${bg}" onclick="S._storyBg='${bg}';render()"></div>`).join('')}</div>
+    `:''}
     <button class="btn-primary" style="margin-top:16px" onclick="publishStory()">Share Story</button>
   </div></div>`;
 }
@@ -2867,6 +2936,13 @@ function publishStory() {
     const txt = document.getElementById('storyText')?.value;
     if (!txt) return toast('Write something!','fa-exclamation');
     stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:'',text:txt,bg:S._storyBg||'linear-gradient(135deg,#C41E3A,#E8751A)',time:'just now'});
+  } else if (S._storyType === 'poll') {
+    const q = document.getElementById('storyPollQ')?.value;
+    const opts = ['storyPollA','storyPollB','storyPollC','storyPollD'].map(id=>document.getElementById(id)?.value).filter(Boolean);
+    if (!q || opts.length < 2) return toast('Need a question and at least 2 options!','fa-exclamation');
+    const pollId = 'sp_'+(Date.now());
+    storyPolls[pollId] = {question:q, options:opts, votes:opts.map(()=>0), totalVotes:0, voted:null};
+    stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:'',text:q,bg:S._storyBg||'linear-gradient(135deg,#C41E3A,#E8751A)',time:'just now',poll:pollId});
   } else {
     if (!S._storyPhoto) return toast('Upload a photo!','fa-exclamation');
     stories.unshift({id:'s'+(Date.now()),uid:S.user.id,media:S._storyPhoto,text:'',bg:'',time:'just now'});
@@ -2996,6 +3072,7 @@ function renderCommunityDetail() {
         </div>
       </div>
     </div>
+    <div style="margin-top:16px">${renderGroupChat(c.id)}</div>
     <div style="margin-top:16px">${posts.slice(0,3).map(p=>renderPost(p)).join('')}</div>
   </div></div>`;
 }
@@ -4903,6 +4980,160 @@ function renderQRArtModal() {
         <button style="padding:10px 20px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="toast('QR code saved! 📲')"><i class="fas fa-download"></i> Save</button>
         <button style="padding:10px 20px;background:#e4e6eb;color:#1C1C1E;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="toast('QR link copied! 🔗')"><i class="fas fa-share"></i> Share</button>
       </div>
+    </div>
+  </div>`;
+}
+
+// === FEATURE: OAuth Login ===
+function oauthLogin(provider) {
+  const names = {google:'Google',facebook:'Facebook',apple:'Apple'};
+  toast(`Connecting to ${names[provider]}...`,'fa-plug');
+  setTimeout(()=>{
+    S.user = users[0]; S.page = 'feed'; S.loggedIn = true;
+    toast(`Signed in with ${names[provider]}! 🎉`,'fa-check-circle');
+    render();
+  }, 1200);
+}
+
+// === FEATURE: Infinite Scroll ===
+S._feedPage = 1;
+S._feedLoading = false;
+S._feedPerPage = 5;
+function setupInfiniteScroll() {
+  window.removeEventListener('scroll', handleInfiniteScroll);
+  window.addEventListener('scroll', handleInfiniteScroll);
+}
+function handleInfiniteScroll() {
+  if (S.page !== 'feed' || S._feedLoading) return;
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 400) {
+    loadMorePosts();
+  }
+}
+function loadMorePosts() {
+  if (S._feedLoading) return;
+  S._feedLoading = true;
+  const loader = document.querySelector('.infinite-loader');
+  if (loader) loader.style.display = 'block';
+  setTimeout(() => {
+    const templates = [
+      {text:'Just discovered an amazing hidden trail in the mountains! 🏔️ Nature never disappoints.',mood:'inspired',media:'https://picsum.photos/600/400?random='+(Date.now())},
+      {text:'Working on something exciting... stay tuned! 🚀',mood:'creative',media:''},
+      {text:'Coffee, code, and good vibes. Perfect morning routine ☕',mood:'chill',media:'https://picsum.photos/600/400?random='+(Date.now()+1)},
+      {text:'Grateful for the little things today. What made you smile? 😊',mood:'happy',media:''},
+      {text:'New recipe unlocked! This homemade ramen is a game changer 🍜',mood:'excited',media:'https://picsum.photos/600/400?random='+(Date.now()+2)}
+    ];
+    const t = templates[Math.floor(Math.random()*templates.length)];
+    const author = users[Math.floor(Math.random()*users.length)];
+    posts.push({
+      id:'inf_'+(Date.now()),uid:author.id,text:t.text,media:t.media,mood:t.mood,
+      time:Math.floor(Math.random()*23+1)+'h',likes:[],comments:[],saves:[],shares:0,
+      poll:null,type:'text',hashtags:[]
+    });
+    S._feedPage++;
+    S._feedLoading = false;
+    render();
+    toast('New posts loaded','fa-arrow-down');
+  }, 800);
+}
+setupInfiniteScroll();
+
+// === FEATURE: Story Polls ===
+const storyPolls = {
+  sp1: {question:'Best time to meditate?',options:['Morning 🌅','Evening 🌆','Night 🌙','Anytime 🧘'],votes:[34,28,18,20],totalVotes:100,voted:null},
+  sp2: {question:'Favorite JOMO feature?',options:['Reels 🎬','Communities 👥','Live 📡','Stories 📸'],votes:[42,25,15,18],totalVotes:100,voted:null},
+  sp3: {question:'Weekend plans?',options:['Hiking 🥾','Reading 📚','Cooking 🍳','Gaming 🎮'],votes:[30,22,28,20],totalVotes:100,voted:null}
+};
+stories.forEach((s,i)=>{
+  if(i%3===1 && !s.poll) s.poll = Object.keys(storyPolls)[i%3];
+});
+
+function renderStoryPoll(pollId) {
+  const poll = storyPolls[pollId];
+  if(!poll) return '';
+  return `<div class="story-poll">
+    <h4>${poll.question}</h4>
+    ${poll.options.map((opt,i)=>{
+      const pct = Math.round((poll.votes[i]/poll.totalVotes)*100);
+      const isVoted = poll.voted === i;
+      return `<div class="story-poll-option ${poll.voted!==null?'voted':''}" onclick="voteStoryPoll('${pollId}',${i})">
+        ${poll.voted!==null?`<div class="poll-fill" style="width:${pct}%"></div>`:''}
+        <span>${opt}</span>
+        ${poll.voted!==null?`<span class="poll-pct">${pct}%</span>`:''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+function voteStoryPoll(pollId, optIdx) {
+  const poll = storyPolls[pollId];
+  if(poll.voted !== null) return;
+  poll.voted = optIdx;
+  poll.votes[optIdx]++;
+  poll.totalVotes++;
+  toast('Vote recorded! 🗳️');
+  render();
+}
+
+// === FEATURE: Content Moderation ===
+const flaggedWords = ['spam','scam','hack','xxx'];
+function moderateContent(text) {
+  const lower = text.toLowerCase();
+  for(const w of flaggedWords) { if(lower.includes(w)) return {flagged:true,reason:'Potentially inappropriate content'}; }
+  return {flagged:false};
+}
+S._hiddenPosts = {};
+function toggleHiddenPost(id) {
+  S._hiddenPosts[id] = !S._hiddenPosts[id];
+  render();
+}
+function reportContent(id, type) {
+  S.showReportModal = true;
+  S._reportTarget = {id, type};
+  render();
+}
+
+// === FEATURE: Group Chat in Communities ===
+const groupChats = {};
+communities.forEach(c => {
+  groupChats[c.id] = {
+    messages: [
+      {uid:'2',text:'Welcome everyone! 🎉',time:'2h ago'},
+      {uid:'3',text:'Excited to be here!',time:'1h ago'},
+      {uid:'4',text:'Great community, looking forward to sharing',time:'45m ago'},
+      {uid:'5',text:'Hello from Bhutan! 🇧🇹',time:'30m ago'}
+    ]
+  };
+});
+S._communityChat = {};
+function sendGroupMsg(comId) {
+  const input = document.getElementById('groupChatInput_'+comId);
+  if(!input || !input.value.trim()) return;
+  const mod = moderateContent(input.value);
+  if(mod.flagged) { toast('Message flagged: '+mod.reason,'fa-exclamation-triangle'); return; }
+  groupChats[comId].messages.push({uid:S.user.id, text:input.value.trim(), time:'now'});
+  input.value = '';
+  toast('Message sent!');
+  render();
+}
+function renderGroupChat(comId) {
+  const chat = groupChats[comId];
+  if(!chat) return '';
+  return `<div class="group-chat-panel">
+    <div class="group-chat-header">
+      <div class="group-avatar"><i class="fas fa-comments"></i></div>
+      <div><strong>Group Chat</strong><div style="font-size:11px;color:#65676b">${chat.messages.length} messages</div></div>
+    </div>
+    <div class="group-chat-msgs">
+      ${chat.messages.map(m=>{
+        const u = U(m.uid);
+        return `<div class="group-msg">
+          <img src="${u.avatar}">
+          <div class="group-msg-bubble"><div class="msg-author">${u.fullName}</div><div class="msg-text">${m.text}</div></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="group-chat-input">
+      <input id="groupChatInput_${comId}" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendGroupMsg('${comId}')">
+      <button onclick="sendGroupMsg('${comId}')"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>`;
 }
