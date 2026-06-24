@@ -1750,7 +1750,164 @@
 
 <div id="app"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+// ===== FIREBASE CONFIG =====
+// Replace these with your Firebase project credentials from https://console.firebase.google.com
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+let fb = null, db = null, fbAuth = null, fbUser = null;
+const FB_ENABLED = firebaseConfig.apiKey !== 'YOUR_API_KEY';
+
+if (FB_ENABLED) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  fbAuth = firebase.auth();
+}
+
+// ===== FIREBASE DATABASE LAYER =====
+const DB = {
+  async saveWallet(userId) {
+    if (!FB_ENABLED) return;
+    try {
+      await db.collection('wallets').doc(userId).set({
+        coins: S.coins, diamonds: S.diamonds,
+        totalDiamondsEarned: S.totalDiamondsEarned,
+        tipsReceived: S.tipsReceived, tipsSent: S.tipsSent,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, {merge: true});
+    } catch(e) { console.warn('Wallet save:', e); }
+  },
+
+  async loadWallet(userId) {
+    if (!FB_ENABLED) return null;
+    try {
+      const doc = await db.collection('wallets').doc(userId).get();
+      return doc.exists ? doc.data() : null;
+    } catch(e) { return null; }
+  },
+
+  async recordGift(senderId, receiverId, giftData) {
+    if (!FB_ENABLED) return;
+    try {
+      const batch = db.batch();
+      batch.set(db.collection('transactions').doc(), {
+        type: 'gift', senderId, receiverId,
+        giftId: giftData.giftId, giftName: giftData.name,
+        coinCost: giftData.cost, diamondsEarned: giftData.diamonds,
+        platformFee: Math.floor(giftData.cost * 0.5),
+        context: giftData.context || 'post',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      batch.update(db.collection('wallets').doc(senderId), {
+        coins: firebase.firestore.FieldValue.increment(-giftData.cost),
+        tipsSent: firebase.firestore.FieldValue.increment(giftData.cost)
+      });
+      batch.update(db.collection('wallets').doc(receiverId), {
+        diamonds: firebase.firestore.FieldValue.increment(giftData.diamonds),
+        totalDiamondsEarned: firebase.firestore.FieldValue.increment(giftData.diamonds),
+        tipsReceived: firebase.firestore.FieldValue.increment(giftData.cost)
+      });
+      await batch.commit();
+    } catch(e) { console.warn('Gift record:', e); }
+  },
+
+  async recordRecharge(userId, amount, price) {
+    if (!FB_ENABLED) return;
+    try {
+      const batch = db.batch();
+      batch.set(db.collection('transactions').doc(), {
+        type: 'recharge', userId, coinsAdded: amount, pricePaid: price,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      batch.update(db.collection('wallets').doc(userId), {
+        coins: firebase.firestore.FieldValue.increment(amount)
+      });
+      await batch.commit();
+    } catch(e) { console.warn('Recharge:', e); }
+  },
+
+  async submitWithdrawal(userId, diamonds, nuAmount, bankInfo) {
+    if (!FB_ENABLED) return;
+    try {
+      const batch = db.batch();
+      batch.set(db.collection('withdrawals').doc(), {
+        userId, diamonds, nuAmount,
+        bankName: bankInfo.bank, accountNumber: bankInfo.account,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      batch.update(db.collection('wallets').doc(userId), {
+        diamonds: firebase.firestore.FieldValue.increment(-diamonds)
+      });
+      await batch.commit();
+    } catch(e) { console.warn('Withdrawal:', e); }
+  },
+
+  async getHistory(userId, limit) {
+    if (!FB_ENABLED) return [];
+    try {
+      const sent = await db.collection('transactions')
+        .where('senderId', '==', userId).orderBy('createdAt', 'desc').limit(limit || 30).get();
+      const received = await db.collection('transactions')
+        .where('receiverId', '==', userId).orderBy('createdAt', 'desc').limit(limit || 30).get();
+      const all = [...sent.docs, ...received.docs].map(d => ({id: d.id, ...d.data()}));
+      all.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+      return all.slice(0, limit || 50);
+    } catch(e) { return []; }
+  },
+
+  async signIn(email, password) {
+    if (!FB_ENABLED) return null;
+    const cred = await fbAuth.signInWithEmailAndPassword(email, password);
+    fbUser = cred.user;
+    return fbUser;
+  },
+
+  async register(email, password, displayName) {
+    if (!FB_ENABLED) return null;
+    const cred = await fbAuth.createUserWithEmailAndPassword(email, password);
+    fbUser = cred.user;
+    await fbUser.updateProfile({displayName});
+    await db.collection('users').doc(fbUser.uid).set({
+      displayName, email, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await db.collection('wallets').doc(fbUser.uid).set({
+      coins: 5000, diamonds: 0, totalDiamondsEarned: 0, tipsReceived: 0, tipsSent: 0
+    });
+    return fbUser;
+  },
+
+  async signInWithGoogle() {
+    if (!FB_ENABLED) return null;
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const cred = await fbAuth.signInWithPopup(provider);
+    fbUser = cred.user;
+    const walletDoc = await db.collection('wallets').doc(fbUser.uid).get();
+    if (!walletDoc.exists) {
+      await db.collection('wallets').doc(fbUser.uid).set({
+        coins: 5000, diamonds: 0, totalDiamondsEarned: 0, tipsReceived: 0, tipsSent: 0
+      });
+    }
+    return fbUser;
+  },
+
+  listenToWallet(userId, callback) {
+    if (!FB_ENABLED) return () => {};
+    return db.collection('wallets').doc(userId).onSnapshot(doc => {
+      if (doc.exists) callback(doc.data());
+    });
+  }
+};
 const S = {
   user: null, page: 'login', viewProfile: null, viewStory: null, storyIdx: 0,
   activeConv: null, profileTab: 'posts', exploreTab: 'trending', notifTab: 'all',
@@ -2767,16 +2924,28 @@ setInterval(simulateOnlineStatus, 10000);
 
 // ===== EVENTS =====
 function attachEvents() {
-  document.getElementById('loginForm')?.addEventListener('submit', e => {
+  document.getElementById('loginForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     const em=document.getElementById('loginEmail').value, pw=document.getElementById('loginPass').value;
+    if (FB_ENABLED) {
+      try {
+        await DB.signIn(em, pw);
+        const wallet = await DB.loadWallet(fbUser.uid);
+        if (wallet) { S.coins=wallet.coins; S.diamonds=wallet.diamonds; S.totalDiamondsEarned=wallet.totalDiamondsEarned; S.tipsReceived=wallet.tipsReceived; S.tipsSent=wallet.tipsSent; }
+        DB.listenToWallet(fbUser.uid, w => { S.coins=w.coins; S.diamonds=w.diamonds; S.totalDiamondsEarned=w.totalDiamondsEarned; });
+      } catch(err) { const errEl=document.getElementById('authError'); errEl.textContent=err.message; errEl.classList.remove('hidden'); return; }
+    }
     const u = users.find(x=>x.email===em&&x.pw===pw);
     if (u) { S.user=u; S.page='feed'; setTimeout(()=>{S.showInstallPrompt=true;render();},3000); render(); }
     else { const err=document.getElementById('authError'); err.textContent='Invalid credentials. Try john@example.com / 123456'; err.classList.remove('hidden'); }
   });
-  document.getElementById('registerForm')?.addEventListener('submit', e => {
+  document.getElementById('registerForm')?.addEventListener('submit', async e => {
     e.preventDefault();
-    const nu = { id:String(users.length+1), fullName:document.getElementById('regName').value, username:document.getElementById('regUser').value, email:document.getElementById('regEmail').value, pw:document.getElementById('regPass').value, avatar:`https://i.pravatar.cc/150?img=${users.length+10}`, bio:'',location:'',website:'',followers:[],following:[],verified:false,online:true,private:false };
+    const name=document.getElementById('regName').value, uname=document.getElementById('regUser').value, email=document.getElementById('regEmail').value, pw=document.getElementById('regPass').value;
+    if (FB_ENABLED) {
+      try { await DB.register(email, pw, name); } catch(err) { toast(err.message, 'fa-exclamation'); return; }
+    }
+    const nu = { id:String(users.length+1), fullName:name, username:uname, email:email, pw:pw, avatar:`https://i.pravatar.cc/150?img=${users.length+10}`, bio:'',location:'',website:'',followers:[],following:[],verified:false,online:true,private:false };
     users.push(nu); S.user=nu; S.page='feed'; render();
   });
   ['photoDropZone','videoDropZone'].forEach(id => {
@@ -3580,6 +3749,10 @@ function sendGift(cost, giftId, name) {
   const now = new Date().toLocaleTimeString();
   S.giftHistory.unshift({type:'sent', gift: name, amount: cost, diamonds: 0, time: now, to: 'Creator'});
   S.giftHistory.unshift({type:'received', gift: name, amount: cost, diamonds: diamondsEarned, time: now, from: S.user.fullName});
+  if (FB_ENABLED) {
+    DB.recordGift(S.user.id || 'self', 'creator', giftId, name, cost, diamondsEarned);
+    DB.saveWallet(S.user.id || 'self', {coins: S.coins, diamonds: S.diamonds, totalDiamondsEarned: S.totalDiamondsEarned});
+  }
   playGiftAnimation(gift, name, S.user);
   if (isLive) addLiveGiftToQueue(gift, name, S.user);
   S.showTips = null;
@@ -3719,6 +3892,10 @@ function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAm
 function rechargeCoins(pack) {
   S.coins += pack.coins;
   S.rechargeHistory.unshift({amount: pack.coins, price: pack.price, time: new Date().toLocaleString()});
+  if (FB_ENABLED) {
+    DB.recordRecharge(S.user.id || 'self', pack.coins, pack.price);
+    DB.saveWallet(S.user.id || 'self', {coins: S.coins, diamonds: S.diamonds, totalDiamondsEarned: S.totalDiamondsEarned});
+  }
   toast('Recharged Nu. ' + pack.coins.toLocaleString() + '! 💰', 'fa-coins');
   render();
 }
@@ -3731,6 +3908,10 @@ function withdrawDiamonds() {
   S.diamonds -= amt;
   S.pendingWithdraw += nuAmount;
   S.withdrawHistory.unshift({diamonds: amt, amount: nuAmount, status: 'pending', time: new Date().toLocaleString()});
+  if (FB_ENABLED) {
+    DB.submitWithdrawal(S.user.id || 'self', amt, nuAmount);
+    DB.saveWallet(S.user.id || 'self', {coins: S.coins, diamonds: S.diamonds, totalDiamondsEarned: S.totalDiamondsEarned});
+  }
   toast('Withdrawal of Nu. ' + nuAmount + ' submitted! Processing in 3-5 days 🏦', 'fa-check-circle');
   render();
 }
@@ -5609,6 +5790,19 @@ function renderQRArtModal() {
 // === FEATURE: OAuth Login ===
 function oauthLogin(provider) {
   const names = {google:'Google',facebook:'Facebook',apple:'Apple'};
+  if (FB_ENABLED && provider === 'google') {
+    toast(`Connecting to ${names[provider]}...`,'fa-plug');
+    DB.signInWithGoogle().then(u => {
+      if (u) {
+        S.user = {id: u.uid, fullName: u.displayName || 'User', avatar: u.photoURL || '', email: u.email};
+        S.loggedIn = true; S.page = 'feed';
+        DB.loadWallet(u.uid).then(w => { if(w){S.coins=w.coins||0;S.diamonds=w.diamonds||0;S.totalDiamondsEarned=w.totalDiamondsEarned||0;} render(); });
+        toast(`Signed in with Google! 🎉`,'fa-check-circle');
+        render();
+      }
+    }).catch(() => toast('Google sign-in failed','fa-exclamation-triangle'));
+    return;
+  }
   toast(`Connecting to ${names[provider]}...`,'fa-plug');
   setTimeout(()=>{
     S.user = users[0]; S.page = 'feed'; S.loggedIn = true;
