@@ -1396,6 +1396,43 @@
     .dark .group-msg-bubble { background: #21262d; }
     .dark .group-chat-input input { background: #0d1117; border-color: #30363D; color: #e6edf3; }
 
+    /* Wallet & Economy */
+    .wallet-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+    .wallet-content { background: white; border-radius: 20px; width: 460px; max-width: 95vw; max-height: 85vh; overflow-y: auto; }
+    .wallet-header { background: linear-gradient(135deg, #C41E3A, #E8751A, #D4A017); padding: 24px; border-radius: 20px 20px 0 0; color: white; text-align: center; position: relative; }
+    .wallet-header .wallet-close { position: absolute; top: 12px; right: 16px; background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; }
+    .wallet-balance-row { display: flex; justify-content: center; gap: 32px; margin-top: 16px; }
+    .wallet-bal { text-align: center; }
+    .wallet-bal .bal-label { font-size: 12px; opacity: 0.85; }
+    .wallet-bal .bal-value { font-size: 28px; font-weight: 800; }
+    .wallet-bal .bal-icon { font-size: 16px; margin-right: 4px; }
+    .wallet-tabs { display: flex; border-bottom: 2px solid #f0f2f5; padding: 0 16px; }
+    .wallet-tab { flex: 1; text-align: center; padding: 12px; font-size: 13px; font-weight: 600; color: #65676b; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .wallet-tab.active { color: #C41E3A; border-bottom-color: #C41E3A; }
+    .wallet-body { padding: 16px; }
+    .recharge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+    .recharge-item { border: 2px solid #e4e6eb; border-radius: 12px; padding: 14px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .recharge-item:hover { border-color: #C41E3A; background: rgba(196,30,58,0.04); }
+    .recharge-item .coin-amt { font-size: 20px; font-weight: 800; color: #D4A017; }
+    .recharge-item .coin-price { font-size: 13px; color: #65676b; margin-top: 4px; }
+    .recharge-item .coin-bonus { font-size: 11px; color: #C41E3A; font-weight: 600; margin-top: 2px; }
+    .withdraw-card { background: linear-gradient(135deg, #f8f9fa, #fff); border: 1.5px solid #e4e6eb; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f2f5; }
+    .history-item:last-child { border: none; }
+    .history-item .hi-left { display: flex; align-items: center; gap: 10px; }
+    .history-item .hi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .history-item .hi-name { font-size: 13px; font-weight: 600; }
+    .history-item .hi-time { font-size: 11px; color: #65676b; }
+    .history-item .hi-amount { font-weight: 700; font-size: 14px; }
+    .hi-amount.income { color: #27ae60; }
+    .hi-amount.expense { color: #e74c3c; }
+    .dark .wallet-content { background: #161B22; }
+    .dark .wallet-tab { color: #8b949e; }
+    .dark .wallet-tab.active { color: #C41E3A; }
+    .dark .recharge-item { border-color: #30363D; background: #0d1117; }
+    .dark .withdraw-card { background: #0d1117; border-color: #30363D; }
+    .dark .history-item { border-color: #21262d; }
+
     /* Gift Animation - TikTok/Live Style */
     .gift-anim-container { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
     .gift-anim-overlay { position: fixed; inset: 0; z-index: 9998; pointer-events: none; background: radial-gradient(circle at 50% 60%, rgba(255,215,0,0.15), transparent 70%); animation: overlayPulse 1s ease-in-out 3; }
@@ -1725,6 +1762,12 @@ const S = {
   reelsIdx: 0, showAIChat: false, aiMessages: [],
   showLive: false, liveComments: [], liveViewers: 1243,
   showTips: null, coins: 5000, tipsReceived: 0, tipsSent: 0,
+  // Wallet & Economy (TikTok-style)
+  showWallet: false, walletTab: 'balance',
+  diamonds: 0, totalDiamondsEarned: 0, pendingWithdraw: 0,
+  giftHistory: [], earningsHistory: [],
+  withdrawHistory: [],
+  rechargeHistory: [],
   dashboardTab: 'overview',
   showVerifyModal: false,
   communityTab: 'discover', activeCommunity: null,
@@ -1927,6 +1970,7 @@ function render() {
     if (S.showBadges) modals += renderBadgesModal();
     if (S.showLevelUp) modals += renderLevelUp();
     if (S.showTips) modals += renderTipsModal();
+    if (S.showWallet) modals += renderWalletModal();
     if (S.showVerifyModal) modals += renderVerifyModal();
     if (S.showAudioRoom) modals += renderAudioRoom();
     if (S.showGifSearch) modals += renderGifSearch();
@@ -2060,6 +2104,7 @@ function renderNav() {
       <a onclick="closeDrop();S.showPostCalendar=true;render()"><i class="fas fa-calendar-alt" style="color:#3498db"></i> Post Calendar</a>
       <a onclick="closeDrop();S.showBookshelf=true;render()"><i class="fas fa-book" style="color:#8B4513"></i> Bookshelf</a>
       <a onclick="closeDrop();S.showQRArt=true;render()"><i class="fas fa-qrcode" style="color:#C41E3A"></i> QR Profile</a>
+      <a onclick="closeDrop();S.showWallet=true;render()"><i class="fas fa-wallet" style="color:#D4A017"></i> Wallet <span style="font-size:11px;color:#D4A017;font-weight:600">${S.diamonds} 💎</span></a>
       <a onclick="closeDrop();go('settings')"><i class="fas fa-cog"></i> Settings</a>
       <a onclick="closeDrop();toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
       <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
@@ -2135,6 +2180,7 @@ function renderSidebar() {
     <div class="sidebar-item" onclick="S.showLeaderboard=true;render()"><i class="fas fa-trophy"></i> Leaderboard</div>
     <div class="sidebar-item" onclick="S.showFriendSuggestions=true;render()"><i class="fas fa-user-plus"></i> Friend Suggestions</div>
     <div class="sidebar-item" onclick="S.showBroadcast=true;render()"><i class="fas fa-bullhorn"></i> Broadcast</div>
+    <div class="sidebar-item" onclick="S.showWallet=true;render()"><i class="fas fa-wallet" style="color:#D4A017"></i> Wallet <span style="font-size:11px;color:#D4A017;font-weight:700;margin-left:4px">${S.diamonds} 💎</span></div>
     <div class="sidebar-item ${S.page==='settings'?'active':''}" onclick="go('settings')"><i class="fas fa-cog"></i> Settings</div>
     <div style="padding:10px 14px;margin-top:8px;border-top:1px solid #f0f2f5">
       <div class="streak-indicator"><i class="fas fa-fire"></i> ${S.streakDays} day streak</div>
@@ -2765,6 +2811,7 @@ document.addEventListener('keydown', e => {
     if(S.showLeaderboard){S.showLeaderboard=false;render();}
     if(S.showBadges){S.showBadges=false;render();}
     if(S.showTips){S.showTips=null;render();}
+    if(S.showWallet){S.showWallet=false;render();}
     if(S.showVerifyModal){S.showVerifyModal=false;render();}
     if(S.showAudioRoom){S.showAudioRoom=false;render();}
     if(S.showGifSearch){S.showGifSearch=false;render();}
@@ -3518,11 +3565,21 @@ function renderTipsModal() {
 S._giftCombo = {};
 S._liveGiftQueue = [];
 function sendGift(cost, giftId, name) {
-  if (S.coins < cost) return toast('Not enough Nu.! Top up your balance','fa-exclamation-triangle');
+  if (S.coins < cost) return toast('Not enough Nu.! Top up your balance. Open Wallet to recharge.','fa-exclamation-triangle');
   S.coins -= cost;
+  S.tipsSent += cost;
   gainXP(cost / 2);
   const gift = giftItems.find(g => g.id === giftId) || giftItems[0];
   const isLive = S.page === 'live' || S.showTips === 'live';
+  // Creator earns diamonds (50% of gift value, like TikTok)
+  const diamondsEarned = Math.floor(cost * 0.5);
+  S.diamonds += diamondsEarned;
+  S.totalDiamondsEarned += diamondsEarned;
+  S.tipsReceived += cost;
+  // Track in history
+  const now = new Date().toLocaleTimeString();
+  S.giftHistory.unshift({type:'sent', gift: name, amount: cost, diamonds: 0, time: now, to: 'Creator'});
+  S.giftHistory.unshift({type:'received', gift: name, amount: cost, diamonds: diamondsEarned, time: now, from: S.user.fullName});
   playGiftAnimation(gift, name, S.user);
   if (isLive) addLiveGiftToQueue(gift, name, S.user);
   S.showTips = null;
@@ -3649,7 +3706,163 @@ go = function(page) {
   if (page === 'live') startLiveGiftSimulation();
   else stopLiveGiftSimulation();
 };
-function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
+function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);
+  const diamonds=Math.floor(amt*0.5);S.diamonds+=diamonds;S.totalDiamondsEarned+=diamonds;
+  S.giftHistory.push({type:'tip_sent',amount:amt,diamonds:0,time:new Date().toLocaleTimeString(),user:'Custom Tip'});
+  toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
+
+// ===== WALLET & ECONOMY (TikTok Model) =====
+// Flow: Real Money → Nu. (coins) → Gifts → Diamonds (creator) → Withdraw
+// Exchange rates: Nu. 1 = 1 coin, Gift cost → 50% becomes Diamonds for creator
+// Diamonds → Nu. withdrawal at 1 Diamond = Nu. 0.5
+
+function rechargeCoins(pack) {
+  S.coins += pack.coins;
+  S.rechargeHistory.unshift({amount: pack.coins, price: pack.price, time: new Date().toLocaleString()});
+  toast('Recharged Nu. ' + pack.coins.toLocaleString() + '! 💰', 'fa-coins');
+  render();
+}
+
+function withdrawDiamonds() {
+  const amt = parseInt(document.getElementById('withdrawAmt')?.value);
+  if (!amt || amt < 100) return toast('Minimum withdrawal is 100 diamonds', 'fa-exclamation');
+  if (amt > S.diamonds) return toast('Not enough diamonds! You have ' + S.diamonds, 'fa-exclamation-triangle');
+  const nuAmount = Math.floor(amt * 0.5);
+  S.diamonds -= amt;
+  S.pendingWithdraw += nuAmount;
+  S.withdrawHistory.unshift({diamonds: amt, amount: nuAmount, status: 'pending', time: new Date().toLocaleString()});
+  toast('Withdrawal of Nu. ' + nuAmount + ' submitted! Processing in 3-5 days 🏦', 'fa-check-circle');
+  render();
+}
+
+function renderWalletModal() {
+  if (!S.showWallet) return '';
+  const rechargePacks = [
+    {coins: 100, price: 'Nu. 80', bonus: ''},
+    {coins: 500, price: 'Nu. 380', bonus: '+20 bonus'},
+    {coins: 1000, price: 'Nu. 720', bonus: '+80 bonus'},
+    {coins: 5000, price: 'Nu. 3,400', bonus: '+600 bonus'},
+    {coins: 10000, price: 'Nu. 6,500', bonus: '+1,500 bonus'},
+    {coins: 50000, price: 'Nu. 30,000', bonus: '+10,000 bonus'}
+  ];
+  const diamondRate = 0.5;
+  const withdrawableNu = Math.floor(S.diamonds * diamondRate);
+  const t = S.walletTab;
+  return `<div class="wallet-modal" onclick="if(event.target===this){S.showWallet=false;render()}">
+    <div class="wallet-content">
+      <div class="wallet-header">
+        <button class="wallet-close" onclick="S.showWallet=false;render()">✕</button>
+        <h3 style="font-size:18px;margin-bottom:4px"><i class="fas fa-wallet"></i> JOMO Wallet</h3>
+        <div class="wallet-balance-row">
+          <div class="wallet-bal"><div class="bal-label"><i class="fas fa-coins bal-icon"></i>Nu. Balance</div><div class="bal-value">Nu. ${S.coins.toLocaleString()}</div></div>
+          <div class="wallet-bal"><div class="bal-label"><i class="fas fa-gem bal-icon" style="color:#00D4FF"></i>Diamonds</div><div class="bal-value" style="color:#00D4FF">${S.diamonds.toLocaleString()}</div></div>
+        </div>
+        <div style="font-size:11px;opacity:0.8;margin-top:8px">Total earned: ${S.totalDiamondsEarned.toLocaleString()} 💎 | Gifts received: ${S.giftHistory.filter(g=>g.type==='received').length}</div>
+      </div>
+      <div class="wallet-tabs">
+        <div class="wallet-tab ${t==='balance'?'active':''}" onclick="S.walletTab='balance';render()">Recharge</div>
+        <div class="wallet-tab ${t==='diamonds'?'active':''}" onclick="S.walletTab='diamonds';render()">Diamonds</div>
+        <div class="wallet-tab ${t==='withdraw'?'active':''}" onclick="S.walletTab='withdraw';render()">Withdraw</div>
+        <div class="wallet-tab ${t==='history'?'active':''}" onclick="S.walletTab='history';render()">History</div>
+      </div>
+      <div class="wallet-body">
+        ${t==='balance'?`
+          <div style="margin-bottom:12px">
+            <h4 style="font-size:15px;margin-bottom:4px">Buy Nu. Coins</h4>
+            <p style="font-size:12px;color:#65676b">Use coins to send gifts to creators during live streams</p>
+          </div>
+          <div class="recharge-grid">
+            ${rechargePacks.map(p=>`<div class="recharge-item" onclick="rechargeCoins({coins:${p.coins},price:'${p.price}'})">
+              <div class="coin-amt"><i class="fas fa-coins" style="color:#D4A017;font-size:14px"></i> ${p.coins.toLocaleString()}</div>
+              <div class="coin-price">${p.price}</div>
+              ${p.bonus?`<div class="coin-bonus">${p.bonus}</div>`:''}
+            </div>`).join('')}
+          </div>
+          <div style="background:#f8f9fa;border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:#65676b">
+            <i class="fas fa-info-circle" style="color:#C41E3A"></i> <strong>How it works:</strong><br>
+            1. Buy Nu. coins with real money<br>
+            2. Send gifts to creators during live streams<br>
+            3. Creators receive Diamonds (50% of gift value)<br>
+            4. Creators can withdraw Diamonds as real money
+          </div>
+        `:''}
+        ${t==='diamonds'?`
+          <div class="withdraw-card" style="text-align:center">
+            <div style="font-size:48px;margin-bottom:8px">💎</div>
+            <div style="font-size:32px;font-weight:800;color:#00D4FF">${S.diamonds.toLocaleString()}</div>
+            <div style="font-size:13px;color:#65676b">Diamonds Earned</div>
+            <div style="margin-top:12px;font-size:14px;font-weight:600">Withdrawable: <span style="color:#27ae60">Nu. ${withdrawableNu.toLocaleString()}</span></div>
+            <div style="font-size:11px;color:#65676b;margin-top:4px">1 Diamond = Nu. ${diamondRate} | Min. withdrawal: 100 💎</div>
+          </div>
+          <h4 style="font-size:14px;margin:16px 0 8px">How You Earn Diamonds</h4>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            ${[{icon:'fa-gift',color:'#C41E3A',title:'Receive Gifts',desc:'When viewers send you gifts during live, 50% converts to diamonds'},{icon:'fa-hand-holding-heart',color:'#E8751A',title:'Receive Tips',desc:'Tips on your posts and profile convert to diamonds'},{icon:'fa-fire',color:'#D4A017',title:'Weekly Bonus',desc:'Top creators earn bonus diamonds based on engagement'}].map(i=>`
+              <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:#f8f9fa;border-radius:10px">
+                <i class="fas ${i.icon}" style="color:${i.color};font-size:18px;margin-top:2px"></i>
+                <div><div style="font-size:13px;font-weight:600">${i.title}</div><div style="font-size:11px;color:#65676b">${i.desc}</div></div>
+              </div>`).join('')}
+          </div>
+        `:''}
+        ${t==='withdraw'?`
+          <div class="withdraw-card">
+            <h4 style="font-size:15px;margin-bottom:12px"><i class="fas fa-university" style="color:#C41E3A"></i> Withdraw to Bank</h4>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f2f5">
+              <span style="font-size:13px;color:#65676b">Available Diamonds</span>
+              <span style="font-weight:700;color:#00D4FF">${S.diamonds.toLocaleString()} 💎</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f2f5">
+              <span style="font-size:13px;color:#65676b">Exchange Rate</span>
+              <span style="font-weight:600">1 💎 = Nu. ${diamondRate}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0">
+              <span style="font-size:13px;color:#65676b">Max Withdrawal</span>
+              <span style="font-weight:700;color:#27ae60">Nu. ${withdrawableNu.toLocaleString()}</span>
+            </div>
+            <div style="margin-top:12px">
+              <label style="font-size:12px;font-weight:600;color:#65676b">Diamonds to withdraw</label>
+              <div style="display:flex;gap:8px;margin-top:4px">
+                <input id="withdrawAmt" type="number" min="100" max="${S.diamonds}" placeholder="Min 100" style="flex:1;padding:10px 14px;border:1.5px solid #dadce0;border-radius:10px;font-size:14px">
+                <button onclick="document.getElementById('withdrawAmt').value=${S.diamonds}" style="padding:8px 14px;background:#f0f2f5;border:1px solid #dadce0;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer">All</button>
+              </div>
+              <div id="withdrawPreview" style="font-size:12px;color:#65676b;margin-top:4px"></div>
+            </div>
+            <div style="margin-top:12px">
+              <label style="font-size:12px;font-weight:600;color:#65676b">Bank Account (Bhutan)</label>
+              <input placeholder="Account number" style="width:100%;padding:10px;border:1.5px solid #dadce0;border-radius:10px;font-size:14px;margin-top:4px">
+              <select style="width:100%;padding:10px;border:1.5px solid #dadce0;border-radius:10px;font-size:14px;margin-top:6px;color:#65676b">
+                <option>Bank of Bhutan</option>
+                <option>Bhutan National Bank</option>
+                <option>Bhutan Development Bank</option>
+                <option>T Bank</option>
+                <option>Druk PNB</option>
+              </select>
+            </div>
+            <button onclick="withdrawDiamonds()" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer"><i class="fas fa-money-bill-wave"></i> Withdraw</button>
+          </div>
+          ${S.withdrawHistory.length?`
+            <h4 style="font-size:14px;margin:16px 0 8px">Withdrawal History</h4>
+            ${S.withdrawHistory.map(w=>`<div class="history-item">
+              <div class="hi-left"><div class="hi-icon" style="background:rgba(39,174,96,0.1);color:#27ae60"><i class="fas fa-arrow-down"></i></div><div><div class="hi-name">Withdraw ${w.diamonds} 💎</div><div class="hi-time">${w.time}</div></div></div>
+              <div><div class="hi-amount income">Nu. ${w.amount}</div><div style="font-size:10px;color:${w.status==='pending'?'#e67e22':'#27ae60'};font-weight:600">${w.status==='pending'?'⏳ Pending':'✅ Completed'}</div></div>
+            </div>`).join('')}
+          `:''}
+        `:''}
+        ${t==='history'?`
+          <h4 style="font-size:14px;margin-bottom:8px">Transaction History</h4>
+          ${S.giftHistory.length===0&&S.rechargeHistory.length===0?'<p style="text-align:center;padding:30px;color:#65676b;font-size:13px">No transactions yet. Send or receive gifts to see history here.</p>':''}
+          ${S.rechargeHistory.map(r=>`<div class="history-item">
+            <div class="hi-left"><div class="hi-icon" style="background:rgba(212,160,23,0.1);color:#D4A017"><i class="fas fa-plus"></i></div><div><div class="hi-name">Recharged</div><div class="hi-time">${r.time}</div></div></div>
+            <div class="hi-amount income">+Nu. ${r.amount.toLocaleString()}</div>
+          </div>`).join('')}
+          ${S.giftHistory.map(g=>`<div class="history-item">
+            <div class="hi-left"><div class="hi-icon" style="background:${g.type==='received'?'rgba(0,212,255,0.1)':'rgba(196,30,58,0.1)'};color:${g.type==='received'?'#00D4FF':'#C41E3A'}"><i class="fas ${g.type==='received'?'fa-gem':'fa-gift'}"></i></div><div><div class="hi-name">${g.type==='received'?'Received '+g.gift:'Sent '+g.gift}</div><div class="hi-time">${g.from?'from '+g.from:g.to?'to '+g.to:''} · ${g.time}</div></div></div>
+            <div><div class="hi-amount ${g.type==='received'?'income':'expense'}">${g.type==='received'?'+'+g.diamonds+' 💎':'-Nu. '+g.amount}</div></div>
+          </div>`).join('')}
+        `:''}
+      </div>
+    </div>
+  </div>`;
+}
 
 // ===== VERIFICATION =====
 function renderVerifyModal(){
@@ -4172,11 +4385,11 @@ function renderAffiliateModal() {
     <h3><i class="fas fa-link" style="color:#27ae60;margin-right:8px"></i> Affiliate Links</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Earn commission when followers buy through your links.</p>
     ${links.map(l=>`<div style="padding:12px;border:1px solid #e4e6eb;border-radius:12px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:14px">${l.name}</strong><span style="color:#27ae60;font-weight:700;font-size:14px">$${l.earnings.toFixed(2)}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-size:14px">${l.name}</strong><span style="color:#27ae60;font-weight:700;font-size:14px">Nu. ${l.earnings.toFixed(2)}</span></div>
       <p style="font-size:11px;color:#65676b;margin-top:4px">${l.url} · ${l.clicks} clicks</p>
     </div>`).join('')}
     <div style="border-top:1px solid #e4e6eb;padding-top:12px;margin-top:8px">
-      <strong style="font-size:13px">Total Earnings: <span style="color:#27ae60">$${links.reduce((s,l)=>s+l.earnings,0).toFixed(2)}</span></strong>
+      <strong style="font-size:13px">Total Earnings: <span style="color:#27ae60">Nu. ${links.reduce((s,l)=>s+l.earnings,0).toFixed(2)}</span></strong>
     </div>
     <input placeholder="Paste product URL to create affiliate link..." style="width:100%;padding:10px;border:2px solid #e4e6eb;border-radius:10px;margin-top:12px;font-size:13px">
     <button class="btn-primary" style="margin-top:8px" onclick="toast('Affiliate link created!','fa-link');S.showAffiliate=false;render()">Create Affiliate Link</button>
