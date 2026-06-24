@@ -1122,6 +1122,68 @@
     .dark .sticker-item:hover { background: #21262D; }
     .dark .mood-filter-btn { background: #161B22; border-color: #30363D; color: #c9d1d9; }
     .dark .music-share-card { background: linear-gradient(135deg, #0D1117, #1A0D1F); }
+
+    /* Shared Playlists */
+    .playlist-card { background: linear-gradient(135deg, #1C1C1E, #2A1A2E); border-radius: 16px; padding: 18px; color: white; margin-bottom: 12px; }
+    .playlist-song { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 13px; }
+    .playlist-song:last-child { border-bottom: none; }
+
+    /* Post Remix */
+    .remix-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(155,89,182,0.1); color: #9b59b6; }
+
+    /* Fortune Cookie */
+    .fortune-card { text-align: center; padding: 40px 30px; }
+    .fortune-cookie { font-size: 80px; cursor: pointer; transition: all 0.5s; display: inline-block; }
+    .fortune-cookie:hover { transform: rotate(15deg) scale(1.1); }
+    .fortune-cookie.cracked { animation: crackCookie 0.5s ease forwards; }
+    @keyframes crackCookie { 0%{transform:scale(1)} 50%{transform:scale(1.2) rotate(20deg)} 100%{transform:scale(0.8) rotate(-10deg);opacity:0.5} }
+    .fortune-text { font-size: 18px; font-weight: 600; color: #D4A017; margin-top: 20px; animation: fadeIn 1s ease; }
+    .fortune-wisdom { font-size: 13px; color: #65676b; margin-top: 8px; font-style: italic; }
+
+    /* Friend Map */
+    .friend-map { background: linear-gradient(135deg, #0D1117, #1a2332); border-radius: 16px; padding: 24px; position: relative; min-height: 350px; overflow: hidden; }
+    .map-dot { position: absolute; cursor: pointer; transition: all 0.3s; }
+    .map-dot img { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #C41E3A; }
+    .map-dot:hover { transform: scale(1.2); z-index: 10; }
+    .map-dot .map-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: white; white-space: nowrap; font-weight: 600; }
+    .map-line { position: absolute; height: 1px; background: rgba(196,30,58,0.3); transform-origin: left center; }
+
+    /* Confession Wall */
+    .confession-card { background: linear-gradient(135deg, rgba(28,28,30,0.95), rgba(45,26,46,0.95)); border-radius: 16px; padding: 20px; color: white; margin-bottom: 12px; position: relative; }
+    .confession-card::before { content: '"'; position: absolute; top: 8px; left: 14px; font-size: 48px; opacity: 0.1; font-family: Georgia; }
+
+    /* Vibe Check */
+    .vibe-bar { display: flex; gap: 12px; padding: 16px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; align-items: center; }
+    .vibe-option { text-align: center; cursor: pointer; flex: 1; padding: 12px 8px; border-radius: 12px; transition: all 0.2s; }
+    .vibe-option:hover { background: #FDE8EC; }
+    .vibe-option.selected { background: #FDE8EC; border: 2px solid #C41E3A; }
+    .vibe-emoji { font-size: 28px; display: block; margin-bottom: 4px; }
+    .vibe-pct { font-size: 12px; font-weight: 700; color: #C41E3A; }
+
+    /* Reaction Timeline */
+    .reaction-timeline { padding: 16px; }
+    .reaction-graph { display: flex; align-items: flex-end; gap: 4px; height: 100px; padding: 12px 0; }
+    .reaction-graph-bar { flex: 1; background: linear-gradient(to top, #C41E3A, #E8751A); border-radius: 4px 4px 0 0; transition: height 0.5s; min-height: 4px; }
+
+    /* Memory Lane */
+    .memory-card { background: linear-gradient(135deg, rgba(212,160,23,0.1), rgba(196,30,58,0.05)); border: 2px solid rgba(212,160,23,0.2); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .memory-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .memory-date { background: linear-gradient(135deg, #D4A017, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 16px; }
+
+    /* Focus Mode */
+    .focus-mode .post-stats, .focus-mode .post-analytics { display: none !important; }
+    .focus-mode .post-actions-bar .action-btn i + span, .focus-mode .nav-badge { display: none !important; }
+    .focus-indicator { position: fixed; top: 70px; right: 16px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 999; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(39,174,96,0.3); }
+
+    /* Visitor Log */
+    .visitor-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0f2f5; }
+    .visitor-item:last-child { border-bottom: none; }
+
+    .dark .confession-card { background: linear-gradient(135deg, rgba(13,17,23,0.95), rgba(26,13,31,0.95)); }
+    .dark .vibe-bar { background: #161B22; }
+    .dark .memory-card { background: linear-gradient(135deg, rgba(212,160,23,0.05), rgba(196,30,58,0.02)); border-color: rgba(212,160,23,0.15); }
+    .dark .playlist-card { background: linear-gradient(135deg, #0D1117, #1A0D1F); }
+    .dark .visitor-item { border-bottom-color: #30363D; }
     }
   </style>
 </head>
@@ -1222,7 +1284,22 @@ const S = {
   moodFilter: null,
   showTranslate: {},
   showStickerPicker: false,
-  storyReactionOverlay: null
+  storyReactionOverlay: null,
+  // Batch 6 features
+  showPlaylist: false, playlists: [{name:'Chill Vibes',songs:['Mountain Echo','Prayer Flags','Valley of Dreams'],likes:42},{name:'Workout Mix',songs:['Thunder Dragon','Himalayan Sunset'],likes:18}],
+  showRemix: null, remixText: '',
+  showFortune: false, fortuneRevealed: false,
+  showFriendMap: false,
+  showConfessions: false, confessions: [
+    {id:'cf1',text:'I pretend to understand code reviews but I just approve everything',likes:247,comments:34,time:'2h ago'},
+    {id:'cf2',text:'I use my company laptop for personal projects and feel zero guilt',likes:189,comments:22,time:'4h ago'},
+    {id:'cf3',text:'I have 5 unread books on my shelf but keep buying new ones',likes:312,comments:45,time:'6h ago'}
+  ],
+  showVibeCheck: false, vibeVoted: false, vibeChoice: null,
+  showReactionTimeline: null,
+  showMemoryLane: false,
+  focusMode: false,
+  showVisitorLog: false
 };
 
 const users = [
@@ -1355,10 +1432,19 @@ function render() {
     if (S.showAchievements) modals += renderAchievementsModal();
     if (S.showBetting) modals += renderBettingModal();
     if (S.showStickerPicker) modals += renderStickerPicker();
+    if (S.showPlaylist) modals += renderPlaylistModal();
+    if (S.showRemix) modals += renderRemixModal();
+    if (S.showFortune) modals += renderFortuneModal();
+    if (S.showFriendMap) modals += renderFriendMapModal();
+    if (S.showConfessions) modals += renderConfessionsModal();
+    if (S.showVibeCheck) modals += renderVibeCheckModal();
+    if (S.showReactionTimeline) modals += renderReactionTimelineModal();
+    if (S.showMemoryLane) modals += renderMemoryLaneModal();
+    if (S.showVisitorLog) modals += renderVisitorLogModal();
     if (S.isOffline) modals += '<div class="offline-banner"><i class="fas fa-wifi-slash"></i> You are offline. Some features may not work.</div>';
     const moodBar = S.showMoodPicker ? renderMoodPicker() : '';
     const karmaLvl = getKarmaLevel(S.karma);
-    app.innerHTML = renderNav() + moodBar + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
+    app.innerHTML = renderNav() + moodBar + `<div class="realtime-indicator"><span class="realtime-dot"></span> Live</div>` + (S.vanishMode?'<div class="vanish-indicator"><i class="fas fa-ghost"></i> Vanish Mode</div>':'') + (S.anonMode?'<div class="anon-indicator"><i class="fas fa-mask"></i> Anonymous Mode</div>':'') + (S.focusMode?'<div class="focus-indicator" onclick="S.focusMode=false;document.body.classList.remove(\'focus-mode\');render()"><i class="fas fa-eye-slash"></i> Focus Mode</div>':'') + renderPage() + renderAIChatBtn() + modals;
   }
   const ptEl2 = document.getElementById('postText');
   if (ptEl2 && S._postDraft) ptEl2.value = S._postDraft;
@@ -1423,6 +1509,10 @@ function renderNav() {
           <a onclick="S.showMiniGame=true;S.miniGameType=null;render()"><i class="fas fa-gamepad"></i> Mini Games</a>
           <a onclick="S.showChallengeFeed=true;render()"><i class="fas fa-trophy" style="color:#D4A017"></i> Challenges</a>
           <a onclick="S.showAchievements=true;render()"><i class="fas fa-medal" style="color:#D4A017"></i> Achievements</a>
+          <a onclick="S.showFortune=true;S.fortuneRevealed=false;render()"><i class="fas fa-cookie-bite" style="color:#D4A017"></i> Daily Fortune</a>
+          <a onclick="S.showConfessions=true;render()"><i class="fas fa-user-secret" style="color:#9b59b6"></i> Confessions</a>
+          <a onclick="S.showFriendMap=true;render()"><i class="fas fa-map-marked-alt" style="color:#27ae60"></i> Friend Map</a>
+          <a onclick="S.focusMode=!S.focusMode;if(S.focusMode)document.body.classList.add('focus-mode');else document.body.classList.remove('focus-mode');toast(S.focusMode?'Focus mode on — distractions hidden':'Focus mode off');render()"><i class="fas fa-${S.focusMode?'eye':'eye-slash'}"></i> ${S.focusMode?'Disable':'Enable'} Focus</a>
           <a onclick="go('settings')"><i class="fas fa-cog"></i> Settings</a>
           <a onclick="toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
           <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
@@ -1466,6 +1556,8 @@ function renderFeed() {
       <button class="mood-filter-btn ${S.moodFilter==='chill'?'active':''}" onclick="S.moodFilter='chill';render()">😌 Chill</button>
       <button class="mood-filter-btn ${S.moodFilter==='excited'?'active':''}" onclick="S.moodFilter='excited';render()">🎉 Excited</button>
     </div>
+    <div class="vibe-bar"><span style="font-weight:700;font-size:14px;white-space:nowrap"><i class="fas fa-bolt" style="color:#C41E3A"></i> Vibe Check</span>${[{e:'😊',l:'Great',p:42},{e:'😌',l:'Chill',p:28},{e:'🔥',l:'Fired Up',p:18},{e:'😴',l:'Tired',p:12}].map(v=>`<div class="vibe-option ${S.vibeChoice===v.l?'selected':''}" onclick="castVibe('${v.l}')"><span class="vibe-emoji">${v.e}</span><span style="font-size:11px;font-weight:600">${v.l}</span>${S.vibeVoted?`<span class="vibe-pct">${v.p+(S.vibeChoice===v.l?1:0)}%</span>`:''}</div>`).join('')}</div>
+    ${renderMemoryLaneWidget()}
     <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
     ${posts.map(p => renderPost(p)).join('')}
   </div><div class="sidebar-right">${renderRight()}</div></div>${S.viewStory ? renderStoryViewer() : ''}${S.showStoryCreate ? renderStoryCreate() : ''}${S.showShareModal ? renderShareModal() : ''}`;
@@ -1567,6 +1659,7 @@ function renderPost(p) {
       <button class="action-btn" onclick="toggleComments('${p.id}')" style="flex:1"><i class="fas fa-comment"></i> Comment</button>
       <button class="action-btn" onclick="openShareModal('${p.id}')" style="flex:1"><i class="fas fa-share"></i> Share</button>
       <button class="action-btn ${saved?'saved':''}" onclick="toggleSave('${p.id}')" style="flex:1"><i class="fas fa-bookmark"></i> ${saved?'Saved':'Save'}</button>
+      <button class="action-btn" onclick="S.showRemix='${p.id}';render()" style="flex:1"><i class="fas fa-recycle"></i> Remix</button>
       ${p.aid!==S.user.id?`<button class="action-btn" onclick="S.showTips='${p.id}';render()" style="flex:1"><i class="fas fa-gift"></i> Tip</button>`:''}
     </div>
     ${showComments?`<div class="comments-section">
@@ -1574,7 +1667,7 @@ function renderPost(p) {
       <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">${getSmartReplies().map(r=>`<button style="background:#FAF8F5;border:none;padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer" onclick="document.getElementById('ci-${p.id}').value='${r}';addComment('${p.id}')">${r}</button>`).join('')}</div>
       <div class="comment-form" style="position:relative"><img src="${S.user.avatar}" class="avatar-xs"><input placeholder="Write a comment..." id="ci-${p.id}" onkeydown="if(event.key==='Enter'){addComment('${p.id}');event.preventDefault()}"><button onclick="toggleEmojiPicker('ci-${p.id}')" style="font-size:16px">😊</button><button onclick="S.showGifSearch=true;render()" style="font-size:14px;background:none;color:#C41E3A;padding:4px">GIF</button><button onclick="addComment('${p.id}')">Post</button>${S.showEmojiPicker==='ci-'+p.id?renderEmojiPicker('ci-'+p.id):''}</div>
     </div>`:''}
-    ${p.aid===S.user.id?`<div class="post-analytics"><span><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)+200} views</span><span><i class="fas fa-chart-line"></i> ${Math.floor(Math.random()*500)+50} reach</span><span><i class="fas fa-percentage"></i> ${(Math.random()*15+2).toFixed(1)}% engagement</span></div>`:''}
+    ${p.aid===S.user.id?`<div class="post-analytics"><span><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)+200} views</span><span><i class="fas fa-chart-line"></i> ${Math.floor(Math.random()*500)+50} reach</span><span><i class="fas fa-percentage"></i> ${(Math.random()*15+2).toFixed(1)}% engagement</span><span onclick="S.showReactionTimeline='${p.id}';render()" style="cursor:pointer;color:#C41E3A"><i class="fas fa-chart-area"></i> Timeline</span></div>`:''}
   </div>`;
 }
 
@@ -1681,7 +1774,11 @@ function renderProfile() {
     ${own?`<div class="profile-extras">
       <div class="profile-extras-section"><h4><i class="fas fa-music"></i> Profile Music</h4>${renderProfileMusic()}</div>
       <div class="profile-extras-section"><h4><i class="fas fa-palette"></i> Theme</h4>${renderProfileThemePicker()}</div>
-      <div class="profile-extras-section" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="S.showProfileViewers=true;render()"><span style="font-size:13px;font-weight:600;color:#65676b"><i class="fas fa-eye" style="color:#C41E3A"></i> Profile Views</span><span style="font-size:14px;font-weight:700;color:#C41E3A">${Math.floor(Math.random()*50)+12} this week <i class="fas fa-chevron-right" style="font-size:10px"></i></span></div>
+      <div class="profile-extras-section"><h4><i class="fas fa-list-music"></i> Playlists</h4>
+        ${S.playlists.map((pl,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;${i<S.playlists.length-1?'border-bottom:1px solid rgba(0,0,0,0.06)':''}"><div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#C41E3A,#E8751A);display:flex;align-items:center;justify-content:center;color:white;font-size:16px"><i class="fas fa-music"></i></div><div style="flex:1"><div style="font-weight:600;font-size:13px">${pl.name}</div><div style="font-size:11px;color:#65676b">${pl.songs.length} songs</div></div><span style="font-size:12px;color:#65676b"><i class="fas fa-heart" style="color:#C41E3A"></i> ${pl.likes}</span></div>`).join('')}
+        <button style="width:100%;margin-top:8px;padding:8px;background:none;border:2px dashed #e4e6eb;border-radius:10px;color:#C41E3A;font-weight:600;font-size:13px;cursor:pointer" onclick="S.showPlaylist=true;render()"><i class="fas fa-plus"></i> Create Playlist</button>
+      </div>
+      <div class="profile-extras-section" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="S.showVisitorLog=true;render()"><span style="font-size:13px;font-weight:600;color:#65676b"><i class="fas fa-eye" style="color:#C41E3A"></i> Profile Visitors</span><span style="font-size:14px;font-weight:700;color:#C41E3A">${Math.floor(Math.random()*50)+12} this week <i class="fas fa-chevron-right" style="font-size:10px"></i></span></div>
     </div>`:''}
     <div class="profile-tabs">
       ${['posts','media','likes'].map(t => `<span class="profile-tab ${S.profileTab===t?'active':''}" onclick="S.profileTab='${t}';render()">${t[0].toUpperCase()+t.slice(1)}</span>`).join('')}
@@ -3851,6 +3948,230 @@ function sendSticker(emoji) {
   S.showStickerPicker = false;
   toast('Sticker sent!'); addKarma(2,'Sent sticker');
   render();
+}
+
+// === FEATURE: Shared Playlists ===
+function renderPlaylistModal() {
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showPlaylist=false;render()}">
+    <div class="modal-card" style="max-width:450px">
+      <div class="modal-header"><h3><i class="fas fa-music" style="color:#C41E3A"></i> Create Playlist</h3><button class="modal-close" onclick="S.showPlaylist=false;render()">✕</button></div>
+      <input placeholder="Playlist name..." id="playlistName" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box">
+      <p style="font-size:13px;color:#65676b;margin-bottom:12px">Add songs to your playlist:</p>
+      ${['Mountain Echo','Thunder Dragon','Prayer Flags','Himalayan Sunset','Valley of Dreams','Druk Gi Zhungdra'].map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='#f0f2f5'" onmouseout="this.style.background=''" onclick="this.querySelector('i').classList.toggle('fa-check-circle');this.querySelector('i').classList.toggle('fa-circle')"><i class="far fa-circle" style="color:#C41E3A;font-size:18px"></i><span style="font-size:14px">${s}</span></div>`).join('')}
+      <button style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:12px;font-weight:600;cursor:pointer" onclick="createPlaylist()">Create Playlist</button>
+    </div>
+  </div>`;
+}
+function createPlaylist() {
+  const name = document.getElementById('playlistName')?.value || 'My Playlist';
+  S.playlists.push({name, songs:['Mountain Echo','Thunder Dragon'], likes:0});
+  S.showPlaylist = false;
+  toast('Playlist created! 🎵'); addKarma(15,'Created playlist');
+  render();
+}
+
+// === FEATURE: Post Remixes ===
+function renderRemixModal() {
+  const p = posts.find(x=>x.id===S.showRemix);
+  if (!p) return '';
+  const a = U(p.aid);
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showRemix=null;render()}">
+    <div class="modal-card" style="max-width:500px">
+      <div class="modal-header"><h3><i class="fas fa-recycle" style="color:#9b59b6"></i> Remix Post</h3><button class="modal-close" onclick="S.showRemix=null;render()">✕</button></div>
+      <div style="background:#f8f9fa;border-radius:12px;padding:14px;margin-bottom:14px;border-left:4px solid #9b59b6">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><img src="${a.avatar}" style="width:24px;height:24px;border-radius:50%"><span style="font-weight:600;font-size:13px">${a.fullName}</span><span class="remix-badge"><i class="fas fa-recycle"></i> Original</span></div>
+        <p style="font-size:13px;color:#65676b">${p.text.substring(0,120)}${p.text.length>120?'...':''}</p>
+      </div>
+      <textarea id="remixText" placeholder="Add your twist, perspective, or mashup..." rows="4" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;resize:none;box-sizing:border-box"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button style="flex:1;padding:12px;background:linear-gradient(135deg,#9b59b6,#8e44ad);color:white;border:none;border-radius:12px;font-weight:600;cursor:pointer" onclick="publishRemix('${p.id}')"><i class="fas fa-recycle"></i> Publish Remix</button>
+      </div>
+    </div>
+  </div>`;
+}
+function publishRemix(pid) {
+  const text = document.getElementById('remixText')?.value;
+  if (!text) { toast('Add your remix twist!','fa-times'); return; }
+  const orig = posts.find(x=>x.id===pid);
+  posts.unshift({id:'p'+(++postIdCounter),aid:S.user.id,text:'🔄 Remix: '+text+'\n\n↩️ Original by '+U(orig.aid).fullName+': "'+orig.text.substring(0,80)+'..."',media:[],videos:[],likes:[],comments:[],shares:[],saves:[],time:'Just now',reaction:{},_remix:pid});
+  S.showRemix = null;
+  toast('Remix published! 🔄'); addKarma(20,'Published remix');
+  render();
+}
+
+// === FEATURE: Fortune Cookie / Daily Horoscope ===
+function renderFortuneModal() {
+  const wisdoms = [
+    {quote:'Happiness is not something ready made. It comes from your own actions.',source:'Dalai Lama'},
+    {quote:'The mind is everything. What you think you become.',source:'Buddha'},
+    {quote:'In the middle of difficulty lies opportunity.',source:'Bhutanese Proverb'},
+    {quote:'A disciplined mind brings happiness.',source:'Buddhist Teaching'},
+    {quote:'The secret of health for both mind and body is not to mourn for the past.',source:'Buddha'},
+    {quote:'Thousands of candles can be lit from a single candle.',source:'Buddhist Wisdom'},
+    {quote:'Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.',source:'Buddha'},
+    {quote:'Peace comes from within. Do not seek it without.',source:'Buddha'}
+  ];
+  const today = new Date().getDay();
+  const fortune = wisdoms[today % wisdoms.length];
+  const zodiac = ['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Sheep','Monkey','Rooster','Dog','Pig'][new Date().getMonth()];
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showFortune=false;render()}">
+    <div class="modal-card" style="max-width:420px">
+      <div class="fortune-card">
+        <h3 style="margin-bottom:20px;font-size:18px"><i class="fas fa-cookie-bite" style="color:#D4A017"></i> Daily Fortune</h3>
+        <div class="fortune-cookie ${S.fortuneRevealed?'cracked':''}" onclick="S.fortuneRevealed=true;addKarma(5,'Opened fortune');render()">🥠</div>
+        ${S.fortuneRevealed?`
+          <div class="fortune-text">"${fortune.quote}"</div>
+          <div class="fortune-wisdom">— ${fortune.source}</div>
+          <div style="margin-top:24px;padding:16px;background:rgba(212,160,23,0.08);border-radius:12px">
+            <p style="font-size:12px;color:#65676b;margin-bottom:4px">Your Bhutanese Zodiac</p>
+            <p style="font-size:20px;font-weight:700">🐲 Year of the ${zodiac}</p>
+            <p style="font-size:12px;color:#65676b;margin-top:6px">Lucky number: ${Math.floor(Math.random()*9)+1} · Lucky color: ${['Crimson','Gold','Saffron','Azure','Emerald'][today%5]}</p>
+          </div>
+          <button style="margin-top:16px;padding:10px 24px;background:linear-gradient(135deg,#D4A017,#FFD700);color:#1C1C1E;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="toast('Fortune shared! 🥠')"><i class="fas fa-share"></i> Share Fortune</button>
+        `:`<p style="color:#65676b;font-size:14px;margin-top:16px">Tap the cookie to reveal your daily wisdom</p>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+// === FEATURE: Friend Map ===
+function renderFriendMapModal() {
+  const friends = users.filter(u=>u.id!==S.user.id);
+  const positions = [{top:'25%',left:'15%'},{top:'35%',left:'65%'},{top:'55%',left:'40%'},{top:'20%',left:'80%'}];
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showFriendMap=false;render()}">
+    <div class="modal-card" style="max-width:700px">
+      <div class="modal-header"><h3><i class="fas fa-map-marked-alt" style="color:#27ae60"></i> Friend Map</h3><button class="modal-close" onclick="S.showFriendMap=false;render()">✕</button></div>
+      <div class="friend-map">
+        <div style="position:absolute;inset:0;opacity:0.1;background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 400%22><path d=%22M100,200 Q200,100 300,180 T500,160 T700,200%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22/><path d=%22M50,250 Q150,200 250,230 T450,220 T650,250%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221%22/></svg>') center/cover"></div>
+        ${friends.map((u,i)=>{const pos=positions[i%positions.length];return`<div class="map-dot" style="top:${pos.top};left:${pos.left}" onclick="toast('${u.fullName} is in ${u.location}')">
+          <img src="${u.avatar}">
+          <div class="map-label">${u.location||'Unknown'}</div>
+          ${u.online?'<div style="position:absolute;top:-2px;right:-2px;width:10px;height:10px;background:#27ae60;border-radius:50%;border:2px solid #0D1117"></div>':''}
+        </div>`}).join('')}
+        <div class="map-dot" style="top:45%;left:30%"><img src="${S.user.avatar}"><div class="map-label" style="color:#D4A017">You · ${S.user.location}</div></div>
+      </div>
+      <div style="display:flex;gap:16px;padding:16px 0;font-size:13px;color:#65676b;justify-content:center">
+        <span><span style="display:inline-block;width:8px;height:8px;background:#27ae60;border-radius:50;margin-right:4px"></span> Online</span>
+        <span><span style="display:inline-block;width:8px;height:8px;background:#65676b;border-radius:50%;margin-right:4px"></span> Offline</span>
+        <span>${friends.length} friends across ${new Set(friends.map(u=>u.location).filter(Boolean)).size} cities</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// === FEATURE: Confession Wall ===
+function renderConfessionsModal() {
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showConfessions=false;render()}">
+    <div class="modal-card" style="max-width:500px;max-height:85vh;overflow-y:auto">
+      <div class="modal-header"><h3><i class="fas fa-user-secret" style="color:#9b59b6"></i> Confession Wall</h3><button class="modal-close" onclick="S.showConfessions=false;render()">✕</button></div>
+      <div style="margin-bottom:16px"><textarea id="confessionText" placeholder="Share your confession anonymously..." rows="3" style="width:100%;padding:12px;border:2px solid #e4e6eb;border-radius:10px;font-size:14px;resize:none;box-sizing:border-box"></textarea>
+      <button style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,#9b59b6,#8e44ad);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="postConfession()"><i class="fas fa-mask"></i> Post Anonymously</button></div>
+      ${S.confessions.map(c=>`<div class="confession-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9b59b6,#8e44ad);display:flex;align-items:center;justify-content:center;color:white;font-size:14px"><i class="fas fa-mask"></i></div><span style="font-weight:600;font-size:13px">Anonymous</span><span style="font-size:11px;opacity:0.5;margin-left:auto">${c.time}</span></div>
+        <p style="font-size:14px;line-height:1.5;margin-bottom:12px">${c.text}</p>
+        <div style="display:flex;gap:16px;font-size:13px;opacity:0.7">
+          <span onclick="c.likes++;render()" style="cursor:pointer"><i class="fas fa-heart" style="color:#C41E3A"></i> ${c.likes}</span>
+          <span><i class="fas fa-comment"></i> ${c.comments}</span>
+          <span onclick="toast('Confession reported')" style="cursor:pointer;margin-left:auto"><i class="fas fa-flag"></i></span>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+function postConfession() {
+  const text = document.getElementById('confessionText')?.value;
+  if (!text?.trim()) { toast('Write something first!','fa-times'); return; }
+  S.confessions.unshift({id:'cf'+(S.confessions.length+1),text,likes:0,comments:0,time:'Just now'});
+  toast('Confession posted anonymously! 🎭'); addKarma(10,'Posted confession');
+  render();
+}
+
+// === FEATURE: Vibe Check ===
+function castVibe(choice) {
+  S.vibeChoice = choice;
+  S.vibeVoted = true;
+  toast('Vibe cast! You feel ' + choice + ' today'); addKarma(3,'Daily vibe check');
+  render();
+}
+function renderVibeCheckModal() { return ''; }
+
+// === FEATURE: Reaction Timeline ===
+function renderReactionTimelineModal() {
+  const hours = ['12am','3am','6am','9am','12pm','3pm','6pm','9pm'];
+  const data = hours.map(()=>Math.floor(Math.random()*80)+10);
+  const max = Math.max(...data);
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showReactionTimeline=null;render()}">
+    <div class="modal-card" style="max-width:500px">
+      <div class="modal-header"><h3><i class="fas fa-chart-area" style="color:#C41E3A"></i> Reaction Timeline</h3><button class="modal-close" onclick="S.showReactionTimeline=null;render()">✕</button></div>
+      <div class="reaction-timeline">
+        <p style="font-size:13px;color:#65676b;margin-bottom:12px">How reactions changed over the past 24 hours</p>
+        <div class="reaction-graph">${data.map((d,i)=>`<div style="flex:1;text-align:center"><div class="reaction-graph-bar" style="height:${(d/max)*80}px" title="${hours[i]}: ${d} reactions"></div><div style="font-size:10px;color:#65676b;margin-top:4px">${hours[i]}</div></div>`).join('')}</div>
+        <div style="display:flex;justify-content:space-around;margin-top:16px;padding:12px;background:#f8f9fa;border-radius:10px">
+          <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#C41E3A">${data.reduce((a,b)=>a+b,0)}</div><div style="font-size:11px;color:#65676b">Total</div></div>
+          <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#E8751A">${Math.max(...data)}</div><div style="font-size:11px;color:#65676b">Peak</div></div>
+          <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#D4A017">6pm</div><div style="font-size:11px;color:#65676b">Best Time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// === FEATURE: Memory Lane ===
+function renderMemoryLaneWidget() {
+  const memories = [
+    {text:'Started my coding journey today! Excited for what is ahead.',time:'1 year ago',likes:42,img:'https://picsum.photos/400/300?random=mem1'},
+    {text:'Just hit 100 followers! Thank you all for the support!',time:'6 months ago',likes:89,img:''}
+  ];
+  if (Math.random() > 0.5) return '';
+  const m = memories[0];
+  return `<div class="memory-card">
+    <div class="memory-header"><i class="fas fa-clock-rotate-left" style="color:#D4A017;font-size:20px"></i><div><span class="memory-date">On This Day</span><span style="display:block;font-size:12px;color:#65676b">${m.time}</span></div><button style="margin-left:auto;background:none;color:#C41E3A;font-size:12px;font-weight:600;cursor:pointer" onclick="S.showMemoryLane=true;render()">See All</button></div>
+    <p style="font-size:14px;margin-bottom:8px">${m.text}</p>
+    ${m.img?`<img src="${m.img}" style="width:100%;border-radius:10px;margin-top:8px">`:''}
+    <div style="display:flex;gap:12px;margin-top:10px;font-size:13px;color:#65676b"><span><i class="fas fa-heart" style="color:#C41E3A"></i> ${m.likes}</span><button style="background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-left:auto" onclick="toast('Memory shared! 🕰️')"><i class="fas fa-share"></i> Share Memory</button></div>
+  </div>`;
+}
+function renderMemoryLaneModal() {
+  const memories = [
+    {text:'Started my coding journey today! Excited for what is ahead.',time:'1 year ago',likes:42,img:'https://picsum.photos/400/300?random=mem1'},
+    {text:'Just hit 100 followers! Thank you all for the support!',time:'6 months ago',likes:89,img:'https://picsum.photos/400/300?random=mem2'},
+    {text:'My first viral post! Still can not believe it went trending.',time:'3 months ago',likes:234,img:'https://picsum.photos/400/300?random=mem3'},
+    {text:'Reached Gold Karma level! Hard work pays off.',time:'2 months ago',likes:156,img:''}
+  ];
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showMemoryLane=false;render()}">
+    <div class="modal-card" style="max-width:550px;max-height:85vh;overflow-y:auto">
+      <div class="modal-header"><h3><i class="fas fa-clock-rotate-left" style="color:#D4A017"></i> Memory Lane</h3><button class="modal-close" onclick="S.showMemoryLane=false;render()">✕</button></div>
+      ${memories.map(m=>`<div class="memory-card">
+        <div class="memory-header"><span class="memory-date">${m.time}</span></div>
+        <p style="font-size:14px;margin-bottom:8px">${m.text}</p>
+        ${m.img?`<img src="${m.img}" style="width:100%;border-radius:10px">`:''}
+        <div style="display:flex;gap:12px;margin-top:10px;font-size:13px;color:#65676b"><span><i class="fas fa-heart" style="color:#C41E3A"></i> ${m.likes}</span><button style="background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-left:auto" onclick="toast('Memory shared! 🕰️')"><i class="fas fa-share"></i> Share</button></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// === FEATURE: Profile Visitors Log ===
+function renderVisitorLogModal() {
+  const visitors = users.filter(u=>u.id!==S.user.id).map(u=>({...u, visitTime:['2 min ago','15 min ago','1 hour ago','3 hours ago','Yesterday'][Math.floor(Math.random()*5)], visits:Math.floor(Math.random()*10)+1}));
+  return `<div class="modal-overlay" onclick="if(event.target===this){S.showVisitorLog=false;render()}">
+    <div class="modal-card" style="max-width:450px">
+      <div class="modal-header"><h3><i class="fas fa-eye" style="color:#C41E3A"></i> Profile Visitors</h3><button class="modal-close" onclick="S.showVisitorLog=false;render()">✕</button></div>
+      <div style="text-align:center;padding:12px 0 16px;border-bottom:1px solid #f0f2f5;margin-bottom:12px">
+        <div style="font-size:32px;font-weight:800;color:#C41E3A">${Math.floor(Math.random()*50)+25}</div>
+        <div style="font-size:13px;color:#65676b">Profile views this week</div>
+        <div style="display:flex;justify-content:center;gap:24px;margin-top:12px">
+          <div><strong style="color:#27ae60">+${Math.floor(Math.random()*20)+5}%</strong><div style="font-size:11px;color:#65676b">vs last week</div></div>
+          <div><strong>${Math.floor(Math.random()*5)+1}</strong><div style="font-size:11px;color:#65676b">New followers from visits</div></div>
+        </div>
+      </div>
+      ${visitors.map(v=>`<div class="visitor-item">
+        <img src="${v.avatar}" style="width:44px;height:44px;border-radius:50%" onclick="goProfile('${v.username}')">
+        <div style="flex:1"><div style="font-weight:600;font-size:14px">${v.fullName} ${v.verified?'<i class="fas fa-check-circle" style="color:#C41E3A;font-size:12px"></i>':''}</div><div style="font-size:12px;color:#65676b">${v.visitTime} · ${v.visits} visits</div></div>
+        <button class="btn-follow ${S.user.following.includes(v.id)?'following':'not-following'}" onclick="toggleFollow('${v.id}')">${S.user.following.includes(v.id)?'Following':'Follow'}</button>
+      </div>`).join('')}
+    </div>
+  </div>`;
 }
 
 render();
