@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<!-- Drukpa v2.0 - Redesigned -->
+<!-- JOMO v2.0 - Joy Of Missing Out -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drukpa - Connect with the World</title>
-  <meta name="description" content="Drukpa - A full-featured social media platform">
+  <title>JOMO - Joy Of Missing Out</title>
+  <meta name="description" content="JOMO - The Bhutanese Social Experience">
   <meta name="theme-color" content="#C41E3A">
-  <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Drukpa&quot;,&quot;short_name&quot;:&quot;Drukpa&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23C41E3A&quot;,&quot;theme_color&quot;:&quot;%23C41E3A&quot;}">
+  <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;JOMO&quot;,&quot;short_name&quot;:&quot;JOMO&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23C41E3A&quot;,&quot;theme_color&quot;:&quot;%23C41E3A&quot;}">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -1634,7 +1634,7 @@ function render() {
 
 function renderLogin() {
   return `<div class="auth-page"><div class="auth-card fade-in">
-    <div class="auth-header"><h1>Drukpa</h1><p>Connect with friends and the world around you.</p></div>
+    <div class="auth-header"><h1>JOMO</h1><p>Joy Of Missing Out — Connect Mindfully.</p></div>
     <div id="authError" class="error-msg hidden"></div>
     <form id="loginForm">
       <input type="email" id="loginEmail" placeholder="Email" value="john@example.com" required>
@@ -1648,7 +1648,7 @@ function renderLogin() {
 
 function renderRegister() {
   return `<div class="auth-page"><div class="auth-card fade-in">
-    <div class="auth-header"><h1>Drukpa</h1><p>Sign up to connect with the world.</p></div>
+    <div class="auth-header"><h1>JOMO</h1><p>Join the Joyful Kingdom.</p></div>
     <form id="registerForm">
       <input id="regName" placeholder="Full Name" required>
       <input id="regUser" placeholder="Username" required>
@@ -1666,7 +1666,7 @@ function renderNav() {
   return `
     <div class="floating-search">
       <i class="fas fa-search"></i>
-      <input placeholder="Search Drukpa..." id="navSearch" oninput="navSearchHandler(this.value)" onfocus="navSearchHandler(this.value)">
+      <input placeholder="Search JOMO..." id="navSearch" oninput="navSearchHandler(this.value)" onfocus="navSearchHandler(this.value)">
       <div class="nav-search-results" id="navSearchResults"></div>
     </div>
     <div class="floating-menu-btn" onclick="document.getElementById('floatingDrop').classList.toggle('show')">
@@ -1830,7 +1830,7 @@ function renderPost(p) {
     ${p.voicePost?`<div class="voice-post-card" style="margin:0 16px 12px"><div class="voice-post-controls"><button class="voice-play-btn" onclick="toast('Playing voice post...')"><i class="fas fa-play"></i></button><div class="voice-waveform" style="flex:1">${p.voicePost.bars.map(h=>`<span style="height:${h}px"></span>`).join('')}</div><span style="font-size:12px;opacity:0.7">0:${String(p.voicePost.duration).padStart(2,'0')}</span></div></div>`:''}
     ${p.collab?`<div style="padding:0 16px 8px;display:flex;align-items:center;gap:6px"><div class="collab-post-badge">${p.collab.map(id=>`<img src="${U(id).avatar}" style="width:24px;height:24px;border-radius:50%;border:2px solid white;margin-left:-6px">`).join('')}</div><span class="collab-label"><i class="fas fa-users"></i> Collaborative Post</span></div>`:''}
     ${p.aiArt?`<div style="padding:0 16px 4px"><span style="font-size:11px;color:#D4A017;font-weight:600"><i class="fas fa-magic"></i> AI Generated Art</span></div>`:''}
-    ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">drukpa.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
+    ${p.text.includes('https://')?`<div class="link-preview" onclick="toast('Opening link...')"><img src="https://picsum.photos/600/300?random=${p.id.charCodeAt(1)}"><div class="link-preview-info"><div class="lp-domain">jomo.app</div><h4>Check out this amazing content</h4><p>Discover trending topics and connect with creators worldwide.</p></div></div>`:''}
     ${p.poll?`<div class="poll-widget">${p.poll.options.map((o,i)=>{const total=p.poll.options.reduce((s,x)=>s+x.votes.length,0);const pct=total?Math.round(o.votes.length/total*100):0;const voted=o.votes.includes(S.user.id);return`<button class="poll-option ${voted?'voted':''}" onclick="votePoll('${p.id}',${i})"><span class="poll-option-text">${o.text}</span><span class="poll-pct">${pct}%</span><div class="poll-bar" style="width:${pct}%"></div></button>`}).join('')}<div class="poll-total">${p.poll.options.reduce((s,x)=>s+x.votes.length,0)} votes</div>${!S.karmaBets[p.id]?`<button class="bet-btn" style="background:linear-gradient(135deg,#D4A017,#FFD700);color:#1C1C1E;margin-top:8px" onclick="S.showBetting='${p.id}';render()"><i class="fas fa-coins"></i> Bet Karma on Outcome</button>`:`<div style="font-size:12px;color:#D4A017;margin-top:6px"><i class="fas fa-coins"></i> You bet ${S.karmaBets[p.id].amount} karma on "${S.karmaBets[p.id].option}"</div>`}</div>`:''}
     ${p.media.length?`<div class="post-media" style="position:relative" ondblclick="dblTapLike('${p.id}',this)">${p.media.length>2?`<div class="carousel-container"><div class="carousel-track" style="transform:translateX(-${(S.carouselIdx[p.id]||0)*100}%)">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>${(S.carouselIdx[p.id]||0)>0?`<button class="carousel-btn prev" onclick="event.stopPropagation();carouselPrev('${p.id}')"><i class="fas fa-chevron-left"></i></button>`:''}${(S.carouselIdx[p.id]||0)<p.media.length-1?`<button class="carousel-btn next" onclick="event.stopPropagation();carouselNext('${p.id}',${p.media.length})"><i class="fas fa-chevron-right"></i></button>`:''}<div class="carousel-dots">${p.media.map((_,i)=>`<span class="${i===(S.carouselIdx[p.id]||0)?'active':''}" onclick="event.stopPropagation();S.carouselIdx['${p.id}']=${i};render()"></span>`).join('')}</div></div>`:`<div class="post-media-grid ${p.media.length>1?'grid-'+Math.min(p.media.length,3):''}">${p.media.map(m=>`<img src="${m}" onclick="openMedia('${m}')">`).join('')}</div>`}${S.watermarkEnabled&&p.aid===S.user.id?'<div class="watermark-overlay">@'+S.user.username+'</div>':''}</div>`:''}
     ${(p.videos||[]).length?`<div class="post-media">${p.videos.map(v=>`<video src="${v}" controls class="post-video"></video>`).join('')}</div>`:''}
@@ -2276,7 +2276,7 @@ function saveSett() {
 }
 
 function navSearchHandler(q) {
-  if (q.toLowerCase() === 'drukpa') { triggerEasterEgg('gold_theme'); return; }
+  if (q.toLowerCase() === 'jomo') { triggerEasterEgg('gold_theme'); return; }
   const res = document.getElementById('navSearchResults');
   if (q.length > 0) {
     const r = users.filter(u => u.fullName.toLowerCase().includes(q.toLowerCase()) || u.username.includes(q.toLowerCase()));
@@ -2502,7 +2502,7 @@ function likeComment(pid, ci) {
 
 function openShareModal(pid) { S.showShareModal = pid; render(); }
 function renderShareModal() {
-  const link = 'https://drukpa.app/post/' + S.showShareModal;
+  const link = 'https://jomo.app/post/' + S.showShareModal;
   return `<div class="share-modal" onclick="if(event.target===this){S.showShareModal=null;render()}"><div class="share-modal-content">
     <h3>Share Post</h3>
     <div class="share-options">
@@ -2611,7 +2611,7 @@ const ALL_BADGES = {
 };
 
 const aiResponses = [
-  "I'd be happy to help! What would you like to know about Drukpa?",
+  "I'd be happy to help! What would you like to know about JOMO?",
   "That's a great question! Here are some tips for growing your following: 1) Post consistently, 2) Engage with your community, 3) Use trending hashtags.",
   "You can customize your profile by going to Settings. Try adding a bio and profile photo to stand out!",
   "To create a Reel, go to the Reels section and tap the + button. You can add music, effects, and text!",
@@ -2952,7 +2952,7 @@ function renderShortcutsModal(){
 function renderInstallPrompt(){
   return `<div class="install-banner">
     <i class="fas fa-download" style="font-size:24px"></i>
-    <div style="flex:1"><strong>Install Drukpa</strong><p style="font-size:12px;opacity:0.9">Add to home screen for the best experience</p></div>
+    <div style="flex:1"><strong>Install JOMO</strong><p style="font-size:12px;opacity:0.9">Add to home screen for the best experience</p></div>
     <button style="background:white;color:#C41E3A;border:none" onclick="toast('App installed! 📱');S.showInstallPrompt=false;render()">Install</button>
     <button style="background:rgba(255,255,255,0.2);color:white;border:none" onclick="S.showInstallPrompt=false;render()">Later</button>
   </div>`;
@@ -3384,7 +3384,7 @@ function renderFundraiserModal() {
 
 // ===== AFFILIATE LINKS =====
 function renderAffiliateModal() {
-  const links = [{name:'Photography Course',url:'course.drukpa.app/photo',clicks:234,earnings:45.60},{name:'Art Supplies',url:'shop.drukpa.app/art',clicks:567,earnings:89.30},{name:'Tech Gadgets',url:'tech.drukpa.app/gear',clicks:123,earnings:23.10}];
+  const links = [{name:'Photography Course',url:'course.jomo.app/photo',clicks:234,earnings:45.60},{name:'Art Supplies',url:'shop.jomo.app/art',clicks:567,earnings:89.30},{name:'Tech Gadgets',url:'tech.jomo.app/gear',clicks:123,earnings:23.10}];
   return `<div class="block-modal" onclick="if(event.target===this){S.showAffiliate=false;render()}"><div class="block-content" style="width:440px">
     <h3><i class="fas fa-link" style="color:#27ae60;margin-right:8px"></i> Affiliate Links</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Earn commission when followers buy through your links.</p>
@@ -3457,7 +3457,7 @@ function renderExportModal() {
   ];
   return `<div class="export-modal" onclick="if(event.target===this){S.showExport=false;render()}"><div class="export-content">
     <h3><i class="fas fa-download" style="color:#C41E3A;margin-right:8px"></i> Export Your Data</h3>
-    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Download a copy of your Drukpa data. Select what to include:</p>
+    <p style="font-size:13px;color:#65676b;margin:8px 0 16px">Download a copy of your JOMO data. Select what to include:</p>
     ${exports.map(ex=>`<div class="export-item" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
       <i class="fas ${ex.icon}"></i>
       <div style="flex:1"><strong style="font-size:14px">${ex.name}</strong><p style="font-size:12px;color:#65676b">${ex.desc}</p></div>
@@ -3482,7 +3482,7 @@ function startExport() {
     const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'drukpa_data_export.json'; a.click();
+    a.href = url; a.download = 'jomo_data_export.json'; a.click();
     URL.revokeObjectURL(url);
     toast('Data exported successfully! 📁','fa-check-circle');
     S.showExport = false; render();
@@ -4151,7 +4151,7 @@ function translatePost(pid) {
   render();
 }
 
-// === FEATURE: Drukpa Sticker Pack ===
+// === FEATURE: JOMO Sticker Pack ===
 function renderStickerPicker() {
   const bhutanStickers = ['🐉','🏔️','🙏','🎋','🪷','⛩️','🎎','🪘','🌸','🎏','🏯','🪬'];
   const emotionStickers = ['🥰','🤩','😤','🥺','😈','👻','💀','🤡','👽','🤖','💩','🎃'];
@@ -4595,7 +4595,7 @@ function renderQRArtModal() {
       <div class="qr-art">
         <div class="qr-pattern">${pattern.map(c=>`<div class="qr-cell" style="background:${c}"></div>`).join('')}</div>
       </div>
-      <div style="margin-top:16px"><img src="${S.user.avatar}" style="width:48px;height:48px;border-radius:50%;border:3px solid #D4A017;margin-bottom:4px"><div style="font-weight:700">@${S.user.username}</div><div style="font-size:12px;color:#65676b">Scan to connect on Drukpa</div></div>
+      <div style="margin-top:16px"><img src="${S.user.avatar}" style="width:48px;height:48px;border-radius:50%;border:3px solid #D4A017;margin-bottom:4px"><div style="font-weight:700">@${S.user.username}</div><div style="font-size:12px;color:#65676b">Scan to connect on JOMO</div></div>
       <div style="display:flex;gap:8px;margin-top:16px;justify-content:center">
         <button style="padding:10px 20px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="toast('QR code saved! 📲')"><i class="fas fa-download"></i> Save</button>
         <button style="padding:10px 20px;background:#e4e6eb;color:#1C1C1E;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="toast('QR link copied! 🔗')"><i class="fas fa-share"></i> Share</button>
