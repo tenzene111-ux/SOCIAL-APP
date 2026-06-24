@@ -7,7 +7,11 @@
   <title>JOMO - Joy Of Missing Out</title>
   <meta name="description" content="JOMO - The Bhutanese Social Experience">
   <meta name="theme-color" content="#C41E3A">
-  <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;JOMO&quot;,&quot;short_name&quot;:&quot;JOMO&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23C41E3A&quot;,&quot;theme_color&quot;:&quot;%23C41E3A&quot;}">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="JOMO">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -4905,5 +4909,6 @@ function renderQRArtModal() {
 
 render();
 </script>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>
