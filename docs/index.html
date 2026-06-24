@@ -1396,29 +1396,46 @@
     .dark .group-msg-bubble { background: #21262d; }
     .dark .group-chat-input input { background: #0d1117; border-color: #30363D; color: #e6edf3; }
 
-    /* Gift Animation - TikTok Style */
+    /* Gift Animation - TikTok/Live Style */
     .gift-anim-container { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
-    .gift-anim { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; animation: giftEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    .gift-anim img { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3)); }
-    .gift-anim-name { font-size: 18px; font-weight: 800; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.5); margin-top: 8px; }
-    .gift-anim-user { font-size: 13px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
-    .gift-anim-cost { font-size: 14px; font-weight: 700; color: #FFD700; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
-    .gift-anim-combo { position: absolute; top: -20px; right: -30px; font-size: 48px; font-weight: 900; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,215,0,0.4); animation: comboScale 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-    .gift-anim-particles { position: absolute; inset: -60px; pointer-events: none; }
-    .gift-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: particleFly 1.2s ease-out forwards; }
-    @keyframes giftEntrance { 0% { opacity: 0; transform: translateX(-50%) scale(0.3) translateY(100px); } 50% { transform: translateX(-50%) scale(1.2) translateY(-20px); } 100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); } }
-    @keyframes giftExit { 0% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1.5) translateY(-200px); } }
-    @keyframes comboScale { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+    .gift-anim-overlay { position: fixed; inset: 0; z-index: 9998; pointer-events: none; background: radial-gradient(circle at 50% 60%, rgba(255,215,0,0.15), transparent 70%); animation: overlayPulse 1s ease-in-out 3; }
+    @keyframes overlayPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .gift-anim { position: absolute; bottom: 25%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; animation: giftEntrance 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .gift-anim img { width: 160px; height: 160px; object-fit: contain; filter: drop-shadow(0 12px 40px rgba(0,0,0,0.4)); animation: giftFloat 2s ease-in-out infinite; }
+    @keyframes giftFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+    .gift-anim-name { font-size: 22px; font-weight: 800; color: white; text-shadow: 0 2px 12px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.4); margin-top: 12px; letter-spacing: 1px; }
+    .gift-anim-user { font-size: 14px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 6px rgba(0,0,0,0.5); margin-top: 4px; }
+    .gift-anim-cost { font-size: 16px; font-weight: 700; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.6); margin-top: 2px; }
+    .gift-anim-combo { position: absolute; top: -30px; right: -40px; font-size: 56px; font-weight: 900; color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5), 0 4px 8px rgba(0,0,0,0.3); animation: comboScale 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .gift-anim-particles { position: absolute; inset: -80px; pointer-events: none; }
+    .gift-particle { position: absolute; border-radius: 50%; animation: particleFly 1.5s ease-out forwards; }
+    .gift-spark { position: absolute; width: 3px; background: linear-gradient(to bottom, #FFD700, transparent); animation: sparkFall 1.2s ease-in forwards; opacity: 0.8; }
+    @keyframes giftEntrance { 0% { opacity: 0; transform: translateX(-50%) scale(0.2) translateY(150px); } 40% { transform: translateX(-50%) scale(1.3) translateY(-30px); } 70% { transform: translateX(-50%) scale(0.95) translateY(5px); } 100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); } }
+    @keyframes giftExit { 0% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(2) translateY(-300px); } }
+    @keyframes comboScale { 0% { transform: scale(0) rotate(-20deg); } 60% { transform: scale(1.3) rotate(5deg); } 100% { transform: scale(1) rotate(0); } }
     @keyframes particleFly { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--px), var(--py)) scale(0); } }
-    .gift-anim-streak { position: fixed; left: 16px; bottom: 30%; display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 30px; animation: streakSlide 0.5s cubic-bezier(0.34,1.56,0.64,1); z-index: 9998; }
-    .gift-anim-streak img { width: 40px; height: 40px; object-fit: contain; }
+    @keyframes sparkFall { 0% { opacity: 0.9; transform: translateY(-100px) scaleY(1); } 100% { opacity: 0; transform: translateY(200px) scaleY(0.3); } }
+    @keyframes screenShake { 0%,100% { transform: translate(0); } 10% { transform: translate(-3px,2px); } 20% { transform: translate(3px,-2px); } 30% { transform: translate(-2px,-3px); } 40% { transform: translate(2px,3px); } 50% { transform: translate(-1px,1px); } }
+    .screen-shake { animation: screenShake 0.5s ease; }
+    .gift-glow-ring { position: absolute; width: 250px; height: 250px; left: 50%; top: 50%; transform: translate(-50%,-50%); border-radius: 50%; border: 3px solid rgba(255,215,0,0.6); animation: glowExpand 1s ease-out forwards; box-shadow: 0 0 40px rgba(255,215,0,0.3), inset 0 0 40px rgba(255,215,0,0.1); }
+    @keyframes glowExpand { 0% { width: 0; height: 0; opacity: 1; } 100% { width: 400px; height: 400px; opacity: 0; } }
+    .gift-anim-streak { position: fixed; left: 16px; bottom: 30%; display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.75); backdrop-filter: blur(12px); padding: 10px 18px; border-radius: 30px; border: 1px solid rgba(255,215,0,0.3); animation: streakSlide 0.5s cubic-bezier(0.34,1.56,0.64,1); z-index: 9998; }
+    .gift-anim-streak img.streak-gift-img { width: 44px; height: 44px; object-fit: contain; }
     .gift-anim-streak .streak-info { color: white; }
-    .gift-anim-streak .streak-sender { font-size: 12px; font-weight: 700; }
-    .gift-anim-streak .streak-gift { font-size: 11px; opacity: 0.8; }
-    .gift-anim-streak .streak-count { font-size: 32px; font-weight: 900; color: #FFD700; text-shadow: 0 0 15px rgba(255,215,0,0.6); min-width: 40px; text-align: center; animation: comboScale 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    @keyframes streakSlide { 0% { opacity: 0; transform: translateX(-100px); } 100% { opacity: 1; transform: translateX(0); } }
+    .gift-anim-streak .streak-sender { font-size: 13px; font-weight: 700; }
+    .gift-anim-streak .streak-gift { font-size: 11px; opacity: 0.7; }
+    .gift-anim-streak .streak-count { font-size: 36px; font-weight: 900; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.7); min-width: 44px; text-align: center; animation: comboScale 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes streakSlide { 0% { opacity: 0; transform: translateX(-120px); } 100% { opacity: 1; transform: translateX(0); } }
+    .gift-item { text-align: center; }
+    .gift-item img { width: 56px; height: 56px; object-fit: contain; transition: transform 0.2s; }
+    .gift-item:hover img { transform: scale(1.15); }
 
-    .gift-item img { width: 48px; height: 48px; object-fit: contain; }
+    /* Live gift queue */
+    .live-gift-queue { position: absolute; left: 12px; bottom: 80px; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
+    .live-gift-entry { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: 20px; animation: streakSlide 0.4s ease; }
+    .live-gift-entry img.live-gift-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #FFD700; }
+    .live-gift-entry img.live-gift-icon { width: 32px; height: 32px; object-fit: contain; }
+    .live-gift-entry span { color: white; font-size: 12px; font-weight: 600; }
 
     /* ============================================================
        PREMIUM DESIGN UPGRADE — World-Class Enhancements
@@ -3117,7 +3134,9 @@ function renderLive() {
       <div class="live-input-bar">
         <input placeholder="Say something..." id="liveCommentIn" onkeydown="if(event.key==='Enter'){addLiveComment();event.preventDefault()}">
         <button class="live-gift-btn" onclick="S.showTips='live';render()"><i class="fas fa-gift"></i> Gift</button>
+        <button class="live-gift-btn" style="background:linear-gradient(135deg,#a855f7,#6366f1)" onclick="simulateLiveGift()"><i class="fas fa-magic"></i> Simulate</button>
       </div>
+      <div id="liveGiftQueue" class="live-gift-queue"></div>
     </div>
     <div style="margin-top:16px"><h3 style="margin-bottom:12px">Live Now</h3>
       <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px">
@@ -3255,15 +3274,15 @@ function sendAIMsg(preset) {
 
 // ===== TIPS/GIFTS =====
 const giftItems = [
-  {id:'rose',name:'Rose',cost:10,img:'https://img.icons8.com/3d-fluency/94/rose.png'},
-  {id:'star',name:'Star',cost:50,img:'https://img.icons8.com/3d-fluency/94/star.png'},
-  {id:'diamond',name:'Diamond',cost:100,img:'https://img.icons8.com/3d-fluency/94/diamond.png'},
-  {id:'rocket',name:'Rocket',cost:200,img:'https://img.icons8.com/3d-fluency/94/rocket.png'},
-  {id:'crown',name:'Crown',cost:500,img:'https://img.icons8.com/3d-fluency/94/crown.png'},
-  {id:'firework',name:'Firework',cost:1000,img:'https://img.icons8.com/3d-fluency/94/fireworks.png'},
-  {id:'dragon',name:'Thunder Dragon',cost:2000,img:'https://img.icons8.com/3d-fluency/94/dragon.png'},
-  {id:'mountain',name:'Himalaya',cost:5000,img:'https://img.icons8.com/3d-fluency/94/mountain.png'},
-  {id:'pray',name:'Tashi Delek',cost:100,img:'https://img.icons8.com/3d-fluency/94/prayer.png'}
+  {id:'rose',name:'Rose',cost:10,img:'https://cdn-icons-png.freepik.com/256/2107/2107956.png'},
+  {id:'star',name:'Star',cost:50,img:'https://cdn-icons-png.freepik.com/256/1828/1828884.png'},
+  {id:'diamond',name:'Diamond',cost:100,img:'https://cdn-icons-png.freepik.com/256/2945/2945634.png'},
+  {id:'rocket',name:'Rocket',cost:200,img:'https://cdn-icons-png.freepik.com/256/3471/3471345.png'},
+  {id:'crown',name:'Crown',cost:500,img:'https://cdn-icons-png.freepik.com/256/2904/2904584.png'},
+  {id:'firework',name:'Firework',cost:1000,img:'https://cdn-icons-png.freepik.com/256/2404/2404655.png'},
+  {id:'dragon',name:'Thunder Dragon',cost:2000,img:'https://cdn-icons-png.freepik.com/256/2913/2913133.png'},
+  {id:'mountain',name:'Himalaya',cost:5000,img:'https://cdn-icons-png.freepik.com/256/2675/2675539.png'},
+  {id:'pray',name:'Tashi Delek',cost:100,img:'https://cdn-icons-png.freepik.com/256/3468/3468377.png'}
 ];
 function renderTipsModal() {
   const target = S.showTips;
@@ -3287,47 +3306,107 @@ function renderTipsModal() {
   </div></div>`;
 }
 S._giftCombo = {};
+S._liveGiftQueue = [];
 function sendGift(cost, giftId, name) {
   if (S.coins < cost) return toast('Not enough Nu.! Top up your balance','fa-exclamation-triangle');
   S.coins -= cost;
   gainXP(cost / 2);
   const gift = giftItems.find(g => g.id === giftId) || giftItems[0];
-  playGiftAnimation(gift, name);
+  const isLive = S.page === 'live' || S.showTips === 'live';
+  playGiftAnimation(gift, name, isLive);
+  if (isLive) addLiveGiftToQueue(gift, name);
   S.showTips = null;
   render();
 }
-function playGiftAnimation(gift, name) {
-  const colors = ['#FFD700','#FF6B6B','#C41E3A','#E8751A','#4ECDC4','#A855F7','#FF69B4'];
+function playGiftAnimation(gift, name, isLive) {
+  const colors = ['#FFD700','#FF6B6B','#C41E3A','#E8751A','#4ECDC4','#A855F7','#FF69B4','#FFF'];
+  document.body.classList.add('screen-shake');
+  setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+  const overlay = document.createElement('div');
+  overlay.className = 'gift-anim-overlay';
+  if (gift.cost >= 500) overlay.style.background = 'radial-gradient(circle at 50% 60%, rgba(196,30,58,0.2), rgba(255,215,0,0.1), transparent 70%)';
+  document.body.appendChild(overlay);
   const container = document.createElement('div');
   container.className = 'gift-anim-container';
-  const particles = Array.from({length:20}, () => {
+  const particles = Array.from({length: gift.cost >= 500 ? 40 : 20}, () => {
     const angle = Math.random() * Math.PI * 2;
-    const dist = 80 + Math.random() * 120;
-    return `<div class="gift-particle" style="left:50%;top:50%;background:${colors[Math.floor(Math.random()*colors.length)]};--px:${Math.cos(angle)*dist}px;--py:${Math.sin(angle)*dist}px"></div>`;
+    const dist = 100 + Math.random() * 160;
+    const size = 4 + Math.random() * 10;
+    return `<div class="gift-particle" style="left:50%;top:50%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};--px:${Math.cos(angle)*dist}px;--py:${Math.sin(angle)*dist}px"></div>`;
   }).join('');
+  const sparks = gift.cost >= 200 ? Array.from({length: 30}, () => {
+    const x = Math.random() * 100;
+    const h = 20 + Math.random() * 40;
+    const delay = Math.random() * 1.5;
+    return `<div class="gift-spark" style="left:${x}%;top:${Math.random()*30}%;height:${h}px;animation-delay:${delay}s"></div>`;
+  }).join('') : '';
   if (!S._giftCombo[gift.id]) S._giftCombo[gift.id] = 0;
   S._giftCombo[gift.id]++;
   const combo = S._giftCombo[gift.id];
+  const glowRings = gift.cost >= 100 ? '<div class="gift-glow-ring"></div>' + (gift.cost >= 1000 ? '<div class="gift-glow-ring" style="animation-delay:0.3s"></div>' : '') : '';
   container.innerHTML = `
+    ${sparks}
     <div class="gift-anim">
       <div class="gift-anim-particles">${particles}</div>
+      ${glowRings}
       <img src="${gift.img}" alt="${name}">
       <div class="gift-anim-name">${name}</div>
-      <div class="gift-anim-user">from ${S.user.fullName}</div>
-      <div class="gift-anim-cost">Nu. ${gift.cost}</div>
+      <div class="gift-anim-user">${S.user.fullName} sent</div>
+      <div class="gift-anim-cost">Nu. ${gift.cost.toLocaleString()}</div>
       ${combo > 1 ? `<div class="gift-anim-combo">x${combo}</div>` : ''}
     </div>`;
   document.body.appendChild(container);
   const streak = document.createElement('div');
   streak.className = 'gift-anim-streak';
-  streak.innerHTML = `<img src="${S.user.avatar}" style="width:36px;height:36px;border-radius:50%;border:2px solid #FFD700;object-fit:cover"><img src="${gift.img}"><div class="streak-info"><div class="streak-sender">${S.user.fullName}</div><div class="streak-gift">sent ${name}</div></div><div class="streak-count">${combo > 1 ? 'x'+combo : ''}</div>`;
+  streak.innerHTML = `
+    <img src="${S.user.avatar}" style="width:36px;height:36px;border-radius:50%;border:2px solid #FFD700;object-fit:cover">
+    <img src="${gift.img}" class="streak-gift-img">
+    <div class="streak-info"><div class="streak-sender">${S.user.fullName}</div><div class="streak-gift">sent ${name}</div></div>
+    <div class="streak-count">${combo > 1 ? 'x'+combo : ''}</div>`;
   document.body.appendChild(streak);
+  const exitTime = gift.cost >= 1000 ? 3500 : gift.cost >= 500 ? 2800 : 2200;
   setTimeout(() => {
     const anim = container.querySelector('.gift-anim');
-    if (anim) anim.style.animation = 'giftExit 0.8s ease-in forwards';
-  }, 2200);
-  setTimeout(() => { container.remove(); streak.remove(); }, 3000);
-  setTimeout(() => { S._giftCombo[gift.id] = 0; }, 5000);
+    if (anim) anim.style.animation = 'giftExit 1s ease-in forwards';
+  }, exitTime);
+  setTimeout(() => { container.remove(); overlay.remove(); streak.remove(); }, exitTime + 1000);
+  setTimeout(() => { S._giftCombo[gift.id] = 0; }, 6000);
+}
+function addLiveGiftToQueue(gift, name) {
+  S._liveGiftQueue.push({gift, name, sender: S.user, time: Date.now()});
+  if (S._liveGiftQueue.length > 5) S._liveGiftQueue.shift();
+  updateLiveGiftQueue();
+}
+function updateLiveGiftQueue() {
+  let q = document.getElementById('liveGiftQueue');
+  if (!q) {
+    q = document.createElement('div');
+    q.id = 'liveGiftQueue';
+    q.className = 'live-gift-queue';
+    const liveContainer = document.querySelector('.live-stream-container');
+    if (liveContainer) liveContainer.appendChild(q);
+    else { document.body.appendChild(q); q.style.position = 'fixed'; q.style.left = '12px'; q.style.bottom = '140px'; }
+  }
+  q.innerHTML = S._liveGiftQueue.map(e => `
+    <div class="live-gift-entry">
+      <img src="${e.sender.avatar}" class="live-gift-avatar">
+      <span>${e.sender.fullName}</span>
+      <img src="${e.gift.img}" class="live-gift-icon">
+      <span style="color:#FFD700">Nu. ${e.gift.cost}</span>
+    </div>`).join('');
+  setTimeout(() => {
+    S._liveGiftQueue = S._liveGiftQueue.filter(e => Date.now() - e.time < 8000);
+    if (S._liveGiftQueue.length) updateLiveGiftQueue();
+    else if (q) q.innerHTML = '';
+  }, 8000);
+}
+function simulateLiveGift() {
+  const randomUser = users[Math.floor(Math.random() * users.length)];
+  const randomGift = giftItems[Math.floor(Math.random() * giftItems.length)];
+  S._liveGiftQueue.push({gift: randomGift, name: randomGift.name, sender: randomUser, time: Date.now()});
+  if (S._liveGiftQueue.length > 5) S._liveGiftQueue.shift();
+  playGiftAnimation(randomGift, randomGift.name, true);
+  updateLiveGiftQueue();
 }
 function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
 
