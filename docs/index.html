@@ -1944,31 +1944,31 @@ function renderNav() {
       <img src="${u.avatar}" alt="Menu">
     </div>
     <div class="floating-menu-dropdown" id="floatingDrop">
-      <a onclick="goProfile('${u.username}')"><i class="fas fa-user"></i> My Profile</a>
-      <a onclick="go('saved')"><i class="fas fa-bookmark"></i> Saved</a>
-      <a onclick="S.showMoodPicker=!S.showMoodPicker;render()"><i class="fas fa-${S.mood?'heart':'smile-beam'}"${S.mood?' style="color:#C41E3A"':''}></i> ${S.mood?'Change Mood':'Set Mood'}</a>
-      <a onclick="S.showMiniGame=true;S.miniGameType=null;render()"><i class="fas fa-gamepad"></i> Mini Games</a>
-      <a onclick="S.showChallengeFeed=true;render()"><i class="fas fa-trophy" style="color:#D4A017"></i> Challenges</a>
-      <a onclick="S.showAchievements=true;render()"><i class="fas fa-medal" style="color:#D4A017"></i> Achievements</a>
-      <a onclick="S.showFortune=true;S.fortuneRevealed=false;render()"><i class="fas fa-cookie-bite" style="color:#D4A017"></i> Daily Fortune</a>
-      <a onclick="S.showConfessions=true;render()"><i class="fas fa-user-secret" style="color:#9b59b6"></i> Confessions</a>
-      <a onclick="S.showFriendMap=true;render()"><i class="fas fa-map-marked-alt" style="color:#27ae60"></i> Friend Map</a>
-      <a onclick="S.focusMode=!S.focusMode;if(S.focusMode)document.body.classList.add('focus-mode');else document.body.classList.remove('focus-mode');toast(S.focusMode?'Focus mode on - distractions hidden':'Focus mode off');render()"><i class="fas fa-${S.focusMode?'eye':'eye-slash'}"></i> ${S.focusMode?'Disable':'Enable'} Focus</a>
-      <a onclick="S.showHashtagBattle=true;render()"><i class="fas fa-bolt" style="color:#E8751A"></i> Hashtag Battle</a>
-      <a onclick="S.showPointsShop=true;render()"><i class="fas fa-store" style="color:#D4A017"></i> Druk Shop</a>
-      <a onclick="S.showPostCalendar=true;render()"><i class="fas fa-calendar-alt" style="color:#3498db"></i> Post Calendar</a>
-      <a onclick="S.showBookshelf=true;render()"><i class="fas fa-book" style="color:#8B4513"></i> Bookshelf</a>
-      <a onclick="S.showQRArt=true;render()"><i class="fas fa-qrcode" style="color:#C41E3A"></i> QR Profile</a>
-      <a onclick="go('settings')"><i class="fas fa-cog"></i> Settings</a>
-      <a onclick="toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
+      <a onclick="closeDrop();goProfile('${u.username}')"><i class="fas fa-user"></i> My Profile</a>
+      <a onclick="closeDrop();go('saved')"><i class="fas fa-bookmark"></i> Saved</a>
+      <a onclick="closeDrop();S.showMoodPicker=!S.showMoodPicker;render()"><i class="fas fa-${S.mood?'heart':'smile-beam'}"${S.mood?' style="color:#C41E3A"':''}></i> ${S.mood?'Change Mood':'Set Mood'}</a>
+      <a onclick="closeDrop();S.showMiniGame=true;S.miniGameType=null;render()"><i class="fas fa-gamepad"></i> Mini Games</a>
+      <a onclick="closeDrop();S.showChallengeFeed=true;render()"><i class="fas fa-trophy" style="color:#D4A017"></i> Challenges</a>
+      <a onclick="closeDrop();S.showAchievements=true;render()"><i class="fas fa-medal" style="color:#D4A017"></i> Achievements</a>
+      <a onclick="closeDrop();S.showFortune=true;S.fortuneRevealed=false;render()"><i class="fas fa-cookie-bite" style="color:#D4A017"></i> Daily Fortune</a>
+      <a onclick="closeDrop();S.showConfessions=true;render()"><i class="fas fa-user-secret" style="color:#9b59b6"></i> Confessions</a>
+      <a onclick="closeDrop();S.showFriendMap=true;render()"><i class="fas fa-map-marked-alt" style="color:#27ae60"></i> Friend Map</a>
+      <a onclick="closeDrop();S.focusMode=!S.focusMode;if(S.focusMode)document.body.classList.add('focus-mode');else document.body.classList.remove('focus-mode');toast(S.focusMode?'Focus mode on - distractions hidden':'Focus mode off');render()"><i class="fas fa-${S.focusMode?'eye':'eye-slash'}"></i> ${S.focusMode?'Disable':'Enable'} Focus</a>
+      <a onclick="closeDrop();S.showHashtagBattle=true;render()"><i class="fas fa-bolt" style="color:#E8751A"></i> Hashtag Battle</a>
+      <a onclick="closeDrop();S.showPointsShop=true;render()"><i class="fas fa-store" style="color:#D4A017"></i> Druk Shop</a>
+      <a onclick="closeDrop();S.showPostCalendar=true;render()"><i class="fas fa-calendar-alt" style="color:#3498db"></i> Post Calendar</a>
+      <a onclick="closeDrop();S.showBookshelf=true;render()"><i class="fas fa-book" style="color:#8B4513"></i> Bookshelf</a>
+      <a onclick="closeDrop();S.showQRArt=true;render()"><i class="fas fa-qrcode" style="color:#C41E3A"></i> QR Profile</a>
+      <a onclick="closeDrop();go('settings')"><i class="fas fa-cog"></i> Settings</a>
+      <a onclick="closeDrop();toggleDarkMode()"><i class="fas ${S.darkMode?'fa-sun':'fa-moon'}"></i> ${S.darkMode?'Light Mode':'Dark Mode'}</a>
       <button onclick="S.user=null;S.page='login';render()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
     </div>
     <nav class="bottom-nav">
       <button class="bottom-nav-item ${S.page==='feed'?'active':''}" onclick="go('feed')" title="Home"><i class="fas fa-home"></i></button>
       <button class="bottom-nav-item ${S.page==='explore'?'active':''}" onclick="go('explore')" title="Explore"><i class="fas fa-compass"></i></button>
       <button class="bottom-nav-item create-btn" onclick="S.showCreateIsland=true;render()" title="Create"><i class="fas fa-plus"></i></button>
-      <button class="bottom-nav-item ${S.page==='messages'?'active':''}" onclick="go('messages')" title="Messages">${un?`<span class="nav-badge">${un}</span>`:''}<i class="fas fa-comment-dots"></i></button>
-      <button class="bottom-nav-item ${S.page==='notifications'?'active':''}" onclick="go('notifications')" title="Notifications"><i class="fas fa-bell"></i></button>
+      <button class="bottom-nav-item ${S.page==='messages'?'active':''}" onclick="go('messages')" title="Messages">${(()=>{const mu=convos.reduce((s,c)=>s+c.unread,0);return mu?`<span class="nav-badge">${mu}</span>`:''})()}<i class="fas fa-comment-dots"></i></button>
+      <button class="bottom-nav-item ${S.page==='notifications'?'active':''}" onclick="go('notifications')" title="Notifications">${un?`<span class="nav-badge">${un}</span>`:''}<i class="fas fa-bell"></i></button>
     </nav>`;
 }
 
@@ -2373,7 +2373,7 @@ function renderStoryViewer() {
 // ===== ACTIONS =====
 function go(page) { S.page = page; S.viewProfile = null; S.profileTab = 'posts'; closeDrop(); render(); window.scrollTo(0,0); }
 function goProfile(uname) { S.viewProfile = users.find(u => u.username === uname); S.page = 'profile'; S.profileTab = 'posts'; closeDrop(); render(); window.scrollTo(0,0); }
-function closeDrop() { document.getElementById('navDrop')?.classList.remove('show'); document.getElementById('navSearchResults')?.classList.remove('show'); }
+function closeDrop() { document.getElementById('navDrop')?.classList.remove('show'); document.getElementById('floatingDrop')?.classList.remove('show'); document.getElementById('navSearchResults')?.classList.remove('show'); }
 
 function toggleLike(id) {
   const p = posts.find(x => x.id === id);
@@ -2641,8 +2641,8 @@ function attachEvents() {
     });
   });
   document.addEventListener('click', e => {
-    if (!e.target.closest('.nav-profile') && !e.target.closest('.nav-avatar')) document.getElementById('navDrop')?.classList.remove('show');
-    if (!e.target.closest('.nav-search')) document.getElementById('navSearchResults')?.classList.remove('show');
+    if (!e.target.closest('.floating-menu-btn') && !e.target.closest('.floating-menu-dropdown')) document.getElementById('floatingDrop')?.classList.remove('show');
+    if (!e.target.closest('.nav-search') && !e.target.closest('.floating-search')) document.getElementById('navSearchResults')?.classList.remove('show');
     if (!e.target.closest('.post-menu-wrap')) { S.openMenus={}; document.querySelectorAll('.post-menu-dropdown.show').forEach(el=>el.classList.remove('show')); }
   });
 }
@@ -2694,6 +2694,28 @@ document.addEventListener('keydown', e => {
     if(S.showMiniGame){S.showMiniGame=false;S.miniGameType=null;render();}
     if(S.showMoodPicker){S.showMoodPicker=false;render();}
     if(S.showEasterEgg){S.showEasterEgg=false;render();}
+    if(S.showWhiteboard){S.showWhiteboard=false;render();}
+    if(S.showChallengeFeed){S.showChallengeFeed=false;render();}
+    if(S.showMusicShare){S.showMusicShare=false;render();}
+    if(S.showAchievements){S.showAchievements=false;render();}
+    if(S.showBetting){S.showBetting=null;render();}
+    if(S.showStickerPicker){S.showStickerPicker=false;render();}
+    if(S.showPlaylist){S.showPlaylist=false;render();}
+    if(S.showRemix){S.showRemix=null;render();}
+    if(S.showFortune){S.showFortune=false;render();}
+    if(S.showFriendMap){S.showFriendMap=false;render();}
+    if(S.showConfessions){S.showConfessions=false;render();}
+    if(S.showVibeCheck){S.showVibeCheck=false;render();}
+    if(S.showReactionTimeline){S.showReactionTimeline=null;render();}
+    if(S.showMemoryLane){S.showMemoryLane=false;render();}
+    if(S.showVisitorLog){S.showVisitorLog=false;render();}
+    if(S.showCreateIsland){S.showCreateIsland=false;render();}
+    if(S.showPostCalendar){S.showPostCalendar=false;render();}
+    if(S.showBookshelf){S.showBookshelf=false;render();}
+    if(S.showHashtagBattle){S.showHashtagBattle=false;render();}
+    if(S.showPointsShop){S.showPointsShop=false;render();}
+    if(S.showCountdownPost){S.showCountdownPost=false;render();}
+    if(S.showQRArt){S.showQRArt=false;render();}
     document.querySelector('.modal-overlay')?.remove();
   }
   if(!S.user)return;
@@ -4572,7 +4594,7 @@ function renderConfessionsModal() {
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9b59b6,#8e44ad);display:flex;align-items:center;justify-content:center;color:white;font-size:14px"><i class="fas fa-mask"></i></div><span style="font-weight:600;font-size:13px">Anonymous</span><span style="font-size:11px;opacity:0.5;margin-left:auto">${c.time}</span></div>
         <p style="font-size:14px;line-height:1.5;margin-bottom:12px">${c.text}</p>
         <div style="display:flex;gap:16px;font-size:13px;opacity:0.7">
-          <span onclick="c.likes++;render()" style="cursor:pointer"><i class="fas fa-heart" style="color:#C41E3A"></i> ${c.likes}</span>
+          <span onclick="likeConfession('${c.id}')" style="cursor:pointer"><i class="fas fa-heart" style="color:#C41E3A"></i> ${c.likes}</span>
           <span><i class="fas fa-comment"></i> ${c.comments}</span>
           <span onclick="toast('Confession reported')" style="cursor:pointer;margin-left:auto"><i class="fas fa-flag"></i></span>
         </div>
@@ -4586,6 +4608,11 @@ function postConfession() {
   S.confessions.unshift({id:'cf'+(S.confessions.length+1),text,likes:0,comments:0,time:'Just now'});
   toast('Confession posted anonymously! 🎭'); addKarma(10,'Posted confession');
   render();
+}
+
+function likeConfession(id) {
+  const c = S.confessions.find(x=>x.id===id);
+  if(c){c.likes++;render();}
 }
 
 // === FEATURE: Vibe Check ===
@@ -4624,7 +4651,8 @@ function renderMemoryLaneWidget() {
     {text:'Started my coding journey today! Excited for what is ahead.',time:'1 year ago',likes:42,img:'https://picsum.photos/400/300?random=mem1'},
     {text:'Just hit 100 followers! Thank you all for the support!',time:'6 months ago',likes:89,img:''}
   ];
-  if (Math.random() > 0.5) return '';
+  if (!S._showMemoryWidget) { S._showMemoryWidget = Math.random() > 0.5; }
+  if (!S._showMemoryWidget) return '';
   const m = memories[0];
   return `<div class="memory-card">
     <div class="memory-header"><i class="fas fa-clock-rotate-left" style="color:#D4A017;font-size:20px"></i><div><span class="memory-date">On This Day</span><span style="display:block;font-size:12px;color:#65676b">${m.time}</span></div><button style="margin-left:auto;background:none;color:#C41E3A;font-size:12px;font-weight:600;cursor:pointer" onclick="S.showMemoryLane=true;render()">See All</button></div>
