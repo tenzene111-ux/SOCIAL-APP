@@ -1683,7 +1683,7 @@ const S = {
   // Advanced features state
   reelsIdx: 0, showAIChat: false, aiMessages: [],
   showLive: false, liveComments: [], liveViewers: 1243,
-  showTips: null, coins: 5000,
+  showTips: null, coins: 5000, tipsReceived: 0, tipsSent: 0,
   dashboardTab: 'overview',
   showVerifyModal: false,
   communityTab: 'discover', activeCommunity: null,
@@ -2069,7 +2069,7 @@ function renderFeed() {
     </div>
     <div class="vibe-bar"><span style="font-weight:700;font-size:14px;white-space:nowrap"><i class="fas fa-bolt" style="color:#C41E3A"></i> Vibe Check</span>${[{e:'😊',l:'Great',p:42},{e:'😌',l:'Chill',p:28},{e:'🔥',l:'Fired Up',p:18},{e:'😴',l:'Tired',p:12}].map(v=>`<div class="vibe-option ${S.vibeChoice===v.l?'selected':''}" onclick="castVibe('${v.l}')"><span class="vibe-emoji">${v.e}</span><span style="font-size:11px;font-weight:600">${v.l}</span>${S.vibeVoted?`<span class="vibe-pct">${v.p+(S.vibeChoice===v.l?1:0)}%</span>`:''}</div>`).join('')}</div>
     ${renderMemoryLaneWidget()}
-    <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win 500 coins</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
+    <div class="challenge-card"><h3><i class="fas fa-fire"></i> Weekly Challenge: Show Your Workspace</h3><p>Share a photo of where you create. Tag #MyWorkspace to enter!</p><div class="challenge-stats"><span><i class="fas fa-users"></i> 1,247 entries</span><span><i class="fas fa-clock"></i> 3 days left</span><span><i class="fas fa-trophy"></i> Win Nu. 500</span></div><button style="background:white;color:#C41E3A;border:none;padding:8px 20px;border-radius:20px;font-weight:600;font-size:13px;margin-top:10px;cursor:pointer" onclick="toast('Challenge joined! Share your workspace photo 📸')">Join Challenge</button></div>
     <div class="prayer-flags"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="magazine-feed">${posts.map(p => renderPost(p)).join('')}</div>
     <div class="infinite-loader"><div class="spinner"></div><p style="margin-top:8px;font-size:13px;color:#65676b">Loading more posts...</p></div>
@@ -2277,7 +2277,7 @@ function renderProfile() {
         </div>
       </div>
       <div class="profile-actions">
-        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" onclick="S.showTips='profile';render()"><i class="fas fa-gift"></i></button><button class="btn-secondary" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
+        ${own ? `<button class="btn-secondary" onclick="go('settings')"><i class="fas fa-edit"></i> Edit Profile</button><button class="btn-secondary" onclick="S.showQR=true;render()"><i class="fas fa-qrcode"></i></button><button class="btn-secondary" onclick="S.showSubscriptions=true;render()"><i class="fas fa-crown"></i></button><button class="btn-secondary" onclick="S.showFanClub=true;render()"><i class="fas fa-heart" style="color:#e74c3c"></i></button>` : `<button class="btn-follow ${following?'following':'not-following'}" onclick="toggleFollow('${p.id}')">${following?'Following':'Follow'}</button><button class="btn-secondary" onclick="msgUser('${p.id}')"><i class="fas fa-comment"></i></button><button class="btn-secondary" onclick="S.showTips='${p.id}';render()"><i class="fas fa-gift"></i> Tip</button><button class="btn-secondary" onclick="startCall('${p.id}','video')"><i class="fas fa-video"></i></button><button class="btn-secondary" onclick="S.showBlockModal='${p.id}';render()"><i class="fas fa-ban"></i></button>`}
       </div>
     </div>
     ${own?`<div class="highlights-row" style="padding:12px 24px">
@@ -3146,8 +3146,8 @@ function renderDashboard() {
         <button style="background:none;color:#C41E3A;font-weight:600;font-size:13px;margin-top:8px;border:none;cursor:pointer" onclick="S.showBadges=true;render()">View all badges →</button>
       </div>
       <div class="dash-chart"><h4 style="margin-bottom:8px">Earnings</h4>
-        <div class="coin-balance" style="margin:8px 0"><i class="fas fa-coins"></i> ${S.coins}</div>
-        <p style="font-size:12px;color:#65676b">Earned from tips and gifts</p>
+        <div class="coin-balance" style="margin:8px 0"><i class="fas fa-coins"></i> Nu. ${S.coins.toLocaleString()}</div>
+        <p style="font-size:12px;color:#65676b">Bhutanese Ngultrum — Earned from tips and gifts</p>
         <button class="btn-secondary" style="margin-top:8px;font-size:12px" onclick="toast('Payout requested! 💰')">Request Payout</button>
       </div>
     </div>
@@ -3231,15 +3231,33 @@ function sendAIMsg(preset) {
 
 // ===== TIPS/GIFTS =====
 function renderTipsModal() {
-  const gifts=[{emoji:'🌹',name:'Rose',cost:10},{emoji:'⭐',name:'Star',cost:50},{emoji:'💎',name:'Diamond',cost:100},{emoji:'🚀',name:'Rocket',cost:200},{emoji:'👑',name:'Crown',cost:500},{emoji:'🎆',name:'Firework',cost:1000}];
+  const gifts=[
+    {emoji:'🌹',name:'Rose',cost:10},{emoji:'⭐',name:'Star',cost:50},{emoji:'💎',name:'Diamond',cost:100},
+    {emoji:'🚀',name:'Rocket',cost:200},{emoji:'👑',name:'Crown',cost:500},{emoji:'🎆',name:'Firework',cost:1000},
+    {emoji:'🐉',name:'Thunder Dragon',cost:2000},{emoji:'🏔️',name:'Himalaya',cost:5000},{emoji:'🙏',name:'Tashi Delek',cost:100}
+  ];
+  const target = S.showTips;
+  const targetUser = typeof target === 'string' && target.length < 10 ? U(target) : null;
   return `<div class="tips-modal" onclick="if(event.target===this){S.showTips=null;render()}"><div class="tips-content">
-    <h3><i class="fas fa-gift" style="color:#f39c12"></i> Send a Gift</h3>
-    <div class="coin-balance"><i class="fas fa-coins"></i> ${S.coins} coins</div>
-    <div class="gift-grid">${gifts.map(g=>`<div class="gift-item" onclick="sendGift(${g.cost},'${g.emoji}','${g.name}')"><div class="gift-emoji">${g.emoji}</div><div style="font-size:12px;margin-top:4px">${g.name}</div><div class="gift-cost">${g.cost} coins</div></div>`).join('')}</div>
-    <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="S.showTips=null;render()">Cancel</button>
+    <h3><i class="fas fa-gift" style="color:#D4A017"></i> ${targetUser ? 'Send Gift to '+targetUser.fullName : 'Send a Gift'}</h3>
+    <div class="coin-balance"><span style="font-size:14px;color:#65676b">Your Balance</span><br>Nu. ${S.coins.toLocaleString()}</div>
+    <div style="font-size:12px;color:#65676b;margin-bottom:8px">Bhutanese Ngultrum (Nu.)</div>
+    <div class="gift-grid">${gifts.map(g=>`<div class="gift-item" onclick="sendGift(${g.cost},'${g.emoji}','${g.name}')"><div class="gift-emoji">${g.emoji}</div><div style="font-size:12px;margin-top:4px">${g.name}</div><div class="gift-cost">Nu. ${g.cost}</div></div>`).join('')}</div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e4e6eb">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px"><i class="fas fa-hand-holding-heart" style="color:#C41E3A"></i> Custom Tip</div>
+      <div style="display:flex;gap:8px">
+        <div style="position:relative;flex:1"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:600;color:#65676b">Nu.</span><input id="customTipAmt" type="number" min="1" placeholder="Amount" style="width:100%;padding:10px 10px 10px 40px;border:1.5px solid #dadce0;border-radius:10px;font-size:14px"></div>
+        <button style="padding:10px 20px;background:linear-gradient(135deg,#C41E3A,#E8751A);color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer" onclick="sendCustomTip()"><i class="fas fa-paper-plane"></i> Tip</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:10px;justify-content:center">
+      ${[50,100,500,1000].map(a=>`<button style="padding:6px 14px;background:#f0f2f5;border:1px solid #dadce0;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer" onclick="document.getElementById('customTipAmt').value=${a}">Nu. ${a}</button>`).join('')}
+    </div>
+    <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="S.showTips=null;render()">Cancel</button>
   </div></div>`;
 }
-function sendGift(cost,emoji,name){if(S.coins<cost)return toast('Not enough coins!','fa-exclamation-triangle');S.coins-=cost;gainXP(cost/2);toast(emoji+' '+name+' sent!','fa-gift');S.showTips=null;render();}
+function sendGift(cost,emoji,name){if(S.coins<cost)return toast('Not enough Nu.! Top up your balance','fa-exclamation-triangle');S.coins-=cost;gainXP(cost/2);toast(emoji+' '+name+' sent! (Nu. '+cost+')','fa-gift');S.showTips=null;render();}
+function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
 
 // ===== VERIFICATION =====
 function renderVerifyModal(){
@@ -3703,8 +3721,8 @@ function renderPaidDMModal() {
   return `<div class="block-modal" onclick="if(event.target===this){S.showPaidDM=null;render()}"><div class="block-content">
     <h3><i class="fas fa-coins" style="color:#f39c12;margin-right:8px"></i> Paid DMs</h3>
     <p style="font-size:13px;color:#65676b;margin:8px 0">Charge non-followers to send you direct messages.</p>
-    <div class="form-group" style="margin-top:16px"><label>Price per message (coins)</label>
-      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#C41E3A':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(196,30,58,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">${p}</button>`).join('')}</div>
+    <div class="form-group" style="margin-top:16px"><label>Price per message (Nu.)</label>
+      <div style="display:flex;gap:8px">${[10,25,50,100].map(p=>`<button style="padding:8px 16px;border-radius:8px;border:2px solid ${S.paidDMPrice===p?'#C41E3A':'#e4e6eb'};background:${S.paidDMPrice===p?'rgba(196,30,58,0.1)':'white'};cursor:pointer;font-weight:600" onclick="S.paidDMPrice=${p};render()">Nu. ${p}</button>`).join('')}</div>
     </div>
     <div class="toggle-group" style="margin-top:8px"><span>Enable Paid DMs</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
     <button class="btn-primary" style="margin-top:16px" onclick="toast('Paid DM settings saved! 💰');S.showPaidDM=null;render()">Save Settings</button>
@@ -4463,7 +4481,7 @@ function renderAchievementsModal() {
     {id:'storyteller',name:'Storyteller',desc:'Shared 30 stories',icon:'fa-book-open',color:'#8e44ad'},
     {id:'influencer',name:'Influencer',desc:'Reached 100 followers',icon:'fa-crown',color:'#D4A017'},
     {id:'gamer',name:'Game Master',desc:'Won 10 mini games',icon:'fa-gamepad',color:'#C41E3A'},
-    {id:'whale',name:'Generous Whale',desc:'Tipped 1000 coins total',icon:'fa-gift',color:'#2ecc71'},
+    {id:'whale',name:'Generous Whale',desc:'Tipped Nu. 1000 total',icon:'fa-gift',color:'#2ecc71'},
     {id:'dragon',name:'Thunder Dragon',desc:'Found the secret easter egg',icon:'fa-dragon',color:'#C41E3A'}
   ];
   const unlocked = S.achievements.length;
@@ -4896,7 +4914,7 @@ function renderPointsShopModal() {
           <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,${item.color},${item.color}88);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:white;font-size:20px"><i class="fas ${item.icon}"></i></div>
           <div style="font-weight:700;font-size:14px;margin-bottom:4px">${item.name}</div>
           <div style="font-size:11px;color:#65676b;margin-bottom:8px">${item.desc}</div>
-          <div class="price-tag"><i class="fas fa-coins"></i> ${item.price}</div>
+          <div class="price-tag"><i class="fas fa-coins"></i> Nu. ${item.price}</div>
         </div>`).join('')}
       </div>
     </div>
