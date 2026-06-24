@@ -1396,6 +1396,30 @@
     .dark .group-msg-bubble { background: #21262d; }
     .dark .group-chat-input input { background: #0d1117; border-color: #30363D; color: #e6edf3; }
 
+    /* Gift Animation - TikTok Style */
+    .gift-anim-container { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+    .gift-anim { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; animation: giftEntrance 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .gift-anim img { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3)); }
+    .gift-anim-name { font-size: 18px; font-weight: 800; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.5); margin-top: 8px; }
+    .gift-anim-user { font-size: 13px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .gift-anim-cost { font-size: 14px; font-weight: 700; color: #FFD700; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .gift-anim-combo { position: absolute; top: -20px; right: -30px; font-size: 48px; font-weight: 900; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,215,0,0.4); animation: comboScale 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .gift-anim-particles { position: absolute; inset: -60px; pointer-events: none; }
+    .gift-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: particleFly 1.2s ease-out forwards; }
+    @keyframes giftEntrance { 0% { opacity: 0; transform: translateX(-50%) scale(0.3) translateY(100px); } 50% { transform: translateX(-50%) scale(1.2) translateY(-20px); } 100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); } }
+    @keyframes giftExit { 0% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1.5) translateY(-200px); } }
+    @keyframes comboScale { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+    @keyframes particleFly { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--px), var(--py)) scale(0); } }
+    .gift-anim-streak { position: fixed; left: 16px; bottom: 30%; display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 30px; animation: streakSlide 0.5s cubic-bezier(0.34,1.56,0.64,1); z-index: 9998; }
+    .gift-anim-streak img { width: 40px; height: 40px; object-fit: contain; }
+    .gift-anim-streak .streak-info { color: white; }
+    .gift-anim-streak .streak-sender { font-size: 12px; font-weight: 700; }
+    .gift-anim-streak .streak-gift { font-size: 11px; opacity: 0.8; }
+    .gift-anim-streak .streak-count { font-size: 32px; font-weight: 900; color: #FFD700; text-shadow: 0 0 15px rgba(255,215,0,0.6); min-width: 40px; text-align: center; animation: comboScale 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes streakSlide { 0% { opacity: 0; transform: translateX(-100px); } 100% { opacity: 1; transform: translateX(0); } }
+
+    .gift-item img { width: 48px; height: 48px; object-fit: contain; }
+
     /* ============================================================
        PREMIUM DESIGN UPGRADE — World-Class Enhancements
        ============================================================ */
@@ -3230,19 +3254,25 @@ function sendAIMsg(preset) {
 }
 
 // ===== TIPS/GIFTS =====
+const giftItems = [
+  {id:'rose',name:'Rose',cost:10,img:'https://img.icons8.com/3d-fluency/94/rose.png'},
+  {id:'star',name:'Star',cost:50,img:'https://img.icons8.com/3d-fluency/94/star.png'},
+  {id:'diamond',name:'Diamond',cost:100,img:'https://img.icons8.com/3d-fluency/94/diamond.png'},
+  {id:'rocket',name:'Rocket',cost:200,img:'https://img.icons8.com/3d-fluency/94/rocket.png'},
+  {id:'crown',name:'Crown',cost:500,img:'https://img.icons8.com/3d-fluency/94/crown.png'},
+  {id:'firework',name:'Firework',cost:1000,img:'https://img.icons8.com/3d-fluency/94/fireworks.png'},
+  {id:'dragon',name:'Thunder Dragon',cost:2000,img:'https://img.icons8.com/3d-fluency/94/dragon.png'},
+  {id:'mountain',name:'Himalaya',cost:5000,img:'https://img.icons8.com/3d-fluency/94/mountain.png'},
+  {id:'pray',name:'Tashi Delek',cost:100,img:'https://img.icons8.com/3d-fluency/94/prayer.png'}
+];
 function renderTipsModal() {
-  const gifts=[
-    {emoji:'🌹',name:'Rose',cost:10},{emoji:'⭐',name:'Star',cost:50},{emoji:'💎',name:'Diamond',cost:100},
-    {emoji:'🚀',name:'Rocket',cost:200},{emoji:'👑',name:'Crown',cost:500},{emoji:'🎆',name:'Firework',cost:1000},
-    {emoji:'🐉',name:'Thunder Dragon',cost:2000},{emoji:'🏔️',name:'Himalaya',cost:5000},{emoji:'🙏',name:'Tashi Delek',cost:100}
-  ];
   const target = S.showTips;
   const targetUser = typeof target === 'string' && target.length < 10 ? U(target) : null;
   return `<div class="tips-modal" onclick="if(event.target===this){S.showTips=null;render()}"><div class="tips-content">
     <h3><i class="fas fa-gift" style="color:#D4A017"></i> ${targetUser ? 'Send Gift to '+targetUser.fullName : 'Send a Gift'}</h3>
     <div class="coin-balance"><span style="font-size:14px;color:#65676b">Your Balance</span><br>Nu. ${S.coins.toLocaleString()}</div>
     <div style="font-size:12px;color:#65676b;margin-bottom:8px">Bhutanese Ngultrum (Nu.)</div>
-    <div class="gift-grid">${gifts.map(g=>`<div class="gift-item" onclick="sendGift(${g.cost},'${g.emoji}','${g.name}')"><div class="gift-emoji">${g.emoji}</div><div style="font-size:12px;margin-top:4px">${g.name}</div><div class="gift-cost">Nu. ${g.cost}</div></div>`).join('')}</div>
+    <div class="gift-grid">${giftItems.map(g=>`<div class="gift-item" onclick="sendGift(${g.cost},'${g.id}','${g.name}')"><img src="${g.img}" alt="${g.name}"><div style="font-size:12px;margin-top:4px">${g.name}</div><div class="gift-cost">Nu. ${g.cost}</div></div>`).join('')}</div>
     <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e4e6eb">
       <div style="font-size:13px;font-weight:600;margin-bottom:8px"><i class="fas fa-hand-holding-heart" style="color:#C41E3A"></i> Custom Tip</div>
       <div style="display:flex;gap:8px">
@@ -3256,7 +3286,49 @@ function renderTipsModal() {
     <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="S.showTips=null;render()">Cancel</button>
   </div></div>`;
 }
-function sendGift(cost,emoji,name){if(S.coins<cost)return toast('Not enough Nu.! Top up your balance','fa-exclamation-triangle');S.coins-=cost;gainXP(cost/2);toast(emoji+' '+name+' sent! (Nu. '+cost+')','fa-gift');S.showTips=null;render();}
+S._giftCombo = {};
+function sendGift(cost, giftId, name) {
+  if (S.coins < cost) return toast('Not enough Nu.! Top up your balance','fa-exclamation-triangle');
+  S.coins -= cost;
+  gainXP(cost / 2);
+  const gift = giftItems.find(g => g.id === giftId) || giftItems[0];
+  playGiftAnimation(gift, name);
+  S.showTips = null;
+  render();
+}
+function playGiftAnimation(gift, name) {
+  const colors = ['#FFD700','#FF6B6B','#C41E3A','#E8751A','#4ECDC4','#A855F7','#FF69B4'];
+  const container = document.createElement('div');
+  container.className = 'gift-anim-container';
+  const particles = Array.from({length:20}, () => {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 80 + Math.random() * 120;
+    return `<div class="gift-particle" style="left:50%;top:50%;background:${colors[Math.floor(Math.random()*colors.length)]};--px:${Math.cos(angle)*dist}px;--py:${Math.sin(angle)*dist}px"></div>`;
+  }).join('');
+  if (!S._giftCombo[gift.id]) S._giftCombo[gift.id] = 0;
+  S._giftCombo[gift.id]++;
+  const combo = S._giftCombo[gift.id];
+  container.innerHTML = `
+    <div class="gift-anim">
+      <div class="gift-anim-particles">${particles}</div>
+      <img src="${gift.img}" alt="${name}">
+      <div class="gift-anim-name">${name}</div>
+      <div class="gift-anim-user">from ${S.user.fullName}</div>
+      <div class="gift-anim-cost">Nu. ${gift.cost}</div>
+      ${combo > 1 ? `<div class="gift-anim-combo">x${combo}</div>` : ''}
+    </div>`;
+  document.body.appendChild(container);
+  const streak = document.createElement('div');
+  streak.className = 'gift-anim-streak';
+  streak.innerHTML = `<img src="${S.user.avatar}" style="width:36px;height:36px;border-radius:50%;border:2px solid #FFD700;object-fit:cover"><img src="${gift.img}"><div class="streak-info"><div class="streak-sender">${S.user.fullName}</div><div class="streak-gift">sent ${name}</div></div><div class="streak-count">${combo > 1 ? 'x'+combo : ''}</div>`;
+  document.body.appendChild(streak);
+  setTimeout(() => {
+    const anim = container.querySelector('.gift-anim');
+    if (anim) anim.style.animation = 'giftExit 0.8s ease-in forwards';
+  }, 2200);
+  setTimeout(() => { container.remove(); streak.remove(); }, 3000);
+  setTimeout(() => { S._giftCombo[gift.id] = 0; }, 5000);
+}
 function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
 
 // ===== VERIFICATION =====
