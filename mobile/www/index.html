@@ -1401,7 +1401,7 @@
     .gift-anim-overlay { position: fixed; inset: 0; z-index: 9998; pointer-events: none; background: radial-gradient(circle at 50% 60%, rgba(255,215,0,0.15), transparent 70%); animation: overlayPulse 1s ease-in-out 3; }
     @keyframes overlayPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
     .gift-anim { position: absolute; bottom: 25%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; animation: giftEntrance 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    .gift-anim img { width: 160px; height: 160px; object-fit: contain; filter: drop-shadow(0 12px 40px rgba(0,0,0,0.4)); animation: giftFloat 2s ease-in-out infinite; }
+    .gift-anim img { width: 180px; height: 180px; object-fit: contain; filter: drop-shadow(0 16px 48px rgba(0,0,0,0.5)) drop-shadow(0 0 30px rgba(255,215,0,0.3)); animation: giftFloat 2s ease-in-out infinite; image-rendering: high-quality; }
     @keyframes giftFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
     .gift-anim-name { font-size: 22px; font-weight: 800; color: white; text-shadow: 0 2px 12px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.4); margin-top: 12px; letter-spacing: 1px; }
     .gift-anim-user { font-size: 14px; color: rgba(255,255,255,0.9); text-shadow: 0 1px 6px rgba(0,0,0,0.5); margin-top: 4px; }
@@ -1427,8 +1427,8 @@
     .gift-anim-streak .streak-count { font-size: 36px; font-weight: 900; color: #FFD700; text-shadow: 0 0 20px rgba(255,215,0,0.7); min-width: 44px; text-align: center; animation: comboScale 0.3s cubic-bezier(0.34,1.56,0.64,1); }
     @keyframes streakSlide { 0% { opacity: 0; transform: translateX(-120px); } 100% { opacity: 1; transform: translateX(0); } }
     .gift-item { text-align: center; }
-    .gift-item img { width: 56px; height: 56px; object-fit: contain; transition: transform 0.2s; }
-    .gift-item:hover img { transform: scale(1.15); }
+    .gift-item img { width: 64px; height: 64px; object-fit: contain; transition: transform 0.25s ease; image-rendering: high-quality; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+    .gift-item:hover img { transform: scale(1.2) rotate(-5deg); filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25)); }
 
     /* Live gift queue */
     .live-gift-queue { position: absolute; left: 12px; bottom: 80px; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
@@ -3134,7 +3134,6 @@ function renderLive() {
       <div class="live-input-bar">
         <input placeholder="Say something..." id="liveCommentIn" onkeydown="if(event.key==='Enter'){addLiveComment();event.preventDefault()}">
         <button class="live-gift-btn" onclick="S.showTips='live';render()"><i class="fas fa-gift"></i> Gift</button>
-        <button class="live-gift-btn" style="background:linear-gradient(135deg,#a855f7,#6366f1)" onclick="simulateLiveGift()"><i class="fas fa-magic"></i> Simulate</button>
       </div>
       <div id="liveGiftQueue" class="live-gift-queue"></div>
     </div>
@@ -3274,15 +3273,15 @@ function sendAIMsg(preset) {
 
 // ===== TIPS/GIFTS =====
 const giftItems = [
-  {id:'rose',name:'Rose',cost:10,img:'https://cdn-icons-png.freepik.com/256/2107/2107956.png'},
-  {id:'star',name:'Star',cost:50,img:'https://cdn-icons-png.freepik.com/256/1828/1828884.png'},
-  {id:'diamond',name:'Diamond',cost:100,img:'https://cdn-icons-png.freepik.com/256/2945/2945634.png'},
-  {id:'rocket',name:'Rocket',cost:200,img:'https://cdn-icons-png.freepik.com/256/3471/3471345.png'},
-  {id:'crown',name:'Crown',cost:500,img:'https://cdn-icons-png.freepik.com/256/2904/2904584.png'},
-  {id:'firework',name:'Firework',cost:1000,img:'https://cdn-icons-png.freepik.com/256/2404/2404655.png'},
-  {id:'dragon',name:'Thunder Dragon',cost:2000,img:'https://cdn-icons-png.freepik.com/256/2913/2913133.png'},
-  {id:'mountain',name:'Himalaya',cost:5000,img:'https://cdn-icons-png.freepik.com/256/2675/2675539.png'},
-  {id:'pray',name:'Tashi Delek',cost:100,img:'https://cdn-icons-png.freepik.com/256/3468/3468377.png'}
+  {id:'rose',name:'Rose',cost:10,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f339/512.png'},
+  {id:'star',name:'Star',cost:50,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/2b50/512.png'},
+  {id:'diamond',name:'Diamond',cost:100,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f48e/512.png'},
+  {id:'rocket',name:'Rocket',cost:200,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.png'},
+  {id:'crown',name:'Crown',cost:500,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f451/512.png'},
+  {id:'firework',name:'Firework',cost:1000,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f386/512.png'},
+  {id:'dragon',name:'Thunder Dragon',cost:2000,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f409/512.png'},
+  {id:'mountain',name:'Himalaya',cost:5000,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f3d4_fe0f/512.png'},
+  {id:'pray',name:'Tashi Delek',cost:100,img:'https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f/512.png'}
 ];
 function renderTipsModal() {
   const target = S.showTips;
@@ -3400,14 +3399,31 @@ function updateLiveGiftQueue() {
     else if (q) q.innerHTML = '';
   }, 8000);
 }
-function simulateLiveGift() {
-  const randomUser = users[Math.floor(Math.random() * users.length)];
-  const randomGift = giftItems[Math.floor(Math.random() * giftItems.length)];
-  S._liveGiftQueue.push({gift: randomGift, name: randomGift.name, sender: randomUser, time: Date.now()});
-  if (S._liveGiftQueue.length > 5) S._liveGiftQueue.shift();
-  playGiftAnimation(randomGift, randomGift.name, true);
-  updateLiveGiftQueue();
+S._liveGiftInterval = null;
+function startLiveGiftSimulation() {
+  if (S._liveGiftInterval) return;
+  S._liveGiftInterval = setInterval(() => {
+    if (S.page !== 'live') { stopLiveGiftSimulation(); return; }
+    if (Math.random() < 0.4) {
+      const randomUser = users.filter(u => u.id !== S.user.id)[Math.floor(Math.random() * (users.length - 1))];
+      const randomGift = giftItems[Math.floor(Math.random() * giftItems.length)];
+      S._liveGiftQueue.push({gift: randomGift, name: randomGift.name, sender: randomUser, time: Date.now()});
+      if (S._liveGiftQueue.length > 5) S._liveGiftQueue.shift();
+      playGiftAnimation(randomGift, randomGift.name, true);
+      updateLiveGiftQueue();
+      S.liveComments.push({uid: randomUser.id, text: 'sent ' + randomGift.name + ' 🎁'});
+    }
+  }, 4000 + Math.random() * 6000);
 }
+function stopLiveGiftSimulation() {
+  if (S._liveGiftInterval) { clearInterval(S._liveGiftInterval); S._liveGiftInterval = null; }
+}
+const _origGo = go;
+go = function(page) {
+  _origGo(page);
+  if (page === 'live') startLiveGiftSimulation();
+  else stopLiveGiftSimulation();
+};
 function sendCustomTip(){const amt=parseInt(document.getElementById('customTipAmt')?.value);if(!amt||amt<1)return toast('Enter a valid amount','fa-exclamation');if(S.coins<amt)return toast('Not enough Nu.! You have Nu. '+S.coins,'fa-exclamation-triangle');S.coins-=amt;gainXP(amt/2);toast('Tipped Nu. '+amt+'! 🙏 Kadrinche!','fa-heart');S.showTips=null;render();}
 
 // ===== VERIFICATION =====
